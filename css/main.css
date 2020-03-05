@@ -1,0 +1,130 @@
+:root {
+
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+/* 1200px / 16px = 75em */
+@media (max-width: 75em) {
+  html {
+    font-size: 60%;
+  }
+}
+
+/* 980px / 16px = 61.25em */
+@media (max-width: 61.25em) {
+  html {
+    font-size: 58%;
+  }
+}
+
+/* 460px / 16px = 28.75em */
+@media (max-width: 28.75em) {
+  html {
+    font-size: 55%;
+  }
+}
+
+li {
+  list-style: none;
+}
+
+/* TESTING CAROUSEL */
+
+/* DELETE SOME, CORRECT OTHERS */
+
+body {
+  background-color: red;
+}
+.carousel {
+  height: 70rem;
+  width: 90%;
+  margin: 0 auto;
+  background-color: lavenderblush;
+  margin-top: 5rem;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5rem;
+  position: relative;
+}
+
+.carousel__btn {
+  height: 3rem;
+  width: 3rem;
+  border: 0;
+  background-color: black;
+  position: absolute;
+  cursor: pointer;
+}
+
+.carousel__slides-container {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  position: relative;
+  border: 4px solid lightskyblue;
+  overflow: hidden;
+}
+
+.carousel__btn--backward {
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.carousel__btn--forward {
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.carousel__btn--play {
+  right: 50%;
+  bottom: 1rem;
+  transform: translateX(50%);
+}
+
+.carousel__slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition-property: left;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+  z-index: 0;
+}
+
+/* DELETE ALL */
+
+li {
+  font-size: 10rem;
+}
+
+.col1 {
+  background-color: sandybrown;
+}
+
+.col2 {
+  background-color: aquamarine;
+}
+
+.col3 {
+  background-color: blueviolet;
+}
+
+.col4 {
+  background-color: greenyellow;
+}
+/* TESTING CAROUSEL END */
