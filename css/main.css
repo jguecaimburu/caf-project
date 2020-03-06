@@ -1,7 +1,14 @@
+/* Root variables */
 :root {
+  --color-sky-01: #020111;
+  --color-sky-02: #20202c;
+  --color-sky-03: #515175;
+  --color-sky-04: #7072ab;
+  --color-sky-05: #eab0d1
 
 }
 
+/* Set general document properties */
 *,
 *::after,
 *::before {
@@ -41,19 +48,116 @@ li {
   list-style: none;
 }
 
+/* TESTING BACKGROUND */
+
+.welcome {
+  width: 100%;
+  height: 120vh;
+  background: linear-gradient(
+    to bottom,
+    var(--color-sky-01) 50%,
+    var(--color-sky-02) 100%
+    );
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes move-background {
+  from {
+		transform: translate3d(0px, 0px, 0px);
+	}
+	to {
+		transform: translate3d(1000px, 0px, 0px);
+	}
+}
+
+.welcome__stars {
+  background-image: url(/img/background/stars.png);
+  background-color: transparent;
+  background-position: 0 0;
+  width:10000px;
+	height: 120%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 0;
+  animation: move-background 120s linear infinite;
+}
+
+.welcome__twinkling{
+  background-image:
+    radial-gradient(var(--color-sky-01) 5%, transparent 30%),
+    radial-gradient(var(--color-sky-01) 5%, transparent 20%);
+  background-color: transparent;
+  background-position: 0 0, 50px 50px;
+  background-size: 100px 100px;
+	width:10000px;
+	height: 50%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  animation: move-background 30s linear infinite;
+}
+
+.welcome__fade-stars {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    var(--color-sky-02) 100%
+    );
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+}
+
+.about {background-color: lavenderblush;
+  width: 100%;
+  height: 140vh;
+  background: linear-gradient(
+    to bottom,
+    var(--color-sky-02) 0%,
+    var(--color-sky-03) 100%
+    );
+  position: relative;
+}
+
+.carousel-container {
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(
+    to bottom,
+    var(--color-sky-03) 0%,
+    var(--color-sky-04) 100%
+    );
+  position: relative;
+}
+
+.contact {
+  width: 100%;
+  height: 120vh;
+  background: linear-gradient(
+    to bottom,
+    var(--color-sky-04) 0%,
+    var(--color-sky-05) 100%
+    );
+  position: relative;
+}
+
+/* END TESTING BACKGROUND */
+
 /* TESTING CAROUSEL */
 
 /* DELETE SOME, CORRECT OTHERS */
 
-body {
-  background-color: red;
-}
 .carousel {
-  height: 70rem;
-  width: 90%;
+  height: 60rem;
+  width: 60%;
   margin: 0 auto;
-  background-color: lavenderblush;
-  margin-top: 5rem;
+  border: 1px solid white;
   display: flex;
   flex-wrap: wrap;
   padding: 5rem;
@@ -108,23 +212,23 @@ body {
 
 /* DELETE ALL */
 
-li {
-  font-size: 10rem;
-}
-
 .col1 {
   background-color: sandybrown;
+  font-size: 10rem;
 }
 
 .col2 {
   background-color: aquamarine;
+  font-size: 10rem;
 }
 
 .col3 {
   background-color: blueviolet;
+  font-size: 10rem;
 }
 
 .col4 {
   background-color: greenyellow;
+  font-size: 10rem;
 }
 /* TESTING CAROUSEL END */
