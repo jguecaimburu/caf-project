@@ -1,3 +1,11 @@
+/*
+THERE'S A THIN LINE BETWEEN SECTIONS ON MOBILE
+IT MIGHT WORK TO ADD -1PX MARGIN AND 1PX PADDING to UP SECTIONS
+IF IT BREAKS THE COLORS IT MUST BE CORRECTED IN THE BACKGROUND
+*/
+
+
+
 /* Root variables */
 :root {
   --color-sky-01: #020111;
@@ -76,7 +84,7 @@ li {
   background-color: transparent;
   background-position: 0 0;
   width:10000px;
-	height: 120%;
+	height: 100%;
   position: absolute;
   right: 0;
   top: 0;
@@ -232,3 +240,18 @@ li {
   font-size: 10rem;
 }
 /* TESTING CAROUSEL END */
+
+/* TESTING PARALLAX */
+
+.welcome__interaction {
+  width: 40%;
+  height: 20vh;
+  background-color: rgba(255, 255, 255, 0.3);
+  position: absolute;
+  left: 30%;
+  top: 40vh;
+  z-index: 3;
+  transition: transform 100ms linear;
+}
+
+/* END TESTING PARALLAX */
