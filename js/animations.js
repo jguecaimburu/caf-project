@@ -86,6 +86,15 @@ const debounce = (func, delay) => {
   }
 }
 
+// Marker to understand general layout. DELETE UNDER THIS LINE
+
+function showOffsetMarker () {
+  const scrolled = window.pageYOffset
+  const marker = document.querySelector('.y-offset-marker')
+  marker.textContent = scrolled
+}
+// DELETE ABOVE THIS LINE
+
 // Run script
 
 console.log('Load Parallax script')
@@ -98,5 +107,9 @@ window.addEventListener('scroll', function (e) { applyMainParallax() })
 window.addEventListener('scroll', debounce(() => {
   applyParallaxEnding()
 }, 150))
+
+// Marker to understand general layout. DELETE UNDER THIS LINE
+window.addEventListener('scroll', function (e) { showOffsetMarker() })
+// DELETE ABOVE THIS LINE
 
 console.log('Parallax script end')
