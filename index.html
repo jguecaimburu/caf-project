@@ -8,8 +8,9 @@
   <body>
 
     <p
-      class="y-offset-marker parallax"
-      data-rates='{"x": 0, "y":1}'
+      class="y-offset-marker parallax p--move"
+      data-xmove='{"isMoved": false, "deltaYrems": 0, "centerEndAtViewidth": 0, "viewheightDelay": 0}'
+      data-ymove ='{"isMoved": true, "deltaYrems": 0, "rate": 1, "viewheightDelay": 0}'
       >
     </p>
 
@@ -21,8 +22,10 @@
       <div class="welcome__fade-stars">
       </div>
       <div
-        class="welcome__interaction parallax"
-        data-rates='{"x": 0, "y":0.5}'
+        class="welcome__interaction parallax p--move p--move-end"
+        data-xmove='{"isMoved": true, "deltaYrems": 30, "centerEndAtViewidth": 50, "viewheightDelay": -40}'
+        data-ymove ='{"isMoved": true, "deltaYrems": 60, "rate": 0.8, "viewheightDelay": -40}'
+        data-end='{"rate": 0.1, "maxRems": 3}'
       >
       </div>
     </section>
