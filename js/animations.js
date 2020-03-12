@@ -20,11 +20,29 @@ function getParallaxScrollParameters (elementsArray, elementsInitialPositions) {
   const scrollParameters = []
   elementsArray.forEach((element, index) => {
     const parameters = {}
-    parameters.move = getParallaxMoveParameters(
-      element,
-      elementsInitialPositions[index]
-    )
-    // Add other parallax functs
+    const elementClasses = Array.from(element.classList)
+    elementClasses.forEach((className) => {
+      switch(className) {
+        case 'p--move':
+          parameters.move = getParallaxMoveParameters(
+            element,
+            elementsInitialPositions[index]
+          )
+          break;
+        case 'p--fade':
+          parameters.fade = getParallaxFadeParameters(
+            element,
+            elementsInitialPositions[index]
+          )
+          break;
+        case 'p--grow':
+          parameters.grow = getParallaxGrowParameters(
+            element,
+            elementsInitialPositions[index]
+          )
+          break;
+      }
+    })
     scrollParameters.push(parameters)
   })
   return scrollParameters
@@ -66,7 +84,7 @@ function getMoveYParameters (
   yParameters.isMoved = yMoveData.isMoved
   if (yParameters.isMoved) {
     const top = remToPx(elementInitialPosition)
-    yParameters.startY = getMoveStart(top, yMoveData)
+    yParameters.startY = getStartScroll(top, yMoveData.viewheightAnticipation)
     yParameters.endY = getMoveEnd(yParameters.startY, yMoveData)
     yParameters.yRangeSize = (yParameters.endY - yParameters.startY)
     yParameters.rate = yMoveData.rate
@@ -76,9 +94,11 @@ function getMoveYParameters (
   return yParameters
 }
 
-function getMoveStart (top, axisMoveData) {
-  const delay = axisMoveData.viewheightDelay / 100 * window.innerHeight
-  return top + delay
+function getStartScroll (top, viewheightAnticipation) {
+  const anticipation =
+    viewheightAnticipation / 100 *
+    window.innerHeight
+  return top - anticipation
 }
 
 function getMoveEnd (axisStart, axisMoveData) {
@@ -101,7 +121,7 @@ function getMoveXParameters (
   xParameters.isMoved = xMoveData.isMoved
   if (xParameters.isMoved) {
     const top = remToPx(elementInitialPosition)
-    xParameters.startY = getMoveStart(top, xMoveData)
+    xParameters.startY = getStartScroll(top, xMoveData.viewheightAnticipation)
     xParameters.endY = getMoveEnd(xParameters.startY, xMoveData)
     xParameters.yRangeSize = (xParameters.endY - xParameters.startY)
     xParameters.maxDistance = getXCenterEnd(element, boundingRect, xMoveData)
@@ -119,16 +139,69 @@ function getXCenterEnd (element, boundingRect, xMoveData) {
   return finalXPercent * windowWidth - elementWidth / 2 - initial
 }
 
+function getParallaxFadeParameters (element, elementInitialPosition) {
+  const top = remToPx(elementInitialPosition)
+  const fadeData = getParallaxFadeData(element)
+  const fadeParameters = {}
+  fadeParameters.startY = getStartScroll(top, fadeData.viewheightAnticipation)
+  fadeParameters.yRangeSize = getRangeSizeFromViewheighDuration(
+    fadeData.viewheightDuration
+  )
+  fadeParameters.endY = fadeParameters.startY + fadeParameters.yRangeSize
+  const deltaOpacity = fadeData.endOpacity - fadeData.initialOpacity
+  fadeParameters.rate = deltaOpacity / fadeParameters.yRangeSize
+  fadeParameters.initialOpacity = fadeData.initialOpacity
+  fadeParameters.endOpacity = fadeData.endOpacity
+  return fadeParameters
+}
+
+function getParallaxFadeData (element) {
+  const fadeString = element.dataset.fade
+  return JSON.parse(fadeString)
+}
+
+function getRangeSizeFromViewheighDuration (viewheightDuration) {
+  return viewheightDuration / 100 * window.innerHeight
+}
+
+function getParallaxGrowParameters (element, elementInitialPosition) {
+  const top = remToPx(elementInitialPosition)
+  const growData = getParallaxGrowData(element)
+  const growParameters = {}
+  growParameters.startY = getStartScroll(top, growData.viewheightAnticipation)
+  growParameters.yRangeSize = getRangeSizeFromViewheighDuration(
+    growData.viewheightDuration
+  )
+  growParameters.endY = growParameters.startY + growParameters.yRangeSize
+  growParameters.widthRate = growData.widthRate
+  growParameters.heightRate = growData.heightRate
+  growParameters.initialWidth = element.getBoundingClientRect().width
+  growParameters.initialHeight = element.getBoundingClientRect().height
+  return growParameters
+}
+
+function getParallaxGrowData (element) {
+  const growString = element.dataset.grow
+  return JSON.parse(growString)
+}
+
+// Apply parallax scroll and resize functions //
+
+function applyParallax (elementsArray, parametersArray) {
+  const scrolled = window.pageYOffset
+  applyParallaxFade(elementsArray, parametersArray, scrolled)
+  applyParallaxMove(elementsArray, parametersArray, scrolled)
+  applyParallaxGrow(elementsArray, parametersArray, scrolled)
+}
 
 // Parallax main move functions //
 
-function applyParallaxMove (elementsArray, ParametersArray) {
-  const scrolled = window.pageYOffset
+function applyParallaxMove (elementsArray, parametersArray, scrolled) {
   elementsArray.forEach((element, index) => {
     if (Array.from(element.classList).includes('p--move')) {
       parallaxMove(
         element,
-        ParametersArray[index].move,
+        parametersArray[index].move,
         scrolled
       )
     }
@@ -198,12 +271,6 @@ function getDistanceInRange (distanceCalculation, maxDistance) {
   }
 }
 
-function differenceIsAlmostZero (x, y) {
-  const difference = 0.01
-  return Math.abs(x - y) < difference
-}
-
-
 function moveElementByDistances (element, translateDistances) {
   element.style.transform =
   `translate3d(${translateDistances.x}px, ${translateDistances.y}px, 0px)`
@@ -213,7 +280,7 @@ function moveElementByDistances (element, translateDistances) {
 
 function applyParallaxMoveEnd (
   elementsArray,
-  ParametersArray,
+  parametersArray,
   minScroll
 ) {
   const scrolled = window.pageYOffset
@@ -223,7 +290,7 @@ function applyParallaxMoveEnd (
       if (Array.from(element.classList).includes('p--move-end')) {
         parallaxMoveEnd(
           element,
-          ParametersArray[index].move,
+          parametersArray[index].move,
           scrolled,
           deltaScroll
         )
@@ -389,10 +456,6 @@ function moveEndByDistances (element, endTranslateDistances) {
   element.style.transition = ''
 }
 
-function flushCss (element) {
-  element.offsetHeight
-}
-
 function accumulateEndDistance (
   moveParameters,
   translateState,
@@ -401,6 +464,104 @@ function accumulateEndDistance (
 ) {
   moveParameters.x.endAccumulate += (endTranslateDistances.x - translateState.x)
   moveParameters.y.endAccumulate += (endTranslateDistances.y - translateState.y)
+}
+
+// Parallax fade functions //
+
+function applyParallaxFade (elementsArray, parametersArray, scrolled) {
+  elementsArray.forEach((element, index) => {
+    if (Array.from(element.classList).includes('p--fade')) {
+      parallaxFade(
+        element,
+        parametersArray[index].fade,
+        scrolled
+      )
+    }
+  })
+}
+
+function parallaxFade (element, parameters, scrolled) {
+  let opacity
+  if (scrolled <= parameters.startY) {
+    opacity = parameters.initialOpacity
+  } else if (scrolled >= parameters.endY) {
+    opacity = parameters.endOpacity
+  } else {
+    opacity = getOpacity(parameters, scrolled)
+  }
+  element.style.opacity = "" + opacity
+}
+
+function getOpacity (parameters, scrolled) {
+  const yAdvance = scrolled - parameters.startY
+  return parameters.initialOpacity + yAdvance * parameters.rate
+}
+
+// Parallax grow functions //
+
+function applyParallaxGrow (elementsArray, parametersArray, scrolled) {
+  elementsArray.forEach((element, index) => {
+    if (Array.from(element.classList).includes('p--grow')) {
+      parallaxGrow(
+        element,
+        parametersArray[index].grow,
+        scrolled
+      )
+    }
+  })
+}
+
+function parallaxGrow (element, parameters, scrolled) {
+  let width
+  let height
+  if (scrolled <= parameters.startY) {
+    width = parameters.initialWidth
+    height = parameters.initialHeight
+  } else if (scrolled >= parameters.endY) {
+    width = getDimension(
+      parameters.initialWidth,
+      parameters.yRangeSize,
+      parameters.yRangeSize,
+      parameters.widthRate
+    )
+    height = getDimension(
+      parameters.initialHeight,
+      parameters.yRangeSize,
+      parameters.yRangeSize,
+      parameters.heightRate
+    )
+  } else {
+    const yAdvance = scrolled - parameters.startY
+    width = getDimension(
+      parameters.initialWidth,
+      yAdvance,
+      parameters.yRangeSize,
+      parameters.widthRate
+    )
+    height = getDimension(
+      parameters.initialHeight,
+      yAdvance,
+      parameters.yRangeSize,
+      parameters.heightRate
+    )
+  }
+  element.style.width = width + 'px'
+  element.style.height = height + 'px'
+}
+
+function getDimension (baseDimension, advance, rangeSize, rate) {
+  const advancePercent = advance / rangeSize
+  let dimension = baseDimension * (1 + advancePercent * rate)
+  if (dimension < 0) {
+    dimension = 0
+  }
+  return dimension
+}
+
+// General functions
+
+function flushCss (element) {
+  element.offsetHeight
 }
 
 const debounce = (func, delay) => {
@@ -417,6 +578,11 @@ function remToPx (rem) {
 
 function pxToRem (px) {
   return px / parseFloat(getComputedStyle(document.body).fontSize)
+}
+
+function differenceIsAlmostZero (x, y) {
+  const difference = 0.01
+  return Math.abs(x - y) < difference
 }
 
 
@@ -438,6 +604,7 @@ console.log(window.pageYOffset)
 
 const MIN_SCROLL_PX = 100
 const SCROLL_DEBOUNCE_MS = 150
+const RESIZE_DEBOUNCE_MS = 150
 let lastScroll = 0
 const parallaxElements = selectParallaxElements()
 const initialPositions = getParallaxElementsInitialYPositionInRems(
@@ -449,22 +616,22 @@ let parallaxScrollParameters = getParallaxScrollParameters(
 )
 console.log(parallaxScrollParameters)
 
-window.addEventListener('resize', function (e) {
-  console.log('resizing')
+window.addEventListener('resize', debounce(() => {
+  console.log('DEBOUNCING RESIZE !!!!!')
   parallaxScrollParameters = getParallaxScrollParameters(
     parallaxElements,
     initialPositions
   )
   console.log(parallaxScrollParameters)
-  applyParallaxMove(parallaxElements, parallaxScrollParameters)
-})
+  applyParallax(parallaxElements, parallaxScrollParameters)
+}, RESIZE_DEBOUNCE_MS))
 
 window.addEventListener('scroll', function (e) {
-  applyParallaxMove(parallaxElements, parallaxScrollParameters)
+  applyParallax(parallaxElements, parallaxScrollParameters)
 })
 
 window.addEventListener('scroll', debounce(() => {
-  console.log('DEBOUNCING !!!!!')
+  console.log('DEBOUNCING SCROLL!!!!!')
   applyParallaxMoveEnd(parallaxElements, parallaxScrollParameters, MIN_SCROLL_PX)
 }, SCROLL_DEBOUNCE_MS))
 
