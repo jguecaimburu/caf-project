@@ -1,10 +1,5 @@
-/*
-THERE'S A THIN LINE BETWEEN SECTIONS ON MOBILE
-IT MIGHT WORK TO ADD -1PX MARGIN AND 1PX PADDING to UP SECTIONS
-IF IT BREAKS THE COLORS IT MUST BE CORRECTED IN THE BACKGROUND
-*/
-
-
+/* Font import */
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 
 /* Root variables */
 :root {
@@ -12,8 +7,9 @@ IF IT BREAKS THE COLORS IT MUST BE CORRECTED IN THE BACKGROUND
   --color-sky-02: #20202c;
   --color-sky-03: #515175;
   --color-sky-04: #7072ab;
-  --color-sky-05: #eab0d1
-
+  --color-sky-05: #eab0d1;
+  --color-sky-05-opacity: rgba(234, 176, 209, 0.2);
+  --color-sky-05-white: #ffe3f3;
 }
 
 /* Set general document properties */
@@ -29,6 +25,12 @@ IF IT BREAKS THE COLORS IT MUST BE CORRECTED IN THE BACKGROUND
 html {
   font-size: 62.5%;
   scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 /* 1200px / 16px = 75em */
@@ -52,22 +54,59 @@ html {
   }
 }
 
+body {
+  width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: white;
+}
+
+
+section {
+  margin-bottom: -1px;
+  padding-top: 1px;
+  position: relative;
+}
+
+h2 {
+  font-size: 5rem;
+}
+
+h3 {
+  font-size: 3rem;
+}
+
+p {
+  font-size: 2rem;
+}
+
 li {
   list-style: none;
 }
 
-/* TESTING BACKGROUND */
+a {
+  font-size: 2rem;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* WELCOME SECTION */
+
+/* BACKGROUND ANIMATION */
 
 .welcome {
   width: 100%;
-  height: 120rem;
+  height: 100vh;
   background: linear-gradient(
     to bottom,
     var(--color-sky-01) 50%,
     var(--color-sky-02) 100%
     );
-  position: relative;
-  overflow: hidden;
 }
 
 @keyframes move-background {
@@ -122,72 +161,231 @@ li {
   z-index: 2;
 }
 
-.about {background-color: lavenderblush;
+@keyframes text-start {
+  from {
+		transform: translate3d(0px, 5vh, 0px);
+    opacity: 0.2;
+	}
+	to {
+		transform: translate3d(0px, 0px, 0px);
+    opacity: 1;
+	}
+}
+
+.welcome__title {
+  position: relative;
+  margin: 0 auto;
+  margin-top: 25vh;
+  z-index: 3;
+  width: 50%;
+  height: 8%;
+  font-size: 10vw;
+  animation: text-start 500ms ease-out;
+  animation-fill-mode: forwards;
+}
+
+@media (max-width: 28.75em) {
+  .welcome__title {
+    width: 70%;
+    font-size: 15vw;
+  }
+}
+
+.welcome__title-parts {
+  position: absolute;
+}
+
+.char-h {
+  top: 0;
+  left: 0;
+}
+
+.char-o {
+  top: 0;
+  left: 25%;
+}
+
+.char-l {
+  top: 0;
+  left: 50%;
+}
+
+.char-a {
+  top: 0;
+  left: 75%;
+}
+
+/* ABOUT SECTION */
+
+.about {
   width: 100%;
-  height: 140rem;
+  height: auto;
+  min-height: 100vh;
   background: linear-gradient(
     to bottom,
     var(--color-sky-02) 0%,
     var(--color-sky-03) 100%
     );
   position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
-.carousel-container {
+.about__title {
+  position: relative;
+  font-size: 7rem;
+  max-width: 50%;
+  margin: 5rem;
+}
+
+.about__intro {
+  position: relative;
+  font-size: 3rem;
+  max-width: 50%;
+  margin: 2rem;
+  text-align: justify;
+}
+
+.about__projects-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-auto-rows: minmax(37rem, 1fr);
+  grid-gap: 4rem;
+  width: 80%;
+  height: auto;
+  margin: 3rem;
+}
+
+.about__project-tile {
+  background-color: white;
   width: 100%;
-  height: 100rem;
+  height: auto;
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 4px solid pink;
+}
+
+.about__project-logo {
+  width: 100%;
+  max-width:100%;
+  max-height:100%;
+  padding: 10%;
+  z-index: 1;
+  position: relative;
+}
+
+.about__project-description {
+  width: 100%;
+  height: 100%;
+  color: black;
+  text-align: center;
+  padding: 3rem;
+  background-color: var(--color-sky-05-white);
+  opacity: 0;
+  z-index: 2;
+  transition: opacity 700ms ease-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.about__project-description:hover {
+  opacity: 1;
+  border: 6px solid var(--color-sky-05);
+}
+
+.about__btn {
+  position: relative;
+  padding: 1rem 2rem;
+  border-radius: 2px;
+  font-size: 4rem;
+  margin: 3rem;
+  background: white;
+  color: black;
+  transition: background 400ms ease-out;
+}
+
+.about__btn:hover {
+  color: white;
+  background: var(--color-sky-05-opacity);
+  border: 2px solid var(--color-sky-05);
+  font-weight: bold;
+}
+
+/* TRANSITION SECTION */
+
+.transition {
+  width: 100%;
+  height: 130vh;
   background: linear-gradient(
     to bottom,
     var(--color-sky-03) 0%,
     var(--color-sky-04) 100%
     );
   position: relative;
+  overflow: hidden;
 }
 
-.contact {
+
+/* CAROUSEL SECTION */
+
+/* CONTAINER */
+
+.carousel-container {
   width: 100%;
-  height: 140rem;
+  height: 100vh;
   background: linear-gradient(
     to bottom,
     var(--color-sky-04) 0%,
-    var(--color-sky-05) 80%
+    var(--color-sky-05) 100%
     );
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  border: 6px solid yellow;
 }
 
-/* END TESTING BACKGROUND */
+.carousel-container__title {
+  border: 2px solid black;
+  width: 80%;
+  height: 10%;
+  z-index: 12;
+}
 
-/* TESTING CAROUSEL */
 
-/* DELETE SOME, CORRECT OTHERS */
+/* CAROUSEL */
 
 .carousel {
-  height: 60rem;
-  width: 60%;
-  margin: 0 auto;
-  border: 1px solid white;
-  display: flex;
-  flex-wrap: wrap;
-  padding: 5rem;
+  background-image: url("/img/objects/zeppelin.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  height: 70%;
+  width: 80vw;
   position: relative;
+  z-index: 10;
+  border: 1px solid white;
 }
 
 .carousel__btn {
-  height: 3rem;
-  width: 3rem;
-  border: 0;
+  height: 5rem;
+  width: 5rem;
+  border-radius: 50%;
   background-color: black;
   position: absolute;
   cursor: pointer;
-}
-
-.carousel__slides-container {
-  width: 100%;
-  height: 100%;
-  margin: auto;
-  position: relative;
-  border: 4px solid lightskyblue;
-  overflow: hidden;
 }
 
 .carousel__btn--backward {
@@ -208,6 +406,18 @@ li {
   transform: translateX(50%);
 }
 
+.carousel__slides-container {
+  width: 50%;
+  height: 50%;
+  margin: auto;
+  position: relative;
+  left: -10%;
+  top: 18%;
+  border-radius: 3rem;
+  border: 4px solid lightskyblue;
+  overflow: hidden;
+}
+
 .carousel__slide {
   position: absolute;
   width: 100%;
@@ -216,46 +426,95 @@ li {
   transition-duration: 300ms;
   transition-timing-function: ease-in-out;
   z-index: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
 }
 
-/* DELETE ALL */
+/* SLIDES CONTENT */
 
-.col1 {
-  background-color: sandybrown;
-  font-size: 10rem;
+.carousel__slide-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  object-position: 0 -10vh;
 }
 
-.col2 {
-  background-color: aquamarine;
-  font-size: 10rem;
+.carousel__slide-footer {
+  width: 100%;
+  height: auto;
+  background-color: black;
+  position: relative;
+  text-align: center;
+  margin-top: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.col3 {
-  background-color: blueviolet;
-  font-size: 10rem;
+.carousel__slide-title {
+  color: white;
+  height: 3rem;
+  margin: 1rem;
+  position: relative;
 }
 
-.col4 {
-  background-color: greenyellow;
-  font-size: 10rem;
+.carousel__slide-btn {
+  margin: 2rem;
+  position: relative;
+  padding: 1rem 2rem;
+  border-radius: 2px;
+  font-size: 2rem;
+  max-height: 4.5rem;
+  background: white;
+  color: black;
+  transition: background 400ms ease-out;
 }
-/* TESTING CAROUSEL END */
 
-/* TESTING PARALLAX */
+.carousel__slide-btn:hover {
+  color: white;
+  background: var(--color-sky-02);
+  border: 2px solid var(--color-sky-05-opacity);
+  font-weight: bold;
+}
+
+/* CONTACT SECTION */
+
+.contact {
+  width: 100%;
+  height: 140rem;
+  background-color: var(--color-sky-05);
+  position: relative;
+}
+
+
+
+/* PARALLAX PROPERTIES*/
 
 .p--move {
   transition: transform 100ms linear;
 }
 
-.welcome__interaction {
-  width: 40%;
-  height: 15rem;
-  background-color: rgba(255, 255, 255, 0.3);
-  position: absolute;
-  left: 10%;
-  top: 40rem;
-  z-index: 3;
+.p--move--container {
+  position: relative;
 }
+
+.p--grow {
+
+}
+
+.p--grow--container {
+  overflow: hidden;
+}
+
+
+/* DELETE OFFSET*/
 
 .y-offset-marker {
   width: auto;
@@ -267,6 +526,18 @@ li {
   top: 0;
   z-index: 10;
 }
+
+/* .welcome__interaction {
+  width: 40%;
+  height: 15rem;
+  background-color: rgba(255, 255, 255, 0.3);
+  position: absolute;
+  left: 10%;
+  top: 40rem;
+  z-index: 3;
+}
+
+
 
 .test-fade {
   width: 100%;
@@ -309,7 +580,4 @@ li {
   width: 50px;
   height: 50px;
   margin: auto;
-}
-
-
-/* END TESTING PARALLAX */
+} */

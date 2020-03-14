@@ -606,6 +606,7 @@ const MIN_SCROLL_PX = 100
 const SCROLL_DEBOUNCE_MS = 150
 const RESIZE_DEBOUNCE_MS = 150
 let lastScroll = 0
+
 const parallaxElements = selectParallaxElements()
 const initialPositions = getParallaxElementsInitialYPositionInRems(
   parallaxElements
