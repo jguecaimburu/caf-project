@@ -405,6 +405,28 @@ a {
   margin-top: 5vh;
 }
 
+@media (max-width: 600px) {
+  .transition__figure {
+    font-size: 12vw;
+    max-width: 85%;
+  }
+
+  .transition__figure-explanation {
+    max-width: 85%;
+  }
+
+  .transition__paragraph {
+    max-width: 85%;
+  }
+
+  .transition__second-quote-author,
+  .transition__first-quote-author,
+  .transition__second-quote-text,
+  .transition__first-quote {
+    width: 80vw;
+  }
+}
+
 
 /* CAROUSEL SECTION */
 
@@ -541,11 +563,12 @@ a {
 
 @media (max-width: 600px) {
   .carousel {
-    height: 80vh;
+    height: 70vh;
     min-height: 0;
     max-height: 100vh;
     min-width: 0;
     align-self: center;
+    background-image: image();
   }
 
   .carousel__slides-container {
@@ -791,11 +814,12 @@ a {
 
 .y-offset-marker {
   width: auto;
+  max-width: 25vw;
   height: 40px;
-  font-size: 30px;
+  font-size: 25px;
   background-color: rgba(255, 255, 255, 0.4);
   position: absolute;
-  right: 0;
+  right: 5px;
   top: 0;
   z-index: 10;
 }
