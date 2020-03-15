@@ -55,8 +55,6 @@ html::-webkit-scrollbar {
 }
 
 body {
-  width: 100vw;
-  overflow-x: hidden;
   position: relative;
   font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
@@ -67,9 +65,11 @@ body {
 
 
 section {
+  width: 100vw;
   margin-bottom: -1px;
   padding-top: 10vh;
   position: relative;
+  overflow-x: hidden;
 }
 
 h2 {
@@ -100,7 +100,6 @@ a {
 /* BACKGROUND ANIMATION */
 
 .welcome {
-  width: 100%;
   height: 100vh;
   background: linear-gradient(
     to bottom,
@@ -218,7 +217,6 @@ a {
 /* ABOUT SECTION */
 
 .about {
-  width: 100%;
   height: auto;
   min-height: 100vh;
   background: linear-gradient(
@@ -336,7 +334,6 @@ a {
 /* TRANSITION SECTION */
 
 .transition {
-  width: 100%;
   min-height: 130  vh;
   background: linear-gradient(
     to bottom,
@@ -414,7 +411,6 @@ a {
 /* CONTAINER */
 
 .carousel-container {
-  width: 100%;
   height: auto;
   padding-top: 15vh;
   min-height: 100vh;
@@ -660,7 +656,6 @@ a {
 /* CONTACT SECTION */
 
 .contact {
-  width: 100%;
   height: 160vh;
   background-color: var(--color-sky-05);
   position: relative;
@@ -764,7 +759,7 @@ a {
 .footer {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  width: 100vw;
   height: 40vh;
   background-color: var(--color-footer);
   color: white;
