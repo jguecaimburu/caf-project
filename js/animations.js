@@ -8,9 +8,10 @@ function selectParallaxElements () {
 
 function getParallaxElementsInitialYPositionInRems (elementsArray) {
   const elementsYPositions = []
+  const scrolled = window.pageYOffset
   elementsArray.forEach(element => {
     const boundingRect = element.getBoundingClientRect()
-    const topRem = pxToRem(boundingRect.top)
+    const topRem = pxToRem(boundingRect.top + scrolled)
     elementsYPositions.push(topRem)
   })
   return elementsYPositions
@@ -558,6 +559,25 @@ function getDimension (baseDimension, advance, rangeSize, rate) {
   return dimension
 }
 
+// Avoids content jumps on resize
+
+function getTopElementInViewport () {
+  let tempElement
+  topElement = null // Global
+  for (let x = 0; x < document.body.offsetWidth; x++) {
+    tempElement = document.elementFromPoint(x, 2)
+    if (!topElement || tempElement.offsetTop > topElement.offsetTop) {
+      topElement = tempElement
+    }
+  }
+}
+
+function scrollToTopElement () {
+  if (topElement) {
+    topElement.scrollIntoView(true)
+  }
+}
+
 // General functions
 
 function flushCss (element) {
@@ -606,6 +626,7 @@ const MIN_SCROLL_PX = 100
 const SCROLL_DEBOUNCE_MS = 150
 const RESIZE_DEBOUNCE_MS = 150
 let lastScroll = 0
+let topElement
 
 const parallaxElements = selectParallaxElements()
 const initialPositions = getParallaxElementsInitialYPositionInRems(
@@ -623,8 +644,8 @@ window.addEventListener('resize', debounce(() => {
     parallaxElements,
     initialPositions
   )
-  console.log(parallaxScrollParameters)
   applyParallax(parallaxElements, parallaxScrollParameters)
+  scrollToTopElement()
 }, RESIZE_DEBOUNCE_MS))
 
 window.addEventListener('scroll', function (e) {
@@ -634,6 +655,7 @@ window.addEventListener('scroll', function (e) {
 window.addEventListener('scroll', debounce(() => {
   console.log('DEBOUNCING SCROLL!!!!!')
   applyParallaxMoveEnd(parallaxElements, parallaxScrollParameters, MIN_SCROLL_PX)
+  getTopElementInViewport()
 }, SCROLL_DEBOUNCE_MS))
 
 
