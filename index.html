@@ -11,12 +11,56 @@
   </head>
   <body>
 
+<!-- OFFSET MARKER - DELETE -->
     <p
       class="y-offset-marker parallax p--move"
-      data-xmove='{"isMoved": false, "deltaYrems": 0, "centerEndAtViewidth": 0, "viewheightAnticipation": 0}'
-      data-ymove ='{"isMoved": true, "deltaYrems": 0, "rate": 1, "viewheightAnticipation": 0}'
+      data-xmove='{"isMoved": false, "viewheightDuration": 0, "centerEndAtViewidth": 0, "viewheightAnticipation": 0}'
+      data-ymove ='{"isMoved": true, "viewheightDuration": 0, "rate": 1, "viewheightAnticipation": 0}'
       >
     </p>
+<!-- END OFFSET MARKER - DELETE -->
+
+
+
+<!-- TEST SECTION - DELETE -->
+    <section class="test-container-section">
+      <div
+        class="welcome__interaction parallax p--move p--move-end"
+        data-xmove='{"isMoved": true, "viewheightDuration": 30, "centerEndAtViewidth": 50, "viewheightAnticipation": 40}'
+        data-ymove ='{"isMoved": true, "viewheightDuration": 60, "rate": 0.8, "viewheightAnticipation": 40}'
+        data-end='{"rate": 0.1, "maxRems": 3}'
+      >
+      </div>
+      <div class="test-fade">
+        <div
+          class="test-fade__in parallax p--fade"
+          data-fade ='{"viewheightAnticipation": 80, "viewheightDuration": 10, "initialOpacity": 0, "endOpacity": 1}'
+          >
+          <p>Fade IN</p>
+        </div>
+        <div
+          class="test-fade__out parallax p--fade"
+          data-fade ='{"viewheightAnticipation": 20, "viewheightDuration": 10, "initialOpacity": 1, "endOpacity": 0}'
+          >
+          <p>Fade OUT</p>
+        </div>
+
+      </div>
+      <div class="test-grow">
+        <div class="test-grow__limit-container">
+          <div
+            class="test-grow__element parallax p--grow"
+            data-grow ='{"viewheightAnticipation": 80, "viewheightDuration": 30, "widthRate": 4, "heightRate": 4}'
+            >
+          </div>
+        </div>
+
+      </div>
+    </section>
+<!-- TEST SECTION - DELETE -->
+
+
+
 
     <section class="welcome">
       <div class="welcome__stars">
@@ -295,7 +339,7 @@
           <li class="contact__link contact__link--wa">
             <a
               class="contact__link--wa-mobile"
-              href="https://wa.me/5491122381407?text=Hi%20Huancito!"
+              href="https://wa.me/5491122381406?text=Hi%20Huancito!"
               >
               Whatsapp
             </a>
@@ -324,38 +368,3 @@
   </body>
 
 </html>
-
-
-<!-- <div
-COMMENTS HAVE p - - AS DOUBLE HYPHENS ARE NOT ALLOWED
-  class="welcome__interaction parallax p- - move p - -move-end"
-  data-xmove='{"isMoved": true, "deltaYrems": 30, "centerEndAtViewidth": 50, "viewheightAnticipation": 40}'
-  data-ymove ='{"isMoved": true, "deltaYrems": 60, "rate": 0.8, "viewheightAnticipation": 40}'
-  data-end='{"rate": 0.1, "maxRems": 3}'
->
-</div>
-<div class="test-fade">
-  <div
-    class="test-fade__in parallax p- -fade"
-    data-fade ='{"viewheightAnticipation": 80, "viewheightDuration": 10, "initialOpacity": 0, "endOpacity": 1}'
-    >
-    <p>Fade IN</p>
-  </div>
-  <div
-    class="test-fade__out parallax p- -fade"
-    data-fade ='{"viewheightAnticipation": 20, "viewheightDuration": 10, "initialOpacity": 1, "endOpacity": 0}'
-    >
-    <p>Fade OUT</p>
-  </div>
-
-</div>
-<div class="test-grow">
-  <div class="test-grow__limit-container">
-    <div
-      class="test-grow__element parallax p- -grow"
-      data-grow ='{"viewheightAnticipation": 80, "viewheightDuration": 30, "widthRate": 4, "heightRate": 4}'
-      >
-    </div>
-  </div>
-
-</div> -->

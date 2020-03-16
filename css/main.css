@@ -810,7 +810,18 @@ a {
 }
 
 
-/* DELETE OFFSET*/
+
+
+
+/* TEST OBJECTS - DELETE*/
+
+.test-container-section {
+  width: 100vw;
+  min-height: 200vh;
+  position: relative;
+  background-color: purple;
+  padding-top: 100vh;
+}
 
 .y-offset-marker {
   width: auto;
@@ -825,17 +836,15 @@ a {
   overflow: hidden;
 }
 
-/* .welcome__interaction {
+.welcome__interaction {
   width: 40%;
   height: 15rem;
   background-color: rgba(255, 255, 255, 0.3);
   position: absolute;
   left: 10%;
-  top: 40rem;
+  top: 40vh;
   z-index: 3;
 }
-
-
 
 .test-fade {
   width: 100%;
@@ -878,4 +887,4 @@ a {
   width: 50px;
   height: 50px;
   margin: auto;
-} */
+}
