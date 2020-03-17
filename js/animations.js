@@ -36,7 +36,7 @@ function getCurrentTranslateStateString (element) {
 }
 
 function getValuesFromTransformString (transformString) {
-  const intRegex = /(\d+.)*\d+px/g
+  const intRegex = /-*(\d+.)*\d+px/g
   if (transformString) {
     const translateArr = transformString.match(intRegex).map((x) => parseFloat(x))
     return { x: translateArr[0], y: translateArr[1] }
@@ -230,7 +230,7 @@ function getMoveXParameters ({
       scrollLimits: scrollLimits
     })
     xParameters.yRangeSize = (xParameters.endY - xParameters.startY)
-    xParameters.maxDistance = getXCenterEnd({
+    xParameters.maxDistance = getXMaxDistance({
       element: element,
       boundingRect: boundingRect,
       xMoveData: xMoveData
@@ -244,12 +244,12 @@ function getMoveXParameters ({
   return xParameters
 }
 
-function getXCenterEnd ({ element, boundingRect, xMoveData }) {
+function getXMaxDistance ({ element, boundingRect, xMoveData }) {
   const elementWidth = boundingRect.width
   const windowWidth = window.innerWidth
-  const initial = parseFloat(getComputedStyle(element).left)
-  const finalXPercent = xMoveData.centerEndAtViewidth / 100
-  return finalXPercent * windowWidth - elementWidth / 2 - initial
+  const xDistance = (xMoveData.viewwidthDuration / 100) * windowWidth
+  const distanceSign = getProductSign(1, xDistance)
+  return xDistance - distanceSign * elementWidth / 2
 }
 
 function getParallaxFadeParameters ({
@@ -620,12 +620,15 @@ function parallaxMoveEnd ({
   scrolled,
   endTransitionTime
 }) {
+  console.log('element', element)
   const endParameters = getParallaxEndParameters({
     element: element,
     moveParameters: moveParameters,
     deltaScroll: deltaScroll
   })
+  console.log('endParameters', endParameters)
   const maxMove = getMaxMove(moveParameters)
+  console.log('maxMove', maxMove)
   const currentTranslateStateString = getCurrentTranslateStateString(element)
   const translateState = getValuesFromTransformString(currentTranslateStateString)
   const endTranslateDistances = getEndTranslateDistances({
@@ -741,7 +744,10 @@ function getAxisEndTranslateDistance ({
     })
   ) {
     const endSign = getProductSign(axisMaxMove, deltaScroll)
+    console.log('moveSign', endSign)
+    console.log('Actual state', axisTranslateState)
     const endAdded = axisTranslateState + endSign * axisEndParameters
+    console.log('Modified state', endAdded)
     return getDistanceInRange(endAdded, axisMaxMove)
   } else {
     return axisTranslateState
