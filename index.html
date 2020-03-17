@@ -14,7 +14,7 @@
 <!-- OFFSET MARKER - DELETE -->
     <p
       class="y-offset-marker parallax p--move"
-      data-xmove='{"isMoved": false, "viewheightDuration": 0, "centerEndAtViewidth": 0, "viewheightAnticipation": 0}'
+      data-xmove='{"isMoved": false, "viewheightDuration": 0, "viewwidthDuration": 0, "viewheightAnticipation": 0}'
       data-ymove ='{"isMoved": true, "viewheightDuration": 0, "rate": 1, "viewheightAnticipation": 0}'
       >
     </p>
@@ -23,23 +23,23 @@
 
 
 <!-- TEST SECTION - DELETE -->
-    <section class="test-container-section">
+    <!-- <section class="test-container-section">
       <div
-        class="welcome__interaction parallax p--move p--move-end"
-        data-xmove='{"isMoved": true, "viewheightDuration": 30, "centerEndAtViewidth": 50, "viewheightAnticipation": 40}'
+        class="welcome__interaction parallax p- -move p- -move-end"
+        data-xmove='{"isMoved": true, "viewheightDuration": 30, "viewwidthDuration": 50, "viewheightAnticipation": 40}'
         data-ymove ='{"isMoved": true, "viewheightDuration": 60, "rate": 0.8, "viewheightAnticipation": 40}'
         data-end='{"rate": 0.1, "maxRems": 3}'
       >
       </div>
       <div class="test-fade">
         <div
-          class="test-fade__in parallax p--fade"
+          class="test-fade__in parallax p- -fade"
           data-fade ='{"viewheightAnticipation": 80, "viewheightDuration": 10, "initialOpacity": 0, "endOpacity": 1}'
           >
           <p>Fade IN</p>
         </div>
         <div
-          class="test-fade__out parallax p--fade"
+          class="test-fade__out parallax p- -fade"
           data-fade ='{"viewheightAnticipation": 20, "viewheightDuration": 10, "initialOpacity": 1, "endOpacity": 0}'
           >
           <p>Fade OUT</p>
@@ -49,14 +49,14 @@
       <div class="test-grow">
         <div class="test-grow__limit-container">
           <div
-            class="test-grow__element parallax p--grow"
+            class="test-grow__element parallax p- -grow"
             data-grow ='{"viewheightAnticipation": 80, "viewheightDuration": 30, "widthEndScale": 5, "heightEndScale": 5}'
             >
           </div>
         </div>
 
       </div>
-    </section>
+    </section> -->
 <!-- TEST SECTION - DELETE -->
 
 
@@ -69,11 +69,46 @@
       </div>
       <div class="welcome__fade-stars">
       </div>
-      <h1 class="welcome__title">
-        <span class="welcome__title-parts char-h">H</span>
-        <span class="welcome__title-parts char-o">O</span>
-        <span class="welcome__title-parts char-l">L</span>
-        <span class="welcome__title-parts char-a">A</span>
+      <h1
+        class="welcome__title"
+        >
+        <span
+          class="welcome__title-parts char-h parallax p--move p--move-end p--fade"
+          data-xmove='{"isMoved": true, "viewheightDuration": 60, "viewwidthDuration": -30, "viewheightAnticipation": 40}'
+          data-ymove ='{"isMoved": false, "viewheightDuration": 0, "rate": 0, "viewheightAnticipation": 0}'
+          data-end='{"rate": 0.2, "maxRems": 4}'
+          data-fade ='{"viewheightAnticipation": 35, "viewheightDuration": 40, "initialOpacity": 1, "endOpacity": 0}'
+          >
+          H
+        </span>
+        <span
+          class="welcome__title-parts char-o parallax p--move p--move-end p--fade"
+          data-xmove='{"isMoved": true, "viewheightDuration": 60, "viewwidthDuration": -15, "viewheightAnticipation": 40}'
+          data-ymove ='{"isMoved": true, "viewheightDuration": 60, "rate": 0.4, "viewheightAnticipation": 40}'
+          data-end='{"rate": 0.2, "maxRems": 4}'
+          data-fade ='{"viewheightAnticipation": 35, "viewheightDuration": 40, "initialOpacity": 1, "endOpacity": 0}'
+          >
+          O
+        </span>
+        <span
+          class="welcome__title-parts char-l parallax p--move p--move-end p--fade"
+          data-xmove='{"isMoved": true, "viewheightDuration": 60, "viewwidthDuration": 15, "viewheightAnticipation": 40}'
+          data-ymove ='{"isMoved": true, "viewheightDuration": 60, "rate": 0.4, "viewheightAnticipation": 40}'
+          data-end='{"rate": 0.2, "maxRems": 4}'
+          data-fade ='{"viewheightAnticipation": 35, "viewheightDuration": 40, "initialOpacity": 1, "endOpacity": 0}'
+          >
+          L
+        </span>
+        <span
+          class="welcome__title-parts char-a parallax p--move p--move-end p--fade"
+          data-xmove='{"isMoved": true, "viewheightDuration": 60, "viewwidthDuration": 30, "viewheightAnticipation": 40}'
+          data-ymove ='{"isMoved": false, "viewheightDuration": 0, "rate": 0, "viewheightAnticipation": 0}'
+          data-end='{"rate": 0.2, "maxRems": 4}'
+          data-fade ='{"viewheightAnticipation": 35, "viewheightDuration": 40, "initialOpacity": 1, "endOpacity": 0}'
+          >
+          A
+        </span>
+
       </h1>
     </section>
 
