@@ -11,19 +11,34 @@ function getParallaxElementsYPosition (elementsArray) {
   const scrolled = Math.floor(window.pageYOffset)
   elementsArray.forEach(element => {
     const boundingRect = element.getBoundingClientRect()
-    const translatedY = getCurrentTranslateState(element).y
+    const currentTranslateStateString = getCurrentTranslateStateString(element)
+    const translatedY = getValuesFromTransformString(currentTranslateStateString).y
     const correctedTop = boundingRect.top + scrolled - translatedY
     elementsYPositions.push(correctedTop)
   })
   return elementsYPositions
 }
 
-function getCurrentTranslateState (element) {
+function getCurrentTranslateStateString (element) {
+  const translateRegex = /translate3d\(.*\)/
+  const currentTransform = element.style.transform
+  let matchArray
+  if (currentTransform) {
+    matchArray = currentTransform.match(translateRegex)
+  } else {
+    return ''
+  }
+  if (matchArray) {
+    return matchArray[0]
+  } else {
+    return ''
+  }
+}
+
+function getValuesFromTransformString (transformString) {
   const intRegex = /(\d+.)*\d+px/g
-  const translateStr = element.style.transform
-  if (translateStr) {
-    const translateArr = translateStr.match(intRegex).map((x) => parseFloat(x)
-    )
+  if (transformString) {
+    const translateArr = transformString.match(intRegex).map((x) => parseFloat(x))
     return { x: translateArr[0], y: translateArr[1] }
   } else {
     return { x: 0, y: 0 }
@@ -117,6 +132,7 @@ function getParallaxMoveParameters ({
     value: (maxEndY + parallaxRangeExtra)
   })
 
+  moveParameters.endLimits = { low: minStartY, high: maxEndY }
   moveParameters.limits = { low: lowLimit, high: highLimit }
   return moveParameters
 }
@@ -297,10 +313,8 @@ function getParallaxGrowParameters ({
     scrollLimits: scrollLimits
   })
   growParameters.yRangeSize = (growParameters.endY - growParameters.startY)
-  growParameters.widthRate = growData.widthRate
-  growParameters.heightRate = growData.heightRate
-  growParameters.initialWidth = parseFloat(getComputedStyle(element).width)
-  growParameters.initialHeight = parseFloat(getComputedStyle(element).height)
+  growParameters.widthEndScale = growData.widthEndScale
+  growParameters.heightEndScale = growData.heightEndScale
   const lowLimit = correctToRange({
     limits: scrollLimits,
     value: (growParameters.startY - parallaxRangeExtra)
@@ -314,8 +328,8 @@ function getParallaxGrowParameters ({
 }
 
 function getParallaxGrowData (element) {
-  const growString = element.dataset.grow
-  return JSON.parse(growString)
+  const growDataString = element.dataset.grow
+  return JSON.parse(growDataString)
 }
 
 // Apply parallax scroll and resize functions //
@@ -443,21 +457,28 @@ function hasParallaxEffect (element, typeOfEffect) {
 // Parallax main move functions //
 
 function parallaxMove ({ element, parameters, scrolled }) {
+  const currentTranslateStateString = getCurrentTranslateStateString(element)
+  const translateState = getValuesFromTransformString(currentTranslateStateString)
   const translateDistances = getTranslateDistances({
     element: element,
     parameters: parameters,
-    scrolled: scrolled
+    scrolled: scrolled,
+    translateState: translateState
   })
   const translateString = makeTranslateString(translateDistances)
-  moveElementByDistances(element, translateString)
+  modifyTransformState({
+    element: element,
+    currentPropertyStateString: currentTranslateStateString,
+    newPropertyString: translateString
+  })
 }
 
 function getTranslateDistances ({
   element,
   parameters,
-  scrolled
+  scrolled,
+  translateState
 }) {
-  const translateState = getCurrentTranslateState(element)
   const x = getTranslateDistance({
     axis: 'x',
     axisParameters: parameters.x,
@@ -527,8 +548,30 @@ function makeTranslateString (translateDistances) {
   return `translate3d(${x}px, ${y}px, 0px)`
 }
 
-function moveElementByDistances (element, translateString) {
-  element.style.transform = translateString
+function modifyTransformState ({
+  element,
+  currentPropertyStateString,
+  newPropertyString
+}) {
+  const currentTransform = element.style.transform
+  let newTransformString
+  if (!currentTransform) {
+    newTransformString = newPropertyString
+  } else if (
+    currentTransform &&
+    currentPropertyStateString === ''
+  ) {
+    newTransformString =
+      currentTransform +
+      ' ' +
+      newPropertyString
+  } else {
+    newTransformString = currentTransform.replace(
+      currentPropertyStateString,
+      newPropertyString
+    )
+  }
+  element.style.transform = newTransformString
 }
 
 // Parallax smooth ending functions //
@@ -548,7 +591,7 @@ function applyParallaxMoveEnd ({
         hasParallaxEffect(element, 'p--move-end') &&
         hasParallaxEffect(element, 'p--move') &&
         inRange({
-          limits: moveParameters.limits,
+          limits: moveParameters.endLimits,
           value: scrolled
         })
       ) {
@@ -556,6 +599,7 @@ function applyParallaxMoveEnd ({
           element: element,
           moveParameters: moveParameters,
           deltaScroll: deltaScroll,
+          scrolled: scrolled,
           endTransitionTime: endTransitionTime
         })
       }
@@ -573,6 +617,7 @@ function parallaxMoveEnd ({
   element,
   moveParameters,
   deltaScroll,
+  scrolled,
   endTransitionTime
 }) {
   const endParameters = getParallaxEndParameters({
@@ -581,16 +626,20 @@ function parallaxMoveEnd ({
     deltaScroll: deltaScroll
   })
   const maxMove = getMaxMove(moveParameters)
-  const translateState = getCurrentTranslateState(element)
+  const currentTranslateStateString = getCurrentTranslateStateString(element)
+  const translateState = getValuesFromTransformString(currentTranslateStateString)
   const endTranslateDistances = getEndTranslateDistances({
     translateState: translateState,
     endParameters: endParameters,
     maxMove: maxMove,
-    deltaScroll: deltaScroll
+    moveParameters: moveParameters,
+    deltaScroll: deltaScroll,
+    scrolled: scrolled
   })
   const endTranslateString = makeTranslateString(endTranslateDistances)
   moveEndByDistances({
     element: element,
+    currentTranslateStateString: currentTranslateStateString,
     endTranslateString: endTranslateString,
     endTransitionTime: endTransitionTime
   })
@@ -651,19 +700,25 @@ function getEndTranslateDistances ({
   translateState,
   endParameters,
   maxMove,
-  deltaScroll
+  moveParameters,
+  deltaScroll,
+  scrolled
 }) {
   const x = getAxisEndTranslateDistance({
     axisTranslateState: translateState.x,
     axisEndParameters: endParameters.x,
     axisMaxMove: maxMove.x,
-    deltaScroll: deltaScroll
+    axisParameters: moveParameters.x,
+    deltaScroll: deltaScroll,
+    scrolled: scrolled
   })
   const y = getAxisEndTranslateDistance({
     axisTranslateState: translateState.y,
     axisEndParameters: endParameters.y,
     axisMaxMove: maxMove.y,
-    deltaScroll: deltaScroll
+    axisParameters: moveParameters.y,
+    deltaScroll: deltaScroll,
+    scrolled: scrolled
   })
   return { x: x, y: y }
 }
@@ -672,11 +727,25 @@ function getAxisEndTranslateDistance ({
   axisTranslateState,
   axisEndParameters,
   axisMaxMove,
-  deltaScroll
+  axisParameters,
+  deltaScroll,
+  scrolled
 }) {
-  const endSign = getProductSign(axisMaxMove, deltaScroll)
-  const endAdded = axisTranslateState + endSign * axisEndParameters
-  return getDistanceInRange(endAdded, axisMaxMove)
+  if (
+    inRange({
+      limits: {
+        low: axisParameters.startY,
+        high: axisParameters.endY
+      },
+      value: scrolled
+    })
+  ) {
+    const endSign = getProductSign(axisMaxMove, deltaScroll)
+    const endAdded = axisTranslateState + endSign * axisEndParameters
+    return getDistanceInRange(endAdded, axisMaxMove)
+  } else {
+    return axisTranslateState
+  }
 }
 
 function getProductSign (x, y) {
@@ -691,12 +760,16 @@ function getProductSign (x, y) {
 
 function moveEndByDistances ({
   element,
-  endTranslateDistances,
+  currentTranslateStateString,
   endTranslateString,
   endTransitionTime
 }) {
   element.style.transition = 'transform ' + endTransitionTime + 'ms ease-out'
-  element.style.transform = endTranslateString
+  modifyTransformState({
+    element: element,
+    currentPropertyStateString: currentTranslateStateString,
+    newPropertyString: endTranslateString
+  })
   flushCss(element)
   element.style.transition = ''
 }
@@ -733,50 +806,66 @@ function getOpacity (parameters, scrolled) {
 // Parallax grow functions //
 
 function parallaxGrow ({ element, parameters, scrolled }) {
-  let width
-  let height
+  let widthScale
+  let heightScale
   if (scrolled <= parameters.startY) {
-    width = parameters.initialWidth
-    height = parameters.initialHeight
+    widthScale = 1
+    heightScale = 1
   } else if (scrolled >= parameters.endY) {
-    width = getDimension({
-      baseDimension: parameters.initialWidth,
-      advance: parameters.yRangeSize,
-      rangeSize: parameters.yRangeSize,
-      rate: parameters.widthRate
-    })
-    height = getDimension({
-      baseDimension: parameters.initialHeight,
-      advance: parameters.yRangeSize,
-      rangeSize: parameters.yRangeSize,
-      rate: parameters.heightRate
-    })
+    widthScale = parameters.widthEndScale
+    heightScale = parameters.heigthEndScale
   } else {
     const yAdvance = scrolled - parameters.startY
-    width = getDimension({
-      baseDimension: parameters.initialWidth,
+    widthScale = getScale({
       advance: yAdvance,
       rangeSize: parameters.yRangeSize,
-      rate: parameters.widthRate
+      endScale: parameters.widthEndScale
     })
-    height = getDimension({
-      baseDimension: parameters.initialHeight,
+    heightScale = getScale({
       advance: yAdvance,
       rangeSize: parameters.yRangeSize,
-      rate: parameters.heightRate
+      endScale: parameters.heightEndScale
     })
   }
-  element.style.width = width + 'px'
-  element.style.height = height + 'px'
+  const scaleString = makeScaleString({
+    widthScale: widthScale,
+    heightScale: heightScale
+  })
+  const currentScaleStateString = getCurrentScaleStateString(element)
+  modifyTransformState({
+    element: element,
+    currentPropertyStateString: currentScaleStateString,
+    newPropertyString: scaleString
+  })
 }
 
-function getDimension ({ baseDimension, advance, rangeSize, rate }) {
+function getScale ({ advance, rangeSize, endScale }) {
   const advancePercent = advance / rangeSize
-  let dimension = baseDimension * (1 + advancePercent * rate)
-  if (dimension < 0) {
-    dimension = 0
+  const scaleRangeSize = endScale - 1
+  let scale = scaleRangeSize * advancePercent + 1
+  if (scale < 0) {
+    scale = 0
   }
-  return dimension
+  return scale
+}
+
+function makeScaleString ({
+  widthScale,
+  heightScale
+}) {
+  const x = roundToTwoDecimals(widthScale)
+  const y = roundToTwoDecimals(heightScale)
+  return `scale3d(${x}, ${y}, 1)`
+}
+
+function getCurrentScaleStateString (element) {
+  const scaleRegex = /scale3d\(.*\)/
+  const currentTransform = element.style.transform
+  if (currentTransform) {
+    return currentTransform.match(scaleRegex)
+  } else {
+    return ''
+  }
 }
 
 // Avoids content jumps on resize
@@ -837,6 +926,10 @@ const debounce = (func, delay) => {
   }
 }
 
+function vhToPx (vh) {
+  return vh / 100 * window.innerHeight
+}
+
 function remToPx (rem) {
   return rem * parseFloat(getComputedStyle(document.body).fontSize)
 }
@@ -850,8 +943,8 @@ function differenceIsAlmostZero (x, y) {
   return Math.abs(x - y) < difference
 }
 
-function vhToPx (vh) {
-  return vh / 100 * window.innerHeight
+function roundToTwoDecimals (number) {
+  return Math.round((number + Number.EPSILON) * 100) / 100
 }
 
 function inRange ({ limits: { low, high }, value }) {
@@ -915,12 +1008,16 @@ window.addEventListener('resize', debounce(() => {
     elementPositions = getParallaxElementsYPosition(
       parallaxElements
     )
+    console.log('new positions')
+    console.log(elementPositions)
     parallaxScrollParameters = getParallaxScrollParameters({
       elementsArray: parallaxElements,
       elementsInitialPositions: elementPositions,
       parallaxRangeExtraVh: PARALLAX_RANGE_EXTRA_VH
     })
+    console.log('new parameters')
     applyParallaxToAll(parallaxElements, parallaxScrollParameters)
+    console.log('parallaxApplied')
     scrollToTopElement()
   }
   lastSize = getWindowSize()
