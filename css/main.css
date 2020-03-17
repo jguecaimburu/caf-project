@@ -181,6 +181,9 @@ a {
   font-size: 10vw;
   animation: text-start 500ms ease-out;
   animation-fill-mode: forwards;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 @media (max-width: 460px) {
@@ -191,27 +194,7 @@ a {
 }
 
 .welcome__title-parts {
-  position: absolute;
-}
-
-.char-h {
-  top: 0;
-  left: 0;
-}
-
-.char-o {
-  top: 0;
-  left: 25%;
-}
-
-.char-l {
-  top: 0;
-  left: 50%;
-}
-
-.char-a {
-  top: 0;
-  left: 75%;
+  position: relative;
 }
 
 /* ABOUT SECTION */
