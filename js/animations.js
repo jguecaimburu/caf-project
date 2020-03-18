@@ -10,13 +10,20 @@ function getParallaxElementsYPosition (elementsArray) {
   const elementsYPositions = []
   const scrolled = Math.floor(window.pageYOffset)
   elementsArray.forEach(element => {
-    const boundingRect = element.getBoundingClientRect()
-    const currentTranslateStateString = getCurrentTranslateStateString(element)
-    const translatedY = getValuesFromTransformString(currentTranslateStateString).y
-    const correctedTop = boundingRect.top + scrolled - translatedY
+    const correctedTop = getElementYPosition({
+      element: element,
+      scrolled: scrolled
+    })
     elementsYPositions.push(correctedTop)
   })
   return elementsYPositions
+}
+
+function getElementYPosition ({ element, scrolled }) {
+  const boundingRect = element.getBoundingClientRect()
+  const currentTranslateStateString = getCurrentTranslateStateString(element)
+  const translatedY = getValuesFromTransformString(currentTranslateStateString).y
+  return boundingRect.top + scrolled - translatedY
 }
 
 function getCurrentTranslateStateString (element) {
@@ -75,6 +82,9 @@ function getParallaxScrollParameters ({
         case 'p--grow':
           parameters.grow = getParallaxGrowParameters(elementObject)
           break
+        // case 'p--fix':
+        //   parameters.fix = getParallaxFixParameters(elementObject)
+        //   break
       }
     })
     scrollParameters.push(parameters)
@@ -332,6 +342,54 @@ function getParallaxGrowData (element) {
   return JSON.parse(growDataString)
 }
 
+// function getParallaxFixParameters ({
+//   element,
+//   elementInitialPosition,
+//   scrollLimits,
+//   parallaxRangeExtra
+// }) {
+//   const top = elementInitialPosition
+//   const scrolled = Math.floor(window.pageYOffset)
+//   const fixData = getParallaxFixData(element)
+//   const fixParameters = {}
+//   fixParameters.startY = getStartScroll({
+//     top: top,
+//     viewheightAnticipation: 0,
+//     scrollLimits: scrollLimits
+//   })
+//   fixParameters.endY = getEndScroll({
+//     axisStart: fixParameters.startY,
+//     parallaxData: fixData,
+//     scrollLimits: scrollLimits
+//   })
+//   fixParameters.parentYPosition = getParentYPosition({
+//     element: element,
+//     scrolled: scrolled
+//   })
+//   const lowLimit = correctToRange({
+//     limits: scrollLimits,
+//     value: (fixParameters.startY - parallaxRangeExtra)
+//   })
+//   const highLimit = correctToRange({
+//     limits: scrollLimits,
+//     value: (fixParameters.endY + parallaxRangeExtra)
+//   })
+//   fixParameters.limits = { low: lowLimit, high: highLimit }
+//   return fixParameters
+// }
+//
+// function getParallaxFixData (element) {
+//   const fixDataString = element.dataset.fix
+//   return JSON.parse(fixDataString)
+// }
+//
+// function getParentYPosition ({ element, scrolled }) {
+//   return getElementYPosition({
+//     element: element.parentNode,
+//     scrolled: scrolled
+//   })
+// }
+
 // Apply parallax scroll and resize functions //
 
 function applyParallaxInLimits ({
@@ -398,6 +456,9 @@ function applyParallaxFunctionIfElementInRange ({
       case 'grow':
         parallaxGrow(elementObject)
         break
+      // case 'fix':
+      //   parallaxFix(elementObject)
+      //   break
     }
   }
 }
@@ -409,14 +470,31 @@ function getNameOfParallaxFunction (className) {
 
 function applyParallaxToAll (elementsArray, parametersArray) {
   const scrolled = Math.floor(window.pageYOffset)
-  applyParallaxFade(elementsArray, parametersArray, scrolled)
-  applyParallaxMove(elementsArray, parametersArray, scrolled)
-  applyParallaxGrow(elementsArray, parametersArray, scrolled)
+  applyParallaxFade({
+    elementsArray: elementsArray,
+    parametersArray: parametersArray,
+    scrolled: scrolled
+  })
+  applyParallaxMove({
+    elementsArray: elementsArray,
+    parametersArray: parametersArray,
+    scrolled: scrolled
+  })
+  applyParallaxGrow({
+    elementsArray: elementsArray,
+    parametersArray: parametersArray,
+    scrolled: scrolled
+  })
+  // applyParallaxFix({
+  //   elementsArray: elementsArray,
+  //   parametersArray: parametersArray,
+  //   scrolled: scrolled
+  // })
 }
 
-function applyParallaxMove (elementsArray, parametersArray, scrolled) {
+function applyParallaxMove ({ elementsArray, parametersArray, scrolled }) {
   elementsArray.forEach((element, index) => {
-    if (hasParallaxEffect(element, 'p--move')) {
+    if (hasClass(element, 'p--move')) {
       parallaxMove({
         element: element,
         parameters: parametersArray[index].move,
@@ -426,9 +504,9 @@ function applyParallaxMove (elementsArray, parametersArray, scrolled) {
   })
 }
 
-function applyParallaxFade (elementsArray, parametersArray, scrolled) {
+function applyParallaxFade ({ elementsArray, parametersArray, scrolled }) {
   elementsArray.forEach((element, index) => {
-    if (hasParallaxEffect(element, 'p--fade')) {
+    if (hasClass(element, 'p--fade')) {
       parallaxFade({
         element: element,
         parameters: parametersArray[index].fade,
@@ -438,9 +516,9 @@ function applyParallaxFade (elementsArray, parametersArray, scrolled) {
   })
 }
 
-function applyParallaxGrow (elementsArray, parametersArray, scrolled) {
+function applyParallaxGrow ({ elementsArray, parametersArray, scrolled }) {
   elementsArray.forEach((element, index) => {
-    if (hasParallaxEffect(element, 'p--grow')) {
+    if (hasClass(element, 'p--grow')) {
       parallaxGrow({
         element: element,
         parameters: parametersArray[index].grow,
@@ -450,9 +528,18 @@ function applyParallaxGrow (elementsArray, parametersArray, scrolled) {
   })
 }
 
-function hasParallaxEffect (element, typeOfEffect) {
-  return Array.from(element.classList).includes(typeOfEffect)
-}
+// function applyParallaxFix ({ elementsArray, parametersArray, scrolled }) {
+//   elementsArray.forEach((element, index) => {
+//     if (hasClass(element, 'p--fix')) {
+//       parallaxFix({
+//         element: element,
+//         parameters: parametersArray[index].fix,
+//         scrolled: scrolled
+//       })
+//     }
+//   })
+// }
+
 
 // Parallax main move functions //
 
@@ -588,8 +675,8 @@ function applyParallaxMoveEnd ({
     elementsArray.forEach((element, index) => {
       const moveParameters = parametersArray[index].move
       if (
-        hasParallaxEffect(element, 'p--move-end') &&
-        hasParallaxEffect(element, 'p--move') &&
+        hasClass(element, 'p--move-end') &&
+        hasClass(element, 'p--move') &&
         inRange({
           limits: moveParameters.endLimits,
           value: scrolled
@@ -620,15 +707,12 @@ function parallaxMoveEnd ({
   scrolled,
   endTransitionTime
 }) {
-  console.log('element', element)
   const endParameters = getParallaxEndParameters({
     element: element,
     moveParameters: moveParameters,
     deltaScroll: deltaScroll
   })
-  console.log('endParameters', endParameters)
   const maxMove = getMaxMove(moveParameters)
-  console.log('maxMove', maxMove)
   const currentTranslateStateString = getCurrentTranslateStateString(element)
   const translateState = getValuesFromTransformString(currentTranslateStateString)
   const endTranslateDistances = getEndTranslateDistances({
@@ -744,10 +828,7 @@ function getAxisEndTranslateDistance ({
     })
   ) {
     const endSign = getProductSign(axisMaxMove, deltaScroll)
-    console.log('moveSign', endSign)
-    console.log('Actual state', axisTranslateState)
     const endAdded = axisTranslateState + endSign * axisEndParameters
-    console.log('Modified state', endAdded)
     return getDistanceInRange(endAdded, axisMaxMove)
   } else {
     return axisTranslateState
@@ -874,6 +955,76 @@ function getCurrentScaleStateString (element) {
   }
 }
 
+// Parallax fix functions //
+
+// function parallaxFix ({ element, parameters, scrolled }) {
+//   if ((scrolled <= parameters.startY) ||
+//     (scrolled >= parameters.endY)) {
+//     unfixElement({
+//       element: element,
+//       parameters: parameters,
+//       scrolled: scrolled
+//     })
+//   } else {
+//     fixElement({
+//       element: element,
+//       parameters: parameters
+//     })
+//   }
+// }
+//
+// function unfixElement ({ element, parameters, scrolled }) {
+//   if (hasClass(element, 'p--fix-on')) {
+//     console.log('unfixing')
+//     console.log(scrolled)
+//     const elementYPositionInParent = getElementYPositionInParent({
+//       element: element,
+//       parameters: parameters,
+//       scrolled: scrolled
+//     })
+//     setNewYPosition({
+//       element: element,
+//       position: 'absolute',
+//       yTranslate: elementYPositionInParent
+//     })
+//     element.classList.remove('p--fix-on')
+//   }
+// }
+//
+// function getElementYPositionInParent ({ element, parameters, scrolled }) {
+//   const elementYPosition = getElementYPosition({
+//     element: element,
+//     scrolled: scrolled
+//   })
+//   return elementYPosition - parameters.parentYPosition
+// }
+//
+// function setNewYPosition ({ element, position, yTranslate }) {
+//   console.log('setting', position, 'to', yTranslate)
+//   const currentTranslateStateString = getCurrentTranslateStateString(element)
+//   const translateString = makeTranslateString({ x: 0, y: yTranslate })
+//   element.style.position = position
+//   modifyTransformState({
+//     element: element,
+//     currentPropertyStateString: currentTranslateStateString,
+//     newPropertyString: translateString
+//   })
+// }
+//
+// function fixElement ({ element, parameters }) {
+//   if (!(hasClass(element, 'p--fix-on'))) {
+//     console.log('fixing')
+//     console.log(Math.floor(window.pageYOffset))
+//     const elementYPositionInViewport = element.getBoundingClientRect().top
+//     setNewYPosition({
+//       element: element,
+//       position: 'fixed',
+//       yTranslate: elementYPositionInViewport
+//     })
+//     element.classList.add('p--fix-on')
+//   }
+// }
+
 // Avoids content jumps on resize
 
 function getTopElementInViewport () {
@@ -918,6 +1069,7 @@ function getWindowSize () {
   size.height = window.innerHeight
   return size
 }
+
 // General functions
 
 function flushCss (element) {
@@ -930,6 +1082,21 @@ const debounce = (func, delay) => {
     clearTimeout(inDebounce)
     inDebounce = setTimeout(() => { func() }, delay)
   }
+}
+
+const animationThrottle = (func, limit) => {
+  let inThrottle = false
+  return function () {
+    if (!inThrottle) {
+      func()
+      inThrottle = true
+      setTimeout(() => { inThrottle = false }, limit)
+    }
+  }
+}
+
+function hasClass (element, className) {
+  return element.classList.contains(className)
 }
 
 function vhToPx (vh) {
@@ -984,9 +1151,10 @@ console.log('Load Parallax script')
 console.log('Initial Scroll is ' + window.pageYOffset)
 
 const MIN_SCROLL_PX = 100
-const SCROLL_DEBOUNCE_MS = 150
+const SCROLL_DEBOUNCE_MS = 90
+const SCROLL_THROTTLE_MS = 50
 const RESIZE_DEBOUNCE_MS = 150
-const MOVE_END_TRANSITION_MS = 500
+const MOVE_END_TRANSITION_MS = 300
 const PARALLAX_RANGE_EXTRA_VH = 25
 const VALID_PARALLAX_SCROLL_CLASSES = ['p--fade', 'p--move', 'p--grow']
 let lastScroll = 0
@@ -1029,13 +1197,13 @@ window.addEventListener('resize', debounce(() => {
   lastSize = getWindowSize()
 }, RESIZE_DEBOUNCE_MS))
 
-window.addEventListener('scroll', function (e) {
+window.addEventListener('scroll', animationThrottle(() => {
   applyParallaxInLimits({
     elementsArray: parallaxElements,
     parametersArray: parallaxScrollParameters,
     validParallaxScrollClasses: VALID_PARALLAX_SCROLL_CLASSES
   })
-})
+}, SCROLL_THROTTLE_MS))
 
 window.addEventListener('scroll', debounce(() => {
   applyParallaxMoveEnd({
