@@ -800,14 +800,6 @@ a {
 
 /* TEST OBJECTS - DELETE*/
 
-.test-container-section {
-  width: 100vw;
-  min-height: 200vh;
-  position: relative;
-  background-color: purple;
-  padding-top: 100vh;
-}
-
 .y-offset-marker {
   width: auto;
   max-width: 25vw;
@@ -819,60 +811,4 @@ a {
   top: 0;
   z-index: 10;
   overflow: hidden;
-}
-
-.welcome__interaction {
-  width: 40%;
-  height: 15rem;
-  background-color: rgba(255, 255, 255, 0.3);
-  position: absolute;
-  left: 10%;
-  top: 40vh;
-  z-index: 3;
-}
-
-.test-fade {
-  width: 100%;
-  height: 250px;
-  font-size: 30px;
-  position: relative;
-  text-align: center;
-  padding-top: 1px;
-  margin-bottom: 50px;
-}
-
-.test-fade__out,
-.test-fade__in {
-  width: 70%;
-  margin: 30px auto;
-  height: 50px;
-  border: 1px solid white;
-  color: white;
-  position: relative;
-  top: 0;
-}
-
-.test-grow {
-  position: relative;
-  width: 250px;
-  height: 250px;
-  margin: auto auto;
-}
-
-.test-grow__limit-container {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  border: 1px solid white;
-}
-
-.test-grow__element {
-  position: relative;
-  background-color: red;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  left: calc(50% - 25px);
-  top: calc(50% - 25px);
-
 }

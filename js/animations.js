@@ -82,9 +82,6 @@ function getParallaxScrollParameters ({
         case 'p--grow':
           parameters.grow = getParallaxGrowParameters(elementObject)
           break
-        // case 'p--fix':
-        //   parameters.fix = getParallaxFixParameters(elementObject)
-        //   break
       }
     })
     scrollParameters.push(parameters)
@@ -342,54 +339,6 @@ function getParallaxGrowData (element) {
   return JSON.parse(growDataString)
 }
 
-// function getParallaxFixParameters ({
-//   element,
-//   elementInitialPosition,
-//   scrollLimits,
-//   parallaxRangeExtra
-// }) {
-//   const top = elementInitialPosition
-//   const scrolled = Math.floor(window.pageYOffset)
-//   const fixData = getParallaxFixData(element)
-//   const fixParameters = {}
-//   fixParameters.startY = getStartScroll({
-//     top: top,
-//     viewheightAnticipation: 0,
-//     scrollLimits: scrollLimits
-//   })
-//   fixParameters.endY = getEndScroll({
-//     axisStart: fixParameters.startY,
-//     parallaxData: fixData,
-//     scrollLimits: scrollLimits
-//   })
-//   fixParameters.parentYPosition = getParentYPosition({
-//     element: element,
-//     scrolled: scrolled
-//   })
-//   const lowLimit = correctToRange({
-//     limits: scrollLimits,
-//     value: (fixParameters.startY - parallaxRangeExtra)
-//   })
-//   const highLimit = correctToRange({
-//     limits: scrollLimits,
-//     value: (fixParameters.endY + parallaxRangeExtra)
-//   })
-//   fixParameters.limits = { low: lowLimit, high: highLimit }
-//   return fixParameters
-// }
-//
-// function getParallaxFixData (element) {
-//   const fixDataString = element.dataset.fix
-//   return JSON.parse(fixDataString)
-// }
-//
-// function getParentYPosition ({ element, scrolled }) {
-//   return getElementYPosition({
-//     element: element.parentNode,
-//     scrolled: scrolled
-//   })
-// }
-
 // Apply parallax scroll and resize functions //
 
 function applyParallaxInLimits ({
@@ -485,11 +434,6 @@ function applyParallaxToAll (elementsArray, parametersArray) {
     parametersArray: parametersArray,
     scrolled: scrolled
   })
-  // applyParallaxFix({
-  //   elementsArray: elementsArray,
-  //   parametersArray: parametersArray,
-  //   scrolled: scrolled
-  // })
 }
 
 function applyParallaxMove ({ elementsArray, parametersArray, scrolled }) {
@@ -527,18 +471,6 @@ function applyParallaxGrow ({ elementsArray, parametersArray, scrolled }) {
     }
   })
 }
-
-// function applyParallaxFix ({ elementsArray, parametersArray, scrolled }) {
-//   elementsArray.forEach((element, index) => {
-//     if (hasClass(element, 'p--fix')) {
-//       parallaxFix({
-//         element: element,
-//         parameters: parametersArray[index].fix,
-//         scrolled: scrolled
-//       })
-//     }
-//   })
-// }
 
 
 // Parallax main move functions //
@@ -954,76 +886,6 @@ function getCurrentScaleStateString (element) {
     return ''
   }
 }
-
-// Parallax fix functions //
-
-// function parallaxFix ({ element, parameters, scrolled }) {
-//   if ((scrolled <= parameters.startY) ||
-//     (scrolled >= parameters.endY)) {
-//     unfixElement({
-//       element: element,
-//       parameters: parameters,
-//       scrolled: scrolled
-//     })
-//   } else {
-//     fixElement({
-//       element: element,
-//       parameters: parameters
-//     })
-//   }
-// }
-//
-// function unfixElement ({ element, parameters, scrolled }) {
-//   if (hasClass(element, 'p--fix-on')) {
-//     console.log('unfixing')
-//     console.log(scrolled)
-//     const elementYPositionInParent = getElementYPositionInParent({
-//       element: element,
-//       parameters: parameters,
-//       scrolled: scrolled
-//     })
-//     setNewYPosition({
-//       element: element,
-//       position: 'absolute',
-//       yTranslate: elementYPositionInParent
-//     })
-//     element.classList.remove('p--fix-on')
-//   }
-// }
-//
-// function getElementYPositionInParent ({ element, parameters, scrolled }) {
-//   const elementYPosition = getElementYPosition({
-//     element: element,
-//     scrolled: scrolled
-//   })
-//   return elementYPosition - parameters.parentYPosition
-// }
-//
-// function setNewYPosition ({ element, position, yTranslate }) {
-//   console.log('setting', position, 'to', yTranslate)
-//   const currentTranslateStateString = getCurrentTranslateStateString(element)
-//   const translateString = makeTranslateString({ x: 0, y: yTranslate })
-//   element.style.position = position
-//   modifyTransformState({
-//     element: element,
-//     currentPropertyStateString: currentTranslateStateString,
-//     newPropertyString: translateString
-//   })
-// }
-//
-// function fixElement ({ element, parameters }) {
-//   if (!(hasClass(element, 'p--fix-on'))) {
-//     console.log('fixing')
-//     console.log(Math.floor(window.pageYOffset))
-//     const elementYPositionInViewport = element.getBoundingClientRect().top
-//     setNewYPosition({
-//       element: element,
-//       position: 'fixed',
-//       yTranslate: elementYPositionInViewport
-//     })
-//     element.classList.add('p--fix-on')
-//   }
-// }
 
 // Avoids content jumps on resize
 
