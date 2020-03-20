@@ -12,13 +12,9 @@
   <body>
 
 <!-- OFFSET MARKER - DELETE -->
-    <p
-      class="y-offset-marker parallax p--move"
-      data-xmove='{"isMoved": false, "viewheightDuration": 0, "viewwidthDuration": 0, "viewheightAnticipation": 0}'
-      data-ymove ='{"isMoved": true, "viewheightDuration": 0, "rate": 1, "viewheightAnticipation": 0}'
-      >
-    </p>
+    <p class="y-offset-marker"></p>
 <!-- END OFFSET MARKER - DELETE -->
+
 
     <section class="welcome">
       <div class="welcome__stars">
@@ -30,40 +26,16 @@
       <h1
         class="welcome__title"
         >
-        <span
-          class="welcome__title-parts char-h parallax p--move p--move-end p--fade"
-          data-xmove='{"isMoved": true, "viewheightDuration": 60, "viewwidthDuration": -30, "viewheightAnticipation": 40}'
-          data-ymove ='{"isMoved": false, "viewheightDuration": 0, "rate": 0, "viewheightAnticipation": 0}'
-          data-end='{"rate": 0.1, "maxRems": 3}'
-          data-fade ='{"viewheightAnticipation": 35, "viewheightDuration": 40, "initialOpacity": 1, "endOpacity": 0}'
-          >
+        <span class="welcome__title-parts welcome--p-char-h">
           H
         </span>
-        <span
-          class="welcome__title-parts char-o parallax p--move p--move-end p--fade"
-          data-xmove='{"isMoved": true, "viewheightDuration": 60, "viewwidthDuration": -15, "viewheightAnticipation": 40}'
-          data-ymove ='{"isMoved": true, "viewheightDuration": 60, "rate": 0.4, "viewheightAnticipation": 40}'
-          data-end='{"rate": 0.1, "maxRems": 3}'
-          data-fade ='{"viewheightAnticipation": 35, "viewheightDuration": 40, "initialOpacity": 1, "endOpacity": 0}'
-          >
+        <span class="welcome__title-parts welcome--p-char-o">
           O
         </span>
-        <span
-          class="welcome__title-parts char-l parallax p--move p--move-end p--fade"
-          data-xmove='{"isMoved": true, "viewheightDuration": 60, "viewwidthDuration": 15, "viewheightAnticipation": 40}'
-          data-ymove ='{"isMoved": true, "viewheightDuration": 60, "rate": 0.4, "viewheightAnticipation": 40}'
-          data-end='{"rate": 0.1, "maxRems": 3}'
-          data-fade ='{"viewheightAnticipation": 35, "viewheightDuration": 40, "initialOpacity": 1, "endOpacity": 0}'
-          >
+        <span class="welcome__title-parts welcome--p-char-l">
           L
         </span>
-        <span
-          class="welcome__title-parts char-a parallax p--move p--move-end p--fade"
-          data-xmove='{"isMoved": true, "viewheightDuration": 60, "viewwidthDuration": 30, "viewheightAnticipation": 40}'
-          data-ymove ='{"isMoved": false, "viewheightDuration": 0, "rate": 0, "viewheightAnticipation": 0}'
-          data-end='{"rate": 0.1, "maxRems": 3}'
-          data-fade ='{"viewheightAnticipation": 35, "viewheightDuration": 40, "initialOpacity": 1, "endOpacity": 0}'
-          >
+        <span class="welcome__title-parts welcome--p-char-a">
           A
         </span>
 
@@ -71,75 +43,78 @@
     </section>
 
     <section class="about">
-      <h2 class="about__title">Hi! I'm Juan</h2>
-      <p class="about__intro">
-        For 10 years I focused only on efficiency, learned a lot about operations and proudly helped build this nice projects.
-      </p>
-      <div class="about__projects-grid">
+      <div class="about__container">
+        <h2 class="about__title">Hi! I'm Juan</h2>
+        <p class="about__intro">
+          For 10 years I focused only on efficiency, learned a lot about operations and proudly helped build this nice projects.
+        </p>
+        <div class="about__projects-grid">
+          <a
+            href="https://trimaker.com/"
+            target="_blank"
+            class="about__project-tile"
+            >
+              <img
+                class="about__project-logo"
+                src="/img/logos/trimaker.png"
+                alt="trimaker logo"
+              />
+              <p class="about__project-description">
+                Trimaker is the leading 3D printing company of Latin America, with five machines on the global market. R&amp;D, design and brand building in Buenos Aires. Awarded as one of the to 50 most innovative young companies in the world (K50).
+              </p>
+          </a>
+          <a
+            href="https://ikitoi.com/"
+            target="_blank"
+            class="about__project-tile"
+            >
+              <img
+                class="about__project-logo"
+                src="/img/logos/ikitoi.png"
+                alt="ikitoi logo"
+              />
+              <p class="about__project-description">
+                Ikitoi wants kids to be constructors of their reality, not passive consumers, empowering the curious spirit of children through games, feeding their desire to build new worlds.
+              </p>
+          </a>
+          <a
+            href="https://institutobaikal.com/"
+            target="_blank"
+            class="about__project-tile"
+            >
+              <img
+                class="about__project-logo"
+                src="/img/logos/baikal.png"
+                alt="baikal logo"
+              />
+              <p class="about__project-description">
+                Baikal Institute is a science, economy, arts and philosophy non-profit think-tank.
+              </p>
+          </a>
+          <a
+            href="https://www.instagram.com/emprendingoficial/"
+            target="_blank"
+            class="about__project-tile"
+            >
+              <img
+                class="about__project-logo"
+                src="/img/logos/emprending.png"
+                alt="emprending logo"
+              />
+              <p class="about__project-description">
+                Emprending is the free-for-all entrepreneurship course from the Engineering School of the Buenos Aires University. Over 4000 entrepreneurs have gone through Emprending since 2011.
+              </p>
+          </a>
+        </div>
         <a
-          href="https://trimaker.com/"
+          href="https://www.linkedin.com/in/guecaimburuj/"
+          class="about__btn"
           target="_blank"
-          class="about__project-tile"
           >
-            <img
-              class="about__project-logo"
-              src="/img/logos/trimaker.png"
-              alt="trimaker logo"
-            />
-            <p class="about__project-description">
-              Trimaker is the leading 3D printing company of Latin America, with five machines on the global market. R&amp;D, design and brand building in Buenos Aires. Awarded as one of the to 50 most innovative young companies in the world (K50).
-            </p>
-        </a>
-        <a
-          href="https://ikitoi.com/"
-          target="_blank"
-          class="about__project-tile"
-          >
-            <img
-              class="about__project-logo"
-              src="/img/logos/ikitoi.png"
-              alt="ikitoi logo"
-            />
-            <p class="about__project-description">
-              Ikitoi wants kids to be constructors of their reality, not passive consumers, empowering the curious spirit of children through games, feeding their desire to build new worlds.
-            </p>
-        </a>
-        <a
-          href="https://institutobaikal.com/"
-          target="_blank"
-          class="about__project-tile"
-          >
-            <img
-              class="about__project-logo"
-              src="/img/logos/baikal.png"
-              alt="baikal logo"
-            />
-            <p class="about__project-description">
-              Baikal Institute is a science, economy, arts and philosophy non-profit think-tank.
-            </p>
-        </a>
-        <a
-          href="https://www.instagram.com/emprendingoficial/"
-          target="_blank"
-          class="about__project-tile"
-          >
-            <img
-              class="about__project-logo"
-              src="/img/logos/emprending.png"
-              alt="emprending logo"
-            />
-            <p class="about__project-description">
-              Emprending is the free-for-all entrepreneurship course from the Engineering School of the Buenos Aires University. Over 4000 entrepreneurs have gone through Emprending since 2011.
-            </p>
+          Show all
         </a>
       </div>
-      <a
-        href="https://www.linkedin.com/in/guecaimburuj/"
-        class="about__btn"
-        target="_blank"
-        >
-        Show all
-      </a>
+
     </section>
 
     <section class="transition">
@@ -356,6 +331,7 @@
       <p class="footer__text">Brought to life by Huancito&copy;</p>
     </footer>
 
+  <script type="text/javascript" src="/js/animation-data.js"></script>
   <script type="text/javascript" src="/js/animations.js"></script>
   <script type="text/javascript" src="/js/carousel.js"></script>
   </body>

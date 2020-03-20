@@ -1,1087 +1,454 @@
-// Element selector //
+const homeAnimations = (function () {
 
-function selectParallaxElements () {
-  return Array.from(document.querySelectorAll('.parallax'))
-}
+  /*  GLOBALS
+  ----------------------------------------------- */
 
-// Responsive scroll flags calculation //
+  const DOM_ELEMENTS_DATA = animationData.values
+  const SCROLL_INTERVAL_MS = 15
+  const SCROLL_DEBOUNCE_MS = 100
+  const RESIZE_DEBOUNCE_MS = 150
+  const PARALLAX_RANGE_EXTRA_VH = 15
+  const VALID_HEIGHT_RESIZE_PERCENT = 10
+  let lastScroll = 0
+  let topElement
+  let lastScreenSize
+  let maxScroll
+  let scrollTimer
+  const domElements = {}
+  let scheduledAnimationFrame = false
 
-function getParallaxElementsYPosition (elementsArray) {
-  const elementsYPositions = []
-  const scrolled = Math.floor(window.pageYOffset)
-  elementsArray.forEach(element => {
-    const correctedTop = getElementYPosition({
-      element: element,
-      scrolled: scrolled
-    })
-    elementsYPositions.push(correctedTop)
-  })
-  return elementsYPositions
-}
+  /*  CONSTRUCTION
+  ----------------------------------------------- */
 
-function getElementYPosition ({ element, scrolled }) {
-  const boundingRect = element.getBoundingClientRect()
-  const currentTranslateStateString = getCurrentTranslateStateString(element)
-  const translatedY = getValuesFromTransformString(currentTranslateStateString).y
-  return boundingRect.top + scrolled - translatedY
-}
-
-function getCurrentTranslateStateString (element) {
-  const translateRegex = /translate3d\(.*\)/
-  const currentTransform = element.style.transform
-  let matchArray
-  if (currentTransform) {
-    matchArray = currentTransform.match(translateRegex)
-  } else {
-    return ''
+  function init () {
+    setupParameters()
+    console.log('Parameters set')
+    console.log(domElements)
+    setupEventListeners()
+    scrollTimer = setInterval(tryToAnimateElementsInLimits, SCROLL_INTERVAL_MS)
   }
-  if (matchArray) {
-    return matchArray[0]
-  } else {
-    return ''
-  }
-}
 
-function getValuesFromTransformString (transformString) {
-  const intRegex = /-*(\d+.)*\d+px/g
-  if (transformString) {
-    const translateArr = transformString.match(intRegex).map((x) => parseFloat(x))
-    return { x: translateArr[0], y: translateArr[1] }
-  } else {
-    return { x: 0, y: 0 }
+  function setupParameters () {
+    lastScreenSize = getWindowSize()
+    maxScroll = getMaxScroll()
+    lastScroll = getScroll()
+    const domElementsSelectors = Object.keys(DOM_ELEMENTS_DATA)
+    buildDomElementsObject(domElementsSelectors)
   }
-}
 
-function getParallaxScrollParameters ({
-  elementsArray,
-  elementsInitialPositions,
-  parallaxRangeExtraVh
-}) {
-  const scrollParameters = []
-  const scrollMin = 0
-  const scrollMax = getMaxScroll()
-  const scrollLimits = { low: scrollMin, high: scrollMax }
-  const parallaxRangeExtraPx = vhToPx(parallaxRangeExtraVh)
-  elementsArray.forEach((element, index) => {
-    const parameters = {}
-    const elementClasses = Array.from(element.classList)
-    const elementObject = {
-      element: element,
-      elementInitialPosition: elementsInitialPositions[index],
-      scrollLimits: scrollLimits,
-      parallaxRangeExtra: parallaxRangeExtraPx
-    }
-    elementClasses.forEach((className) => {
-      switch (className) {
-        case 'p--move':
-          parameters.move = getParallaxMoveParameters(elementObject)
-          break
-        case 'p--fade':
-          parameters.fade = getParallaxFadeParameters(elementObject)
-          break
-        case 'p--grow':
-          parameters.grow = getParallaxGrowParameters(elementObject)
-          break
+  function setupEventListeners () {
+    window.addEventListener('resize', debounce(() => {
+      if (isValidResize()) {
+        updateParameters()
+        updateWholePage()
+        scrollToTopElement()
       }
-    })
-    scrollParameters.push(parameters)
-  })
-  return scrollParameters
-}
+      lastScreenSize = getWindowSize()
+    }, RESIZE_DEBOUNCE_MS))
 
-function getMaxScroll () {
-  const limit = Math.max(
-    document.body.scrollHeight,
-    document.body.offsetHeight,
-    document.documentElement.clientHeight,
-    document.documentElement.scrollHeight,
-    document.documentElement.offsetHeight
-  )
-  return limit
-}
+    window.addEventListener('scroll', debounce(() => {
+      getTopElementInViewport()
+    }, SCROLL_DEBOUNCE_MS))
 
-function getParallaxMoveParameters ({
-  element,
-  elementInitialPosition,
-  scrollLimits,
-  parallaxRangeExtra
-}) {
-  const boundingRect = element.getBoundingClientRect()
-  const moveData = getParallaxMoveData(element)
-  const moveParameters = {}
-  moveParameters.y = getMoveYParameters({
-    elementInitialPosition: elementInitialPosition,
-    boundingRect: boundingRect,
-    moveData: moveData,
-    scrollLimits: scrollLimits
-  })
-  moveParameters.x = getMoveXParameters({
-    elementInitialPosition: elementInitialPosition,
-    element: element,
-    boundingRect: boundingRect,
-    moveData: moveData,
-    scrollLimits: scrollLimits
-  })
-  const minStartY = Math.min(
-    moveParameters.x.startY,
-    moveParameters.y.startY
-  )
-  const lowLimit = correctToRange({
-    limits: scrollLimits,
-    value: (minStartY - parallaxRangeExtra)
-  })
-  const maxEndY = Math.max(
-    moveParameters.x.endY,
-    moveParameters.y.endY
-  )
-  const highLimit = correctToRange({
-    limits: scrollLimits,
-    value: (maxEndY + parallaxRangeExtra)
-  })
-
-  moveParameters.endLimits = { low: minStartY, high: maxEndY }
-  moveParameters.limits = { low: lowLimit, high: highLimit }
-  return moveParameters
-}
-
-function getParallaxMoveData (element) {
-  const xMoveString = element.dataset.xmove
-  const xMoveData = JSON.parse(xMoveString)
-  const yMoveString = element.dataset.ymove
-  const yMoveData = JSON.parse(yMoveString)
-  return { x: xMoveData, y: yMoveData }
-}
-
-function getMoveYParameters ({
-  elementInitialPosition,
-  boundingRect,
-  moveData,
-  scrollLimits
-}) {
-  const yMoveData = moveData.y
-  const yParameters = {}
-  yParameters.isMoved = yMoveData.isMoved
-  if (yParameters.isMoved) {
-    const top = elementInitialPosition
-    yParameters.startY = getStartScroll({
-      top: top,
-      viewheightAnticipation: yMoveData.viewheightAnticipation,
-      scrollLimits: scrollLimits
-    })
-    yParameters.endY = getEndScroll({
-      axisStart: yParameters.startY,
-      parallaxData: yMoveData,
-      scrollLimits: scrollLimits
-    })
-    yParameters.yRangeSize = (yParameters.endY - yParameters.startY)
-    yParameters.rate = yMoveData.rate
-    yParameters.maxDistance = yParameters.yRangeSize * yParameters.rate
-    yParameters.endAccumulate = 0
-  } else {
-    yParameters.startY = scrollLimits.high
-    yParameters.endY = scrollLimits.low
+    // Marker to understand general layout. DELETE UNDER THIS LINE
+    window.addEventListener('scroll', function (e) { showOffsetMarker() })
+    // DELETE ABOVE THIS LINE
   }
-  return yParameters
-}
 
-function getStartScroll ({
-  top,
-  viewheightAnticipation,
-  scrollLimits
-}) {
-  const anticipation = vhToPx(viewheightAnticipation)
-  const startY = top - anticipation
-  return correctToRange({
-    limits: scrollLimits,
-    value: startY
-  })
-}
+  /*  SETUP
+  ----------------------------------------------- */
 
-function getEndScroll ({
-  axisStart,
-  parallaxData,
-  scrollLimits
-}) {
-  if (parallaxData.viewheightDuration === 0) {
-    return scrollLimits.high
-  } else {
-    const duration = vhToPx(parallaxData.viewheightDuration)
-    const endY = axisStart + duration
+  function buildDomElementsObject (selectors) {
+    selectors.forEach(selector => {
+      domElements[selector] = setupElementParameters(selector)
+    })
+  }
+
+  function setupElementParameters (selector) {
+    const elementObject = {}
+    elementObject.element = document.querySelector(selector)
+    elementObject.animations = processAnimationData({
+      selector: selector,
+      element: elementObject.element
+    })
+    elementObject.limits = getAnimationScrollLimits(elementObject.animations)
+    return elementObject
+  }
+
+  function processAnimationData ({ selector, element }) {
+    const animationParameters = {}
+    const yPosition = getElementYPosition(element)
+    for (const animationType in DOM_ELEMENTS_DATA[selector]) {
+      animationParameters[animationType] = {}
+      animationParameters[animationType].scrollRange = getScrollRange({
+        yPosition: yPosition,
+        animationData: DOM_ELEMENTS_DATA[selector][animationType]
+      })
+      animationParameters[animationType].valueRange = getValueRange({
+        animationData: DOM_ELEMENTS_DATA[selector][animationType],
+        animationType: animationType,
+        scrollRange: animationParameters[animationType].scrollRange
+      })
+    }
+    return animationParameters
+  }
+
+  function getElementYPosition (element) {
+    const boundingRect = element.getBoundingClientRect()
+    const translatedY = getAxisTranslatedValue({
+      element: element,
+      axis: 'y'
+    })
+    return boundingRect.top + lastScroll - translatedY
+  }
+
+  function getAxisTranslatedValue ({ element, axis }) {
+    const translate3dString = getTranslate3dString(element)
+    const intRegex = /-*(\d+.)*\d+px/g
+    if (translate3dString) {
+      const translateValues =
+        translate3dString.match(intRegex).map((x) => parseFloat(x))
+      switch (axis) {
+        case 'x':
+          return translateValues[0]
+        case 'y':
+          return translateValues[1]
+      }
+    } else {
+      return 0
+    }
+  }
+
+  function getTranslate3dString (element) {
+    const translate3dRegex = /translate3d\(.*\)/
+    const currentTransform = element.style.transform
+    let matchArray
+    if (currentTransform) {
+      matchArray = currentTransform.match(translate3dRegex)
+    } else {
+      return ''
+    }
+    if (matchArray) {
+      return matchArray[0]
+    } else {
+      return ''
+    }
+  }
+
+  function getScrollRange ({ yPosition, animationData }) {
+    const scrollRange = {}
+    scrollRange.start = getStartScroll({
+      yPosition: yPosition,
+      viewheightAnticipation: animationData.viewheightAnticipation
+    })
+    scrollRange.end = getEndScroll({
+      startScroll: scrollRange.start,
+      viewheightDuration: animationData.viewheightDuration
+    })
+    scrollRange.size = scrollRange.end - scrollRange.start
+    return scrollRange
+  }
+
+  function getStartScroll ({ yPosition, viewheightAnticipation }) {
+    const anticipation = vhToPx(viewheightAnticipation)
+    const startScroll = yPosition - anticipation
     return correctToRange({
-      limits: scrollLimits,
-      value: endY
+      limits: { low: 0, high: maxScroll },
+      value: startScroll
     })
   }
-}
 
-function getMoveXParameters ({
-  elementInitialPosition,
-  element,
-  boundingRect,
-  moveData,
-  scrollLimits
-}) {
-  const xMoveData = moveData.x
-  const xParameters = {}
-  xParameters.isMoved = xMoveData.isMoved
-  if (xParameters.isMoved) {
-    const top = elementInitialPosition
-    xParameters.startY = getStartScroll({
-      top: top,
-      viewheightAnticipation: xMoveData.viewheightAnticipation,
-      scrollLimits: scrollLimits
+  function getEndScroll ({ startScroll, viewheightDuration }) {
+    const duration = vhToPx(viewheightDuration)
+    const endScroll = startScroll + duration
+    return correctToRange({
+      limits: { low: 0, high: maxScroll },
+      value: endScroll
     })
-    xParameters.endY = getEndScroll({
-      axisStart: xParameters.startY,
-      parallaxData: xMoveData,
-      scrollLimits: scrollLimits
-    })
-    xParameters.yRangeSize = (xParameters.endY - xParameters.startY)
-    xParameters.maxDistance = getXMaxDistance({
-      element: element,
-      boundingRect: boundingRect,
-      xMoveData: xMoveData
-    })
-    xParameters.rate = xParameters.maxDistance / xParameters.yRangeSize
-    xParameters.endAccumulate = 0
-  } else {
-    xParameters.startY = scrollLimits.high
-    xParameters.endY = scrollLimits.low
   }
-  return xParameters
-}
 
-function getXMaxDistance ({ element, boundingRect, xMoveData }) {
-  const elementWidth = boundingRect.width
-  const windowWidth = window.innerWidth
-  const xDistance = (xMoveData.viewwidthDuration / 100) * windowWidth
-  const distanceSign = getProductSign(1, xDistance)
-  return xDistance - distanceSign * elementWidth / 2
-}
-
-function getParallaxFadeParameters ({
-  element,
-  elementInitialPosition,
-  scrollLimits,
-  parallaxRangeExtra
-}) {
-  const top = elementInitialPosition
-  const fadeData = getParallaxFadeData(element)
-  const fadeParameters = {}
-  fadeParameters.startY = getStartScroll({
-    top: top,
-    viewheightAnticipation: fadeData.viewheightAnticipation,
-    scrollLimits: scrollLimits
-  })
-  fadeParameters.endY = getEndScroll({
-    axisStart: fadeParameters.startY,
-    parallaxData: fadeData,
-    scrollLimits: scrollLimits
-  })
-  fadeParameters.yRangeSize = (fadeParameters.endY - fadeParameters.startY)
-  const deltaOpacity = fadeData.endOpacity - fadeData.initialOpacity
-  fadeParameters.rate = deltaOpacity / fadeParameters.yRangeSize
-  fadeParameters.initialOpacity = fadeData.initialOpacity
-  fadeParameters.endOpacity = fadeData.endOpacity
-  const lowLimit = correctToRange({
-    limits: scrollLimits,
-    value: (fadeParameters.startY - parallaxRangeExtra)
-  })
-  const highLimit = correctToRange({
-    limits: scrollLimits,
-    value: (fadeParameters.endY + parallaxRangeExtra)
-  })
-  fadeParameters.limits = { low: lowLimit, high: highLimit }
-  return fadeParameters
-}
-
-function getParallaxFadeData (element) {
-  const fadeString = element.dataset.fade
-  return JSON.parse(fadeString)
-}
-
-function getParallaxGrowParameters ({
-  element,
-  elementInitialPosition,
-  scrollLimits,
-  parallaxRangeExtra
-}) {
-  const top = elementInitialPosition
-  const growData = getParallaxGrowData(element)
-  const growParameters = {}
-  growParameters.startY = getStartScroll({
-    top: top,
-    viewheightAnticipation: growData.viewheightAnticipation,
-    scrollLimits: scrollLimits
-  })
-  growParameters.endY = getEndScroll({
-    axisStart: growParameters.startY,
-    parallaxData: growData,
-    scrollLimits: scrollLimits
-  })
-  growParameters.yRangeSize = (growParameters.endY - growParameters.startY)
-  growParameters.widthEndScale = growData.widthEndScale
-  growParameters.heightEndScale = growData.heightEndScale
-  const lowLimit = correctToRange({
-    limits: scrollLimits,
-    value: (growParameters.startY - parallaxRangeExtra)
-  })
-  const highLimit = correctToRange({
-    limits: scrollLimits,
-    value: (growParameters.endY + parallaxRangeExtra)
-  })
-  growParameters.limits = { low: lowLimit, high: highLimit }
-  return growParameters
-}
-
-function getParallaxGrowData (element) {
-  const growDataString = element.dataset.grow
-  return JSON.parse(growDataString)
-}
-
-// Apply parallax scroll and resize functions //
-
-function applyParallaxInLimits ({
-  elementsArray,
-  parametersArray,
-  validParallaxScrollClasses
-}) {
-  const scrolled = Math.floor(window.pageYOffset)
-  elementsArray.forEach((element, index) => {
-    const elementParameters = parametersArray[index]
-    applyParallaxToElementInLimits({
-      element: element,
-      parameters: elementParameters,
-      scrolled: scrolled,
-      validParallaxScrollClasses: validParallaxScrollClasses
-    })
-  })
-}
-
-function applyParallaxToElementInLimits ({
-  element,
-  parameters,
-  scrolled,
-  validParallaxScrollClasses
-}) {
-  const elementClasses = Array.from(element.classList)
-  elementClasses.forEach((className) => {
-    if (validParallaxScrollClasses.includes(className)) {
-      const parallaxFunctionName = getNameOfParallaxFunction(className)
-      applyParallaxFunctionIfElementInRange({
-        element: element,
-        parameters: parameters,
-        scrolled: scrolled,
-        parallaxFunctionName: parallaxFunctionName
-      })
-    }
-  })
-}
-
-function applyParallaxFunctionIfElementInRange ({
-  element,
-  parameters,
-  scrolled,
-  parallaxFunctionName
-}) {
-  if (
-    inRange({
-      limits: parameters[parallaxFunctionName].limits,
-      value: scrolled
-    })
-  ) {
-    const elementObject = {
-      element: element,
-      parameters: parameters[parallaxFunctionName],
-      scrolled: scrolled
-    }
-    switch (parallaxFunctionName) {
-      case 'move':
-        parallaxMove(elementObject)
+  function getValueRange ({ animationData, animationType, scrollRange }) {
+    const valueRange = {}
+    switch (animationType) {
+      case 'translateX':
+        valueRange.start = 0
+        valueRange.end = vwToPx(animationData.viewwidthDistance)
+        valueRange.size = (valueRange.end - valueRange.start)
         break
-      case 'fade':
-        parallaxFade(elementObject)
+      case 'translateY':
+        valueRange.start = 0
+        valueRange.end = scrollRange.size * animationData.scrollRate
+        valueRange.size = (valueRange.end - valueRange.start)
         break
-      case 'grow':
-        parallaxGrow(elementObject)
+      case 'opacity':
+        valueRange.start = animationData.initialOpacity
+        valueRange.end = animationData.endOpacity
+        valueRange.size = (valueRange.end - valueRange.start)
         break
-      // case 'fix':
-      //   parallaxFix(elementObject)
-      //   break
+      case 'scaleX':
+      case 'scaleY':
+        valueRange.start = 1
+        valueRange.end = valueRange.start + animationData.deltaScale
+        valueRange.size = (valueRange.end - valueRange.start)
+        break
     }
+    valueRange.transition = animationData.transition
+    return valueRange
   }
-}
 
-function getNameOfParallaxFunction (className) {
-  const parallaxClassHyphens = '--'
-  return className.split(parallaxClassHyphens)[1]
-}
-
-function applyParallaxToAll (elementsArray, parametersArray) {
-  const scrolled = Math.floor(window.pageYOffset)
-  applyParallaxFade({
-    elementsArray: elementsArray,
-    parametersArray: parametersArray,
-    scrolled: scrolled
-  })
-  applyParallaxMove({
-    elementsArray: elementsArray,
-    parametersArray: parametersArray,
-    scrolled: scrolled
-  })
-  applyParallaxGrow({
-    elementsArray: elementsArray,
-    parametersArray: parametersArray,
-    scrolled: scrolled
-  })
-}
-
-function applyParallaxMove ({ elementsArray, parametersArray, scrolled }) {
-  elementsArray.forEach((element, index) => {
-    if (hasClass(element, 'p--move')) {
-      parallaxMove({
-        element: element,
-        parameters: parametersArray[index].move,
-        scrolled: scrolled
-      })
-    }
-  })
-}
-
-function applyParallaxFade ({ elementsArray, parametersArray, scrolled }) {
-  elementsArray.forEach((element, index) => {
-    if (hasClass(element, 'p--fade')) {
-      parallaxFade({
-        element: element,
-        parameters: parametersArray[index].fade,
-        scrolled: scrolled
-      })
-    }
-  })
-}
-
-function applyParallaxGrow ({ elementsArray, parametersArray, scrolled }) {
-  elementsArray.forEach((element, index) => {
-    if (hasClass(element, 'p--grow')) {
-      parallaxGrow({
-        element: element,
-        parameters: parametersArray[index].grow,
-        scrolled: scrolled
-      })
-    }
-  })
-}
-
-
-// Parallax main move functions //
-
-function parallaxMove ({ element, parameters, scrolled }) {
-  const currentTranslateStateString = getCurrentTranslateStateString(element)
-  const translateState = getValuesFromTransformString(currentTranslateStateString)
-  const translateDistances = getTranslateDistances({
-    element: element,
-    parameters: parameters,
-    scrolled: scrolled,
-    translateState: translateState
-  })
-  const translateString = makeTranslateString(translateDistances)
-  modifyTransformState({
-    element: element,
-    currentPropertyStateString: currentTranslateStateString,
-    newPropertyString: translateString
-  })
-}
-
-function getTranslateDistances ({
-  element,
-  parameters,
-  scrolled,
-  translateState
-}) {
-  const x = getTranslateDistance({
-    axis: 'x',
-    axisParameters: parameters.x,
-    axisTranslateState: translateState.x,
-    scrolled: scrolled
-  })
-  const y = getTranslateDistance({
-    axis: 'y',
-    axisParameters: parameters.y,
-    axisTranslateState: translateState.y,
-    scrolled: scrolled
-  })
-  return { x: x, y: y }
-}
-
-function getTranslateDistance ({
-  axis,
-  axisParameters,
-  axisTranslateState,
-  scrolled
-}) {
-  if (!axisParameters.isMoved) {
-    return axisTranslateState
-  } else if (scrolled <= axisParameters.startY) {
-    axisParameters.endAccumulate = 0
-    return 0
-  } else if (scrolled >= axisParameters.endY) {
-    axisParameters.endAccumulate = 0
-    return axisParameters.maxDistance
-  } else {
-    return calculateDistance({
-      axis: axis,
-      axisParameters: axisParameters,
-      scrolled: scrolled
-    })
-  }
-}
-
-function calculateDistance ({ axis, axisParameters, scrolled }) {
-  const scrolledFromStart = scrolled - axisParameters.startY
-  const percentOfAdvance = scrolledFromStart / axisParameters.yRangeSize
-  if (differenceIsAlmostZero(percentOfAdvance, 1) ||
-      differenceIsAlmostZero(percentOfAdvance, 0)) {
-    axisParameters.endAccumulate = 0
-  }
-  let distance =
-    scrolledFromStart *
-    axisParameters.rate +
-    axisParameters.endAccumulate
-  distance = getDistanceInRange(distance, axisParameters.maxDistance)
-  return distance
-}
-
-function getDistanceInRange (distanceCalculation, maxDistance) {
-  if (Math.abs(distanceCalculation) > Math.abs(maxDistance)) {
-    return maxDistance
-  } else if (Math.abs(maxDistance - distanceCalculation) > Math.abs(maxDistance)) {
-    return 0
-  } else {
-    return distanceCalculation
-  }
-}
-
-function makeTranslateString (translateDistances) {
-  const x = Math.floor(translateDistances.x)
-  const y = Math.floor(translateDistances.y)
-  return `translate3d(${x}px, ${y}px, 0px)`
-}
-
-function modifyTransformState ({
-  element,
-  currentPropertyStateString,
-  newPropertyString
-}) {
-  const currentTransform = element.style.transform
-  let newTransformString
-  if (!currentTransform) {
-    newTransformString = newPropertyString
-  } else if (
-    currentTransform &&
-    currentPropertyStateString === ''
-  ) {
-    newTransformString =
-      currentTransform +
-      ' ' +
-      newPropertyString
-  } else {
-    newTransformString = currentTransform.replace(
-      currentPropertyStateString,
-      newPropertyString
-    )
-  }
-  element.style.transform = newTransformString
-}
-
-// Parallax smooth ending functions //
-
-function applyParallaxMoveEnd ({
-  elementsArray,
-  parametersArray,
-  minScroll,
-  endTransitionTime
-}) {
-  const scrolled = Math.floor(window.pageYOffset)
-  const deltaScroll = getDeltaScroll(scrolled)
-  if (Math.abs(deltaScroll) > minScroll) {
-    elementsArray.forEach((element, index) => {
-      const moveParameters = parametersArray[index].move
-      if (
-        hasClass(element, 'p--move-end') &&
-        hasClass(element, 'p--move') &&
-        inRange({
-          limits: moveParameters.endLimits,
-          value: scrolled
-        })
-      ) {
-        parallaxMoveEnd({
-          element: element,
-          moveParameters: moveParameters,
-          deltaScroll: deltaScroll,
-          scrolled: scrolled,
-          endTransitionTime: endTransitionTime
-        })
+  function getAnimationScrollLimits (animationParameters) {
+    const extraLimit = vhToPx(PARALLAX_RANGE_EXTRA_VH)
+    let lowScrollLimit
+    let highScrollLimit
+    for (const animationType in animationParameters) {
+      const startScroll = animationParameters[animationType].scrollRange.start
+      const endScroll = animationParameters[animationType].scrollRange.end
+      if ((!lowScrollLimit) || (startScroll < lowScrollLimit)) {
+        lowScrollLimit = startScroll
       }
-    })
-  }
-}
-
-function getDeltaScroll (scrolled) {
-  const deltaScroll = scrolled - lastScroll // global
-  lastScroll = scrolled // Global
-  return deltaScroll
-}
-
-function parallaxMoveEnd ({
-  element,
-  moveParameters,
-  deltaScroll,
-  scrolled,
-  endTransitionTime
-}) {
-  const endParameters = getParallaxEndParameters({
-    element: element,
-    moveParameters: moveParameters,
-    deltaScroll: deltaScroll
-  })
-  const maxMove = getMaxMove(moveParameters)
-  const currentTranslateStateString = getCurrentTranslateStateString(element)
-  const translateState = getValuesFromTransformString(currentTranslateStateString)
-  const endTranslateDistances = getEndTranslateDistances({
-    translateState: translateState,
-    endParameters: endParameters,
-    maxMove: maxMove,
-    moveParameters: moveParameters,
-    deltaScroll: deltaScroll,
-    scrolled: scrolled
-  })
-  const endTranslateString = makeTranslateString(endTranslateDistances)
-  moveEndByDistances({
-    element: element,
-    currentTranslateStateString: currentTranslateStateString,
-    endTranslateString: endTranslateString,
-    endTransitionTime: endTransitionTime
-  })
-  accumulateEndDistance({
-    moveParameters: moveParameters,
-    translateState: translateState,
-    maxMove: maxMove,
-    endTranslateDistances: endTranslateDistances
-  })
-}
-
-function getParallaxEndParameters ({
-  element,
-  moveParameters,
-  deltaScroll
-}) {
-  const endData = getParallaxEndData(element)
-  const endParameters = {}
-  endParameters.x = getProportionalEnd({
-    axisMoveParameters: moveParameters.x,
-    deltaScroll: deltaScroll,
-    endData: endData
-  })
-  endParameters.y = getProportionalEnd({
-    axisMoveParameters: moveParameters.y,
-    deltaScroll: deltaScroll,
-    endData: endData
-  })
-  return endParameters
-}
-
-function getParallaxEndData (element) {
-  const endString = element.dataset.end
-  return JSON.parse(endString)
-}
-
-function getProportionalEnd ({ axisMoveParameters, deltaScroll, endData }) {
-  const axisProportionalEnd = Math.abs(
-    axisMoveParameters.rate *
-    deltaScroll *
-    endData.rate
-  )
-  const endMax = remToPx(endData.maxRems)
-  if (axisProportionalEnd > endMax) {
-    return endMax
-  } else {
-    return axisProportionalEnd
-  }
-}
-
-function getMaxMove (moveParameters) {
-  const maxX = moveParameters.x.maxDistance
-  const maxY = moveParameters.y.maxDistance
-  return { x: maxX, y: maxY }
-}
-
-function getEndTranslateDistances ({
-  translateState,
-  endParameters,
-  maxMove,
-  moveParameters,
-  deltaScroll,
-  scrolled
-}) {
-  const x = getAxisEndTranslateDistance({
-    axisTranslateState: translateState.x,
-    axisEndParameters: endParameters.x,
-    axisMaxMove: maxMove.x,
-    axisParameters: moveParameters.x,
-    deltaScroll: deltaScroll,
-    scrolled: scrolled
-  })
-  const y = getAxisEndTranslateDistance({
-    axisTranslateState: translateState.y,
-    axisEndParameters: endParameters.y,
-    axisMaxMove: maxMove.y,
-    axisParameters: moveParameters.y,
-    deltaScroll: deltaScroll,
-    scrolled: scrolled
-  })
-  return { x: x, y: y }
-}
-
-function getAxisEndTranslateDistance ({
-  axisTranslateState,
-  axisEndParameters,
-  axisMaxMove,
-  axisParameters,
-  deltaScroll,
-  scrolled
-}) {
-  if (
-    inRange({
-      limits: {
-        low: axisParameters.startY,
-        high: axisParameters.endY
-      },
-      value: scrolled
-    })
-  ) {
-    const endSign = getProductSign(axisMaxMove, deltaScroll)
-    const endAdded = axisTranslateState + endSign * axisEndParameters
-    return getDistanceInRange(endAdded, axisMaxMove)
-  } else {
-    return axisTranslateState
-  }
-}
-
-function getProductSign (x, y) {
-  if (x * y > 0) {
-    return 1
-  } else if (x * y < 0) {
-    return -1
-  } else {
-    return 0
-  }
-}
-
-function moveEndByDistances ({
-  element,
-  currentTranslateStateString,
-  endTranslateString,
-  endTransitionTime
-}) {
-  element.style.transition = 'transform ' + endTransitionTime + 'ms ease-out'
-  modifyTransformState({
-    element: element,
-    currentPropertyStateString: currentTranslateStateString,
-    newPropertyString: endTranslateString
-  })
-  flushCss(element)
-  element.style.transition = ''
-}
-
-function accumulateEndDistance ({
-  moveParameters,
-  translateState,
-  maxMove,
-  endTranslateDistances
-}) {
-  moveParameters.x.endAccumulate += (endTranslateDistances.x - translateState.x)
-  moveParameters.y.endAccumulate += (endTranslateDistances.y - translateState.y)
-}
-
-// Parallax fade functions //
-
-function parallaxFade ({ element, parameters, scrolled }) {
-  let opacity
-  if (scrolled <= parameters.startY) {
-    opacity = parameters.initialOpacity
-  } else if (scrolled >= parameters.endY) {
-    opacity = parameters.endOpacity
-  } else {
-    opacity = getOpacity(parameters, scrolled)
-  }
-  element.style.opacity = '' + opacity
-}
-
-function getOpacity (parameters, scrolled) {
-  const yAdvance = scrolled - parameters.startY
-  return parameters.initialOpacity + yAdvance * parameters.rate
-}
-
-// Parallax grow functions //
-
-function parallaxGrow ({ element, parameters, scrolled }) {
-  let widthScale
-  let heightScale
-  if (scrolled <= parameters.startY) {
-    widthScale = 1
-    heightScale = 1
-  } else if (scrolled >= parameters.endY) {
-    widthScale = parameters.widthEndScale
-    heightScale = parameters.heigthEndScale
-  } else {
-    const yAdvance = scrolled - parameters.startY
-    widthScale = getScale({
-      advance: yAdvance,
-      rangeSize: parameters.yRangeSize,
-      endScale: parameters.widthEndScale
-    })
-    heightScale = getScale({
-      advance: yAdvance,
-      rangeSize: parameters.yRangeSize,
-      endScale: parameters.heightEndScale
-    })
-  }
-  const scaleString = makeScaleString({
-    widthScale: widthScale,
-    heightScale: heightScale
-  })
-  const currentScaleStateString = getCurrentScaleStateString(element)
-  modifyTransformState({
-    element: element,
-    currentPropertyStateString: currentScaleStateString,
-    newPropertyString: scaleString
-  })
-}
-
-function getScale ({ advance, rangeSize, endScale }) {
-  const advancePercent = advance / rangeSize
-  const scaleRangeSize = endScale - 1
-  let scale = scaleRangeSize * advancePercent + 1
-  if (scale < 0) {
-    scale = 0
-  }
-  return scale
-}
-
-function makeScaleString ({
-  widthScale,
-  heightScale
-}) {
-  const x = roundToTwoDecimals(widthScale)
-  const y = roundToTwoDecimals(heightScale)
-  return `scale3d(${x}, ${y}, 1)`
-}
-
-function getCurrentScaleStateString (element) {
-  const scaleRegex = /scale3d\(.*\)/
-  const currentTransform = element.style.transform
-  if (currentTransform) {
-    return currentTransform.match(scaleRegex)
-  } else {
-    return ''
-  }
-}
-
-// Avoids content jumps on resize
-
-function getTopElementInViewport () {
-  let tempElement
-  topElement = null // Global
-  for (let x = 0; x < document.body.offsetWidth; x++) {
-    tempElement = document.elementFromPoint(x, 2)
-    if (!topElement || tempElement.offsetTop > topElement.offsetTop) {
-      topElement = tempElement // Global
+      if ((!highScrollLimit) || (endScroll > highScrollLimit)) {
+        highScrollLimit = endScroll
+      }
+    }
+    lowScrollLimit -= extraLimit
+    highScrollLimit += extraLimit
+    return {
+      low: correctToRange({
+        limits: { low: 0, high: maxScroll },
+        value: lowScrollLimit
+      }),
+      high: correctToRange({
+        limits: { low: 0, high: maxScroll },
+        value: highScrollLimit
+      })
     }
   }
-}
 
-function scrollToTopElement () {
-  if (topElement) {
-    topElement.scrollIntoView(true)
-  }
-}
+  /*  UPDATE CONTENT ON SCROLL
+  ----------------------------------------------- */
 
-// Avoid resize event when url bar gets added
-
-function isValidResize () {
-  const validResizePercent = 0.1
-  const deltaSize = getDeltaWindowSize()
-  return deltaSize.width > 0 || deltaSize.height > validResizePercent
-}
-
-function getDeltaWindowSize () {
-  const size = getWindowSize()
-  const deltaWidth =
-    Math.abs(size.width - lastSize.width) / // global
-    Math.min(size.width, lastSize.width) // global
-  const deltaHeight =
-    Math.abs(size.height - lastSize.height) / // global
-    Math.min(size.height, lastSize.height) // global
-  return { width: deltaWidth, height: deltaHeight }
-}
-
-function getWindowSize () {
-  const size = {}
-  size.width = window.innerWidth
-  size.height = window.innerHeight
-  return size
-}
-
-// General functions
-
-function flushCss (element) {
-  element.offsetHeight
-}
-
-const debounce = (func, delay) => {
-  let inDebounce
-  return function () {
-    clearTimeout(inDebounce)
-    inDebounce = setTimeout(() => { func() }, delay)
-  }
-}
-
-const animationThrottle = (func, limit) => {
-  let inThrottle = false
-  return function () {
-    if (!inThrottle) {
-      func()
-      inThrottle = true
-      setTimeout(() => { inThrottle = false }, limit)
+  function tryToAnimateElementsInLimits () {
+    const scroll = getScroll()
+    if (Math.abs(scroll - lastScroll) > 0) {
+      lastScroll = scroll
+      if (scheduledAnimationFrame) {
+        return
+      }
+      scheduledAnimationFrame = true
+      window.requestAnimationFrame(animateElementsInLimits)
     }
   }
-}
 
-function hasClass (element, className) {
-  return element.classList.contains(className)
-}
-
-function vhToPx (vh) {
-  return vh / 100 * window.innerHeight
-}
-
-function remToPx (rem) {
-  return rem * parseFloat(getComputedStyle(document.body).fontSize)
-}
-
-function pxToRem (px) {
-  return px / parseFloat(getComputedStyle(document.body).fontSize)
-}
-
-function differenceIsAlmostZero (x, y) {
-  const difference = 0.01
-  return Math.abs(x - y) < difference
-}
-
-function roundToTwoDecimals (number) {
-  return Math.round((number + Number.EPSILON) * 100) / 100
-}
-
-function inRange ({ limits: { low, high }, value }) {
-  return value >= low && value <= high
-}
-
-function correctToRange ({ limits: { low, high }, value }) {
-  if (value <= low) {
-    return low
-  } else if (value >= high) {
-    return high
-  } else {
-    return value
+  function animateElementsInLimits () {
+    for (const selector in domElements) {
+      if (inRange({
+        limits: domElements[selector].limits,
+        value: lastScroll
+      })
+      ) {
+        animateElement(domElements[selector])
+      }
+    }
+    scheduledAnimationFrame = false
   }
-}
 
-// Marker to understand general layout. DELETE UNDER THIS LINE
+  function animateElement ({ element, animations }) {
+    const animationValues = getAnimationValues(animations)
+    applyAnimation({
+      element: element,
+      animationValues: animationValues
+    })
+  }
 
-function showOffsetMarker () {
-  const scrolled = Math.floor(window.pageYOffset)
-  const marker = document.querySelector('.y-offset-marker')
-  marker.textContent = scrolled
-}
-// DELETE ABOVE THIS LINE
+  function getAnimationValues (animations) {
+    const animationValues = {}
+    for (const type in animations) {
+      switch (type) {
+        case 'translateX':
+        case 'translateY':
+          animationValues[type] = Math.floor(
+            getValueForAnimationType(animations[type])
+          )
+          break
+        default:
+          animationValues[type] = getValueForAnimationType(animations[type])
+            .toFixed(2)
+          break
+      }
+    }
+    return animationValues
+  }
 
+  function getValueForAnimationType ({ scrollRange, valueRange }) {
+    if (lastScroll < scrollRange.start) {
+      return valueRange.start
+    } else if (lastScroll > scrollRange.end) {
+      return valueRange.end
+    } else {
+      const relativeScroll = lastScroll - scrollRange.start
+      const animationAdvance = relativeScroll / scrollRange.size
+      const animationRate = getEasedAnimationRate({
+        animationAdvance: animationAdvance,
+        transition: valueRange.transition
+      })
+      return valueRange.start + valueRange.size * animationRate
+    }
+  }
 
+  function getEasedAnimationRate ({ animationAdvance, transition }) {
+    switch (transition) {
+      case 'ease-out':
+        return animationAdvance * (2 - animationAdvance) // Quadratic Ease Out
+      case 'linear':
+      default:
+        return animationAdvance
+    }
+  }
 
-// Run script
+  function applyAnimation ({ element, animationValues }) {
+    const {
+      translateX = 0,
+      translateY = 0,
+      opacity = 1,
+      scaleX = 1,
+      scaleY = 1
+    } = animationValues
+    const translateString = `translate3d(${translateX}px, ${translateY}px, 0px)`
+    const scaleString = `scale3D(${scaleX}, ${scaleY}, 1)`
+    element.style.opacity = opacity
+    element.style.transform = translateString + ' ' + scaleString
+  }
 
-console.log('Load Parallax script')
-console.log('Initial Scroll is ' + window.pageYOffset)
+  /*  UPDATE CONTENT ON RESIZE
+  ----------------------------------------------- */
 
-const MIN_SCROLL_PX = 100
-const SCROLL_DEBOUNCE_MS = 90
-const SCROLL_THROTTLE_MS = 50
-const RESIZE_DEBOUNCE_MS = 150
-const MOVE_END_TRANSITION_MS = 300
-const PARALLAX_RANGE_EXTRA_VH = 25
-const VALID_PARALLAX_SCROLL_CLASSES = ['p--fade', 'p--move', 'p--grow']
-let lastScroll = 0
-let topElement
-let lastSize = getWindowSize()
+  function isValidResize () {
+    const validResizePercent = VALID_HEIGHT_RESIZE_PERCENT / 100
+    const deltaSize = getDeltaWindowSize()
+    return deltaSize.width > 0 || deltaSize.height > validResizePercent
+  }
 
-const parallaxElements = selectParallaxElements()
-console.log(parallaxElements)
-let elementPositions = getParallaxElementsYPosition(
-  parallaxElements
-)
-console.log('Positions')
-console.log(elementPositions)
-let parallaxScrollParameters = getParallaxScrollParameters({
-  elementsArray: parallaxElements,
-  elementsInitialPositions: elementPositions,
-  parallaxRangeExtraVh: PARALLAX_RANGE_EXTRA_VH
-})
-console.log('Parameters')
-console.log(parallaxScrollParameters)
+  function getDeltaWindowSize () {
+    const size = getWindowSize()
+    const deltaWidth =
+      Math.abs(size.width - lastScreenSize.width) /
+      Math.min(size.width, lastScreenSize.width)
+    const deltaHeight =
+      Math.abs(size.height - lastScreenSize.height) /
+      Math.min(size.height, lastScreenSize.height)
+    return { width: deltaWidth, height: deltaHeight }
+  }
 
-window.addEventListener('resize', debounce(() => {
-  if (isValidResize()) {
-    console.log('Valid resize')
-    elementPositions = getParallaxElementsYPosition(
-      parallaxElements
+  function updateParameters () {
+    lastScreenSize = getWindowSize()
+    maxScroll = getMaxScroll()
+    lastScroll = getScroll()
+    for (const selector in domElements) {
+      const element = domElements[selector].element
+      domElements[selector].animations = processAnimationData({
+        selector: selector,
+        element: element
+      })
+      domElements[selector].limits = getAnimationScrollLimits(
+        domElements[selector].animations
+      )
+    }
+  }
+
+  function updateWholePage () {
+    window.requestAnimationFrame(animateAllElements)
+  }
+
+  function animateAllElements () {
+    for (const selector in domElements) {
+      animateElement(domElements[selector])
+    }
+  }
+
+  /*  VIEW KEEPER ON RESIZE
+  ----------------------------------------------- */
+
+  function getTopElementInViewport () {
+    let tempElement
+    topElement = null
+    for (let x = 0; x < document.body.offsetWidth; x++) {
+      tempElement = document.elementFromPoint(x, 2)
+      if (!topElement || tempElement.offsetTop > topElement.offsetTop) {
+        topElement = tempElement
+      }
+    }
+  }
+
+  function scrollToTopElement () {
+    if (topElement) {
+      topElement.scrollIntoView(true)
+    }
+  }
+
+  /*  HELPERS
+  ----------------------------------------------- */
+
+  function getWindowSize () {
+    const size = {}
+    size.width = window.innerWidth
+    size.height = window.innerHeight
+    return size
+  }
+
+  function getMaxScroll () {
+    return Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.clientHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
     )
-    console.log('new positions')
-    console.log(elementPositions)
-    parallaxScrollParameters = getParallaxScrollParameters({
-      elementsArray: parallaxElements,
-      elementsInitialPositions: elementPositions,
-      parallaxRangeExtraVh: PARALLAX_RANGE_EXTRA_VH
-    })
-    console.log('new parameters')
-    applyParallaxToAll(parallaxElements, parallaxScrollParameters)
-    console.log('parallaxApplied')
-    scrollToTopElement()
   }
-  lastSize = getWindowSize()
-}, RESIZE_DEBOUNCE_MS))
 
-window.addEventListener('scroll', animationThrottle(() => {
-  applyParallaxInLimits({
-    elementsArray: parallaxElements,
-    parametersArray: parallaxScrollParameters,
-    validParallaxScrollClasses: VALID_PARALLAX_SCROLL_CLASSES
-  })
-}, SCROLL_THROTTLE_MS))
+  function getScroll () {
+    return window.pageYOffset
+  }
 
-window.addEventListener('scroll', debounce(() => {
-  applyParallaxMoveEnd({
-    elementsArray: parallaxElements,
-    parametersArray: parallaxScrollParameters,
-    minScroll: MIN_SCROLL_PX,
-    endTransitionTime: MOVE_END_TRANSITION_MS
-  })
-  getTopElementInViewport()
-}, SCROLL_DEBOUNCE_MS))
+  function debounce (func, delay) {
+    let inDebounce
+    return function () {
+      clearTimeout(inDebounce)
+      inDebounce = setTimeout(() => { func() }, delay)
+    }
+  }
 
+  function vhToPx (vh) {
+    return vh / 100 * lastScreenSize.height
+  }
 
+  function vwToPx (vw) {
+    return vw / 100 * lastScreenSize.width
+  }
 
-// Marker to understand general layout. DELETE UNDER THIS LINE
-window.addEventListener('scroll', function (e) { showOffsetMarker() })
-// DELETE ABOVE THIS LINE
+  function inRange ({ limits: { low, high }, value }) {
+    return value >= low && value <= high
+  }
 
+  function correctToRange ({ limits: { low, high }, value }) {
+    if (value <= low) {
+      return low
+    } else if (value >= high) {
+      return high
+    } else {
+      return value
+    }
+  }
 
-console.log('Parallax script end')
+  // Marker to understand general layout. DELETE UNDER THIS LINE
+
+  function showOffsetMarker () {
+    const scrolled = Math.floor(window.pageYOffset)
+    const marker = document.querySelector('.y-offset-marker')
+    marker.textContent = scrolled
+  }
+  // DELETE ABOVE THIS LINE
+
+  init()
+}())
+
+console.log('Animations file loaded correctly')
