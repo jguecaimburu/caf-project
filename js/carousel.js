@@ -1,191 +1,244 @@
-function createCarouselObj () {
-  const carousel = document.querySelector('.carousel')
-  const carouselObj = {}
-  carouselObj.container = carousel
-  carouselObj.buttons = {}
-  carouselObj.buttons.forward = carousel
-    .querySelector('.carousel__btn--forward')
-  carouselObj.buttons.backward = carousel
-    .querySelector('.carousel__btn--backward')
-  carouselObj.buttons.play = carousel
-    .querySelector('.carousel__btn--play')
-  carouselObj.slides = Array.from(carousel
-    .querySelectorAll('.carousel__slide')
-  )
-  return carouselObj
-}
+const imageCarousel = (function () {
 
-function moveSlides (indexChange, slideTransitionTime, carouselObj) {
-  const indexes = identifySlidesToPosition(indexChange, carouselObj)
-  positionSlidesByIndex(indexes, slideTransitionTime, carouselObj)
-}
+  /*  GLOBALS
+  ----------------------------------------------- */
 
-function identifySlidesToPosition (indexChange, carouselObj) {
-  const currentSlide = carouselObj.container
-    .querySelector('.carousel__slide--current')
+  const CAROUSEL_INTERVAL_MS = 5000
+  const RESIZE_DEBOUNCE_MS = 150
+  const carouselObject = {}
+  let carouselTimer
+  let timerIsOn
+  let slideTransitionTime
+  let slideWidth
 
-  const currentIndex = carouselObj
-    .slides.findIndex(slide => slide === currentSlide)
-  const targetIndex = getAbsoluteIndex(
-    currentIndex + indexChange,
-    carouselObj.slides
-  )
-  const newForwardIndex = getAbsoluteIndex(
-    targetIndex + 1,
-    carouselObj.slides
-  )
-  const newBackwardIndex = getAbsoluteIndex(
-    targetIndex - 1,
-    carouselObj.slides
-  )
-  return {
-    current: currentIndex,
-    target: targetIndex,
-    newForward: newForwardIndex,
-    newBackward: newBackwardIndex
+  /*  CONSTRUCTION
+  ----------------------------------------------- */
+
+  function init () {
+    setupParameters()
+    setupEventListeners()
+    carouselTimer = setInterval(moveOneSlideForward, CAROUSEL_INTERVAL_MS)
+    timerIsOn = true
   }
-}
 
-function getAbsoluteIndex (relativeIndex, array) {
-  if (relativeIndex < 0) {
-    return relativeIndex + array.length
-  } else if (relativeIndex > array.length - 1) {
-    return relativeIndex - array.length
-  } else {
-    return relativeIndex
+  function setupParameters () {
+    buildCarouselObject()
+    setSlideWidth()
+    setSlideTransitionDuration()
+    setSlidesInitialPositions()
   }
-}
 
-function positionSlidesByIndex (
-  slidesIndexes
-  , slideTransitionTime
-  , carouselObj
-) {
-  const slideWidth = carouselObj.slides[0].getBoundingClientRect().width
-  const coverCurrentSlide = new Promise(function (resolve, reject) {
-    carouselObj.slides[slidesIndexes.current].style.zIndex = '4'
-    moveOnFront(carouselObj.slides[slidesIndexes.target], 0)
-    setTimeout(() => { resolve() }, slideTransitionTime)
-  })
-  coverCurrentSlide.then(function () {
-    moveOnBack(carouselObj.slides[slidesIndexes.newForward], slideWidth)
-    moveOnBack(carouselObj.slides[slidesIndexes.newBackward], -slideWidth)
-    carouselObj.slides[slidesIndexes.current]
-      .classList.remove('carousel__slide--current')
-    carouselObj.slides[slidesIndexes.target]
-      .classList.add('carousel__slide--current')
-  })
-}
+  function setupEventListeners () {
+    setupButtonListeners()
+    setupKeyboardListener()
+    setupResizeListeners()
+  }
 
-function moveOnFront (element, px) {
-  element.style.zIndex = '5'
-  element.style.left = px + 'px'
-}
+  /*  SETUP
+  ----------------------------------------------- */
 
-function moveOnBack (element, px) {
-  element.style.zIndex = '0'
-  element.style.transitionDuration = '0ms'
-  element.style.left = px + 'px'
-  flushCss(element)
-  element.style.transitionDuration = ''
-}
+  function buildCarouselObject () {
+    const carousel = document.querySelector('.carousel')
+    carouselObject.container = carousel
+    carouselObject.buttons = {}
+    carouselObject.buttons.forward = carousel
+      .querySelector('.carousel__btn--forward')
+    carouselObject.buttons.backward = carousel
+      .querySelector('.carousel__btn--backward')
+    carouselObject.buttons.play = carousel
+      .querySelector('.carousel__btn--play')
+    carouselObject.slides = Array.from(carousel
+      .querySelectorAll('.carousel__slide')
+    )
+  }
 
-function flushCss (element) {
-  element.offsetHeight
-}
+  function setSlideWidth () {
+    slideWidth = carouselObject.slides[0].getBoundingClientRect().width
+  }
 
-function throttle (func, limit) {
-  let inThrottle = false
-  return function () {
-    if (!inThrottle) {
-      func()
-      inThrottle = true
-      setTimeout(() => { inThrottle = false }, limit)
+  function setSlideTransitionDuration () {
+    slideTransitionTime = getElementTransitionDuration(carouselObject.slides[0])
+  }
+
+  function setSlidesInitialPositions () {
+    moveSlides(0)
+  }
+
+  function getElementTransitionDuration (element) {
+    const elementStyle = getComputedStyle(element)
+    const transDurationStr = elementStyle.transitionDuration
+    return Math.floor(parseFloat(transDurationStr) * 1000)
+  }
+
+  /*  EVENT LISTENERS
+  ----------------------------------------------- */
+
+  function setupButtonListeners () {
+    carouselObject.buttons.forward.addEventListener(
+      'click'
+      , throttle(() => {
+        moveOneSlideForward()
+        if (timerIsOn) {
+          resetTimer()
+        }
+      }, slideTransitionTime)
+    )
+
+    carouselObject.buttons.backward.addEventListener(
+      'click'
+      , throttle(() => {
+        moveOneSlideBackward()
+        if (timerIsOn) {
+          resetTimer()
+        }
+      }, slideTransitionTime)
+    )
+
+    carouselObject.buttons.play.addEventListener(
+      'click'
+      , throttle(() => {
+        playStopTimer()
+      }, slideTransitionTime)
+    )
+  }
+
+  function setupKeyboardListener () {
+    document.onkeydown = throttle((e) => {
+      e = e || window.event
+      if (e.keyCode === 39) {
+        moveOneSlideForward()
+      } else if (e.keyCode === 37) {
+        moveOneSlideBackward()
+      }
+      if (timerIsOn) {
+        resetTimer()
+      }
+    }, slideTransitionTime)
+  }
+
+  function setupResizeListeners () {
+    window.addEventListener('resize', debounce(() => {
+      setSlideWidth()
+    }, RESIZE_DEBOUNCE_MS))
+  }
+
+  /*  MOVE SLIDES
+  ----------------------------------------------- */
+
+  function moveOneSlideForward () {
+    moveSlides(1)
+  }
+
+  function moveOneSlideBackward () {
+    moveSlides(-1)
+  }
+
+  function moveSlides (indexChange) {
+    const indexes = identifySlidesToPosition(indexChange)
+    positionSlidesByIndex(indexes)
+  }
+
+  function identifySlidesToPosition (indexChange) {
+    const currentSlide = carouselObject.container
+      .querySelector('.carousel__slide--current')
+    const indexes = {}
+    indexes.current = carouselObject
+      .slides.findIndex(slide => slide === currentSlide)
+    indexes.target = getAbsoluteIndex({
+      relativeIndex: indexes.current + indexChange,
+      array: carouselObject.slides
+    })
+    indexes.newForward = getAbsoluteIndex({
+      relativeIndex: indexes.target + 1,
+      array: carouselObject.slides
+    })
+    indexes.newBackward = getAbsoluteIndex({
+      relativeIndex: indexes.target - 1,
+      array: carouselObject.slides
+    })
+    return indexes
+  }
+
+  function getAbsoluteIndex ({ relativeIndex, array }) {
+    if (relativeIndex < 0) {
+      return relativeIndex + array.length
+    } else if (relativeIndex > array.length - 1) {
+      return relativeIndex - array.length
+    } else {
+      return relativeIndex
     }
   }
-}
 
+  function positionSlidesByIndex ({ current, target, newForward, newBackward }) {
+    const coverCurrentSlide = new Promise(function (resolve, reject) {
+      carouselObject.slides[current].style.zIndex = '4'
+      moveOnFront(carouselObject.slides[target], 0)
+      setTimeout(() => { resolve() }, slideTransitionTime)
+    })
+    coverCurrentSlide.then(function () {
+      moveOnBack(carouselObject.slides[newForward], slideWidth)
+      moveOnBack(carouselObject.slides[newBackward], -slideWidth)
+      carouselObject.slides[current].classList.remove('carousel__slide--current')
+      carouselObject.slides[target].classList.add('carousel__slide--current')
+    })
+  }
 
-function getElementTransitionDuration (element) {
-  const elementStyle = getComputedStyle(element)
-  const transDurationStr = elementStyle.transitionDuration
-  return Math.floor(parseFloat(transDurationStr) * 1000)
-}
+  function moveOnFront (element, px) {
+    element.style.zIndex = '5'
+    element.style.left = px + 'px'
+  }
 
+  function moveOnBack (element, px) {
+    element.style.zIndex = '0'
+    element.style.transitionDuration = '0ms'
+    element.style.left = px + 'px'
+    flushCss(element)
+    element.style.transitionDuration = ''
+  }
 
-// Start execution
+  /*  TIMER MANAGEMENT
+  ----------------------------------------------- */
 
-console.log('Running script')
+  function playStopTimer () {
+    if (timerIsOn) {
+      clearInterval(carouselTimer)
+      timerIsOn = false
+    } else {
+      carouselTimer = setInterval(moveOneSlideForward, CAROUSEL_INTERVAL_MS)
+    }
+  }
 
-// Select HTML Elements
-const carouselObj = createCarouselObj()
-
-// Set slides initial position
-const slideTransitionTime =
-getElementTransitionDuration(carouselObj.slides[0])
-moveSlides(0, slideTransitionTime, carouselObj)
-
-// Define functions for events
-const moveOneSlideForward = () => moveSlides(1, slideTransitionTime, carouselObj)
-const moveOneSlideBackward = () => moveSlides(-1, slideTransitionTime, carouselObj)
-
-// Set timer on, stop and reset functions
-let carouselTimer = setInterval(moveOneSlideForward, 5000)
-let timerIsOn = true
-const playStopTimer = () => {
-  if (timerIsOn) {
-    console.log('is on, turn off')
+  function resetTimer () {
     clearInterval(carouselTimer)
-    timerIsOn = false
-  } else {
-    console.log('is off, turn on')
-    carouselTimer = setInterval(moveOneSlideForward, 5000)
+    carouselTimer = setInterval(moveOneSlideForward, CAROUSEL_INTERVAL_MS)
   }
-}
-const resetTimer = () => {
-  clearInterval(carouselTimer)
-  carouselTimer = setInterval(moveOneSlideForward, 5000)
-}
 
-// Add events to buttons
-carouselObj.buttons.forward.addEventListener(
-  'click'
-  , throttle(() => {
-    moveOneSlideForward()
-    if (timerIsOn) {
-      resetTimer()
+  /*  HELPERS
+  ----------------------------------------------- */
+  function flushCss (element) {
+    element.offsetHeight
+  }
+
+  function throttle (func, limit) {
+    let inThrottle = false
+    return function () {
+      if (!inThrottle) {
+        func()
+        inThrottle = true
+        setTimeout(() => { inThrottle = false }, limit)
+      }
     }
-  }, slideTransitionTime)
-)
+  }
 
-carouselObj.buttons.backward.addEventListener(
-  'click'
-  , throttle(() => {
-    moveOneSlideBackward()
-    if (timerIsOn) {
-      resetTimer()
+  function debounce (func, delay) {
+    let inDebounce
+    return function () {
+      clearTimeout(inDebounce)
+      inDebounce = setTimeout(() => { func() }, delay)
     }
-  }, slideTransitionTime)
-)
-
-carouselObj.buttons.play.addEventListener(
-  'click'
-  , throttle(() => {
-    playStopTimer()
-  }, slideTransitionTime)
-)
-
-// Add events to keys
-document.onkeydown = throttle((e) => {
-  e = e || window.event
-  if (e.keyCode === 39) {
-    moveOneSlideForward()
-  } else if (e.keyCode === 37) {
-    moveOneSlideBackward()
   }
-  if (timerIsOn) {
-    resetTimer()
-  }
-}, slideTransitionTime)
 
-console.log('End of script')
+  init()
+}())
+
+console.log('Carousel file loaded correctly')
