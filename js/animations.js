@@ -170,6 +170,10 @@ const homeAnimations = (function () {
   function getValueRange ({ animationData, animationType, scrollRange }) {
     const valueRange = {}
     switch (animationType) {
+      case 'classChange':
+        valueRange.in = animationData.classIn
+        valueRange.out = animationData.classOut
+        break
       case 'translateX':
         valueRange.start = 0
         valueRange.end = vwToPx(animationData.viewwidthDistance)
@@ -264,6 +268,9 @@ const homeAnimations = (function () {
     const animationValues = {}
     for (const type in animations) {
       switch (type) {
+        case 'classChange':
+          animationValues[type] = getClassValue(animations[type])
+          break
         case 'translateX':
         case 'translateY':
           animationValues[type] = Math.floor(
@@ -277,6 +284,29 @@ const homeAnimations = (function () {
       }
     }
     return animationValues
+  }
+
+  function getClassValue ({ scrollRange, valueRange }) {
+    console.log('Getting classValue')
+    if (inRange({
+      limits: {
+        low: scrollRange.start,
+        high: scrollRange.end
+      },
+      value: lastScroll
+    })) {
+      console.log('IN')
+      return {
+        add: valueRange.in,
+        remove: valueRange.out
+      }
+    } else {
+      console.log('OUT')
+      return {
+        add: valueRange.out,
+        remove: valueRange.in
+      }
+    }
   }
 
   function getValueForAnimationType ({ scrollRange, valueRange }) {
@@ -306,6 +336,32 @@ const homeAnimations = (function () {
   }
 
   function applyAnimation ({ element, animationValues }) {
+    if (Array.from(Object.keys(animationValues)).includes('classChange')) {
+      console.log(animationValues)
+      console.log(animationValues.classChange)
+      applyClassChange({
+        element: element,
+        classChange: animationValues.classChange
+      })
+    } else {
+      applyStyleChanges({
+        element: element,
+        animationValues: animationValues
+      })
+    }
+  }
+
+  function applyClassChange ({ element, classChange: { add, remove } }) {
+    console.log('Change to apply', add, remove)
+    console.log('Initial')
+    console.log(element.classList)
+    console.log('Changing classes')
+    element.classList.add(add)
+    element.classList.remove(remove)
+    console.log(element.classList)
+  }
+
+  function applyStyleChanges ({ element, animationValues }) {
     const {
       translateX = 0,
       translateY = 0,
