@@ -139,14 +139,6 @@ const animationData = {
         deltaScale: 0.25,
         transition: 'ease-out'
       }
-    },
-    '.about__container': {
-      translateY: {
-        viewheightAnticipation: 0,
-        viewheightDuration: 100,
-        scrollRate: 1,
-        transition: 'linear'
-      }
     }
   }
 }

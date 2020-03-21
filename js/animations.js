@@ -4,7 +4,7 @@ const homeAnimations = (function () {
   ----------------------------------------------- */
 
   const DOM_ELEMENTS_DATA = animationData.values
-  const SCROLL_INTERVAL_MS = 15
+  const SCROLL_INTERVAL_MS = 10
   const SCROLL_DEBOUNCE_MS = 100
   const RESIZE_DEBOUNCE_MS = 150
   const PARALLAX_RANGE_EXTRA_VH = 15
