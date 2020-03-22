@@ -3,7 +3,7 @@ const homeAnimations = (function () {
   /*  GLOBALS
   ----------------------------------------------- */
 
-  const DOM_ELEMENTS_DATA = animationData.values
+  const DOM_ELEMENTS_DATA = animationData.generalValues
   const SCROLL_INTERVAL_MS = 10
   const SCROLL_DEBOUNCE_MS = 100
   const RESIZE_DEBOUNCE_MS = 150
@@ -15,6 +15,7 @@ const homeAnimations = (function () {
   let maxScroll
   let scrollTimer
   const domElements = {}
+  const percentAnimation = {}
   let scheduledAnimationFrame = false
 
   /*  CONSTRUCTION
@@ -22,8 +23,6 @@ const homeAnimations = (function () {
 
   function init () {
     setupParameters()
-    console.log('Parameters set')
-    console.log(domElements)
     setupEventListeners()
     scrollTimer = setInterval(tryToAnimateElementsInLimits, SCROLL_INTERVAL_MS)
   }
@@ -34,6 +33,7 @@ const homeAnimations = (function () {
     lastScroll = getScroll()
     const domElementsSelectors = Object.keys(DOM_ELEMENTS_DATA)
     buildDomElementsObject(domElementsSelectors)
+    buildPercentAnimationObject()
   }
 
   function setupEventListeners () {
@@ -228,6 +228,23 @@ const homeAnimations = (function () {
     }
   }
 
+  function buildPercentAnimationObject () {
+    const data = animationData.percentAnimation
+    percentAnimation.element = document.querySelector(data.selector)
+    percentAnimation.animations = { percent: {} }
+    percentAnimation.animations.percent.scrollRange = getScrollRange({
+      yPosition: getElementYPosition(percentAnimation.element),
+      animationData: data
+    })
+    percentAnimation.animations.percent.valueRange = {
+      start: 0,
+      end: data.endValue,
+      size: data.endValue,
+      transition: 'linear'
+    }
+    percentAnimation.limits = getAnimationScrollLimits(percentAnimation.animations)
+  }
+
   /*  UPDATE CONTENT ON SCROLL
   ----------------------------------------------- */
 
@@ -245,15 +262,20 @@ const homeAnimations = (function () {
 
   function animateElementsInLimits () {
     for (const selector in domElements) {
-      if (inRange({
-        limits: domElements[selector].limits,
-        value: lastScroll
-      })
-      ) {
-        animateElement(domElements[selector])
-      }
+      animateIfInLimits(domElements[selector])
     }
+    animateIfInLimits(percentAnimation)
     scheduledAnimationFrame = false
+  }
+
+  function animateIfInLimits (elementObject) {
+    if (inRange({
+      limits: elementObject.limits,
+      value: lastScroll
+    })
+    ) {
+      animateElement(elementObject)
+    }
   }
 
   function animateElement ({ element, animations }) {
@@ -268,6 +290,11 @@ const homeAnimations = (function () {
     const animationValues = {}
     for (const type in animations) {
       switch (type) {
+        case 'percent':
+          animationValues[type] = getValueForAnimationType(animations[type])
+            .toFixed(4) +
+            '%'
+          break
         case 'classChange':
           animationValues[type] = getClassValue(animations[type])
           break
@@ -287,7 +314,6 @@ const homeAnimations = (function () {
   }
 
   function getClassValue ({ scrollRange, valueRange }) {
-    console.log('Getting classValue')
     if (inRange({
       limits: {
         low: scrollRange.start,
@@ -295,13 +321,11 @@ const homeAnimations = (function () {
       },
       value: lastScroll
     })) {
-      console.log('IN')
       return {
         add: valueRange.in,
         remove: valueRange.out
       }
     } else {
-      console.log('OUT')
       return {
         add: valueRange.out,
         remove: valueRange.in
@@ -337,11 +361,14 @@ const homeAnimations = (function () {
 
   function applyAnimation ({ element, animationValues }) {
     if (Array.from(Object.keys(animationValues)).includes('classChange')) {
-      console.log(animationValues)
-      console.log(animationValues.classChange)
       applyClassChange({
         element: element,
         classChange: animationValues.classChange
+      })
+    } else if (Array.from(Object.keys(animationValues)).includes('percent')) {
+      applyContentChange({
+        element: element,
+        animationValues: animationValues
       })
     } else {
       applyStyleChanges({
@@ -352,13 +379,12 @@ const homeAnimations = (function () {
   }
 
   function applyClassChange ({ element, classChange: { add, remove } }) {
-    console.log('Change to apply', add, remove)
-    console.log('Initial')
-    console.log(element.classList)
-    console.log('Changing classes')
     element.classList.add(add)
     element.classList.remove(remove)
-    console.log(element.classList)
+  }
+
+  function applyContentChange ({ element, animationValues }) {
+    element.textContent = animationValues.percent
   }
 
   function applyStyleChanges ({ element, animationValues }) {
@@ -396,6 +422,11 @@ const homeAnimations = (function () {
   }
 
   function updateParameters () {
+    updateGeneralParameters()
+    buildPercentAnimationObject()
+  }
+
+  function updateGeneralParameters () {
     lastScreenSize = getWindowSize()
     maxScroll = getMaxScroll()
     lastScroll = getScroll()
