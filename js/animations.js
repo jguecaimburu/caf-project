@@ -195,6 +195,11 @@ const homeAnimations = (function () {
         valueRange.end = valueRange.start + animationData.deltaScale
         valueRange.size = (valueRange.end - valueRange.start)
         break
+      case 'fontSize':
+        valueRange.start = animationData.initialRemFontSize
+        valueRange.end = animationData.endRemFontSize
+        valueRange.size = (valueRange.end - valueRange.start)
+        break
     }
     valueRange.transition = animationData.transition
     return valueRange
@@ -304,6 +309,10 @@ const homeAnimations = (function () {
             getValueForAnimationType(animations[type])
           )
           break
+        case 'fontSize':
+          animationValues[type] = getValueForAnimationType(animations[type])
+            .toFixed(1)
+          break
         default:
           animationValues[type] = getValueForAnimationType(animations[type])
             .toFixed(2)
@@ -393,12 +402,16 @@ const homeAnimations = (function () {
       translateY = 0,
       opacity = 1,
       scaleX = 1,
-      scaleY = 1
+      scaleY = 1,
+      fontSize = ''
     } = animationValues
     const translateString = `translate3d(${translateX}px, ${translateY}px, 0px)`
     const scaleString = `scale3D(${scaleX}, ${scaleY}, 1)`
     element.style.opacity = opacity
     element.style.transform = translateString + ' ' + scaleString
+    if (fontSize) {
+      element.style.fontSize = fontSize + 'rem'
+    }
   }
 
   /*  UPDATE CONTENT ON RESIZE
