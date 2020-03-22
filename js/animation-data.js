@@ -1,5 +1,5 @@
 const animationData = {
-  values: {
+  generalValues: {
     '.y-offset-marker': {
       translateY: {
         viewheightAnticipation: 0,
@@ -157,7 +157,7 @@ const animationData = {
     },
     '.about__intro-text': {
       opacity: {
-        viewheightAnticipation: 50,
+        viewheightAnticipation: 60,
         viewheightDuration: 25,
         initialOpacity: 0,
         endOpacity: 1,
@@ -166,41 +166,116 @@ const animationData = {
       translateY: {
         viewheightAnticipation: 25,
         viewheightDuration: 30,
-        scrollRate: -1,
+        scrollRate: -0.8,
         transition: 'ease-out'
       }
     },
     '.about--sat-1': {
       classChange: {
         viewheightAnticipation: 25,
-        viewheightDuration: 30,
+        viewheightDuration: 25,
         classIn: 'about--sat-in',
         classOut: 'about--sat-out'
       }
     },
     '.about--sat-2': {
       classChange: {
-        viewheightAnticipation: -10,
-        viewheightDuration: 30,
+        viewheightAnticipation: -5,
+        viewheightDuration: 25,
         classIn: 'about--sat-in',
         classOut: 'about--sat-out'
       }
     },
     '.about--sat-3': {
       classChange: {
-        viewheightAnticipation: -45,
-        viewheightDuration: 30,
+        viewheightAnticipation: -35,
+        viewheightDuration: 25,
         classIn: 'about--sat-in',
         classOut: 'about--sat-out'
       }
     },
     '.about--sat-4': {
       classChange: {
-        viewheightAnticipation: -80,
-        viewheightDuration: 30,
+        viewheightAnticipation: -65,
+        viewheightDuration: 25,
         classIn: 'about--sat-in',
         classOut: 'about--sat-out'
       }
+    },
+    '.transition__figure-sticky-container': {
+      opacity: {
+        viewheightAnticipation: 20,
+        viewheightDuration: 20,
+        initialOpacity: 0,
+        endOpacity: 1,
+        transition: 'ease-out'
+      }
+    },
+    '.transition__paragraph': {
+      translateY: {
+        viewheightAnticipation: 15,
+        viewheightDuration: 50,
+        scrollRate: -1.5,
+        transition: 'linear'
+      }
+    },
+    '.transition__first-quote-container': {
+      translateY: {
+        viewheightAnticipation: 90,
+        viewheightDuration: 50,
+        scrollRate: -1.25,
+        transition: 'ease-out'
+      }
+    },
+    '.transition__first-quote--begin': {
+      opacity: {
+        viewheightAnticipation: 20,
+        viewheightDuration: 25,
+        initialOpacity: 1,
+        endOpacity: 0,
+        transition: 'ease-out'
+      }
+    },
+    '.transition__first-quote--end': {
+      opacity: {
+        viewheightAnticipation: 20,
+        viewheightDuration: 25,
+        initialOpacity: 1,
+        endOpacity: 0,
+        transition: 'ease-out'
+      }
+    },
+    '.transition__first-quote-author': {
+      opacity: {
+        viewheightAnticipation: 25,
+        viewheightDuration: 25,
+        initialOpacity: 1,
+        endOpacity: 0,
+        transition: 'ease-out'
+      }
+    },
+    '.transition__first-quote--relevant': {
+      fontSize: {
+        viewheightAnticipation: 15,
+        viewheightDuration: 30,
+        initialRemFontSize: 3.5,
+        endRemFontSize: 12,
+        transition: 'ease-out'
+      }
+    },
+    '.transition__second-quote-container': {
+      translateY: {
+        viewheightAnticipation: 10,
+        viewheightDuration: 38,
+        scrollRate: -1.15,
+        transition: 'ease-out'
+      }
     }
+  },
+  percentAnimation: {
+    selector: '.transition__figure',
+    viewheightAnticipation: 15,
+    viewheightDuration: 60,
+    endValue: 100 * 15 / 17
   }
 }
