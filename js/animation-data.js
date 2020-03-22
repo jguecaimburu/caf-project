@@ -139,6 +139,68 @@ const animationData = {
         deltaScale: 0.25,
         transition: 'ease-out'
       }
+    },
+    '.about__title': {
+      opacity: {
+        viewheightAnticipation: 75,
+        viewheightDuration: 25,
+        initialOpacity: 0,
+        endOpacity: 1,
+        transition: 'ease-out'
+      },
+      translateY: {
+        viewheightAnticipation: 35,
+        viewheightDuration: 30,
+        scrollRate: -1,
+        transition: 'ease-out'
+      }
+    },
+    '.about__intro-text': {
+      opacity: {
+        viewheightAnticipation: 50,
+        viewheightDuration: 25,
+        initialOpacity: 0,
+        endOpacity: 1,
+        transition: 'ease-out'
+      },
+      translateY: {
+        viewheightAnticipation: 25,
+        viewheightDuration: 30,
+        scrollRate: -1,
+        transition: 'ease-out'
+      }
+    },
+    '.about--sat-1': {
+      classChange: {
+        viewheightAnticipation: 25,
+        viewheightDuration: 30,
+        classIn: 'about--sat-in',
+        classOut: 'about--sat-out'
+      }
+    },
+    '.about--sat-2': {
+      classChange: {
+        viewheightAnticipation: -10,
+        viewheightDuration: 30,
+        classIn: 'about--sat-in',
+        classOut: 'about--sat-out'
+      }
+    },
+    '.about--sat-3': {
+      classChange: {
+        viewheightAnticipation: -45,
+        viewheightDuration: 30,
+        classIn: 'about--sat-in',
+        classOut: 'about--sat-out'
+      }
+    },
+    '.about--sat-4': {
+      classChange: {
+        viewheightAnticipation: -80,
+        viewheightDuration: 30,
+        classIn: 'about--sat-in',
+        classOut: 'about--sat-out'
+      }
     }
   }
 }

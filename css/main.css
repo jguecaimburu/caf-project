@@ -12,6 +12,13 @@
   --color-sky-05-white: #ffe3f3;
   --color-sky-04-opacity: rgba(112, 114, 171, 0.4);
   --color-footer: #6F9A9E;
+  --color-main-planet: #9540DB;
+  --color-sat-skyblue: #35DBD3;
+  --color-sat-yellow: #CEDB2A;
+  --color-sat-orange: #DBA856;
+  --color-sat-green: #2ADB6E;
+  --color-sat-pink: #DB4BC2;
+  --color-sat-shadow: rgba(91, 27, 143, 0.3)
 }
 
 /* Set general document properties */
@@ -200,122 +207,246 @@ a {
 /* ABOUT SECTION */
 
 .about {
+  width: 100vw;
+  height: 300vh;
   position: relative;
-  width: 100%;
-  height: auto;
   background: linear-gradient(
     to bottom,
     var(--color-sky-02) 0%,
     var(--color-sky-03) 100%
     );
-  overflow: hidden;
-  padding-top: 15vh;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
+  overflow: visible;
+}
+
+.about__intro-container {
+  width: 100%;
+  height: 90vh;
+  position: relative;
 }
 
 .about__title {
-  position: relative;
+  position: absolute;
+  top: 18vh;
   font-size: 7rem;
-  max-width: 50%;
-  margin-bottom: 5rem;
+  width: 50%;
+  left: 25%;
+  text-align: center;
+  opacity: 0;
 }
 
 
-.about__intro {
-  position: relative;
+.about__intro-text {
+  position: absolute;
   font-size: 3rem;
-  max-width: 50%;
-  margin: 2rem;
-  text-align: justify;
+  width: 50%;
+  left: 25%;
+  text-align: center;
+  top: 40vh;
+  opacity: 0;
 }
 
 @media (max-width: 900px) {
-  .about__title {
-    max-width: 70%;
-  }
-
-  .about__intro {
-    max-width: 70%;
+  .about__title,
+  .about__intro-text {
+    width: 70%;
+    left: 15%;
   }
 }
 
-.about__projects-grid {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  grid-auto-rows: minmax(37rem, 1fr);
-  grid-gap: 4rem;
-  width: 80%;
-  height: auto;
-  margin: 3rem;
-}
-
-.about__project-tile {
-  background-color: white;
+.about__sticky-container {
   width: 100%;
-  height: auto;
-  border-radius: 10px;
-  overflow: hidden;
-  z-index: 0;
-  position: relative;
+  height: 100vh;
+  position: sticky;
+  top: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+.about__planet-group {
+  margin-top: 20vh;
+  width: 50vh;
+  height: 50vh;
+  min-width: 300px;
+  min-height: 300px;
+  position: relative;
+}
+
+.about__main-planet {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--color-main-planet);
+  z-index: 1;
+}
+
+.about__satellite {
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  z-index: 0;
+  top: 30%;
+  left: 30%;
+  overflow: hidden;
+}
+
+.about--sat-1 {
+  background-color: var(--color-sat-green);
+}
+
+.about--sat-2 {
+  background-color: var(--color-sat-skyblue);
+}
+
+.about--sat-3 {
+  background-color: var(--color-sat-pink);
+}
+
+.about--sat-4 {
+  background-color: var(--color-sat-yellow);
+}
+
+@keyframes to-front {
+  0%   {
+    left: 30%;
+    transform: scale(1);
+    z-index: 0;
+  }
+  30%   {
+    left: 125%;
+    transform: scale(1.1);
+    z-index: 0;
+  }
+  70%   {
+    left: 125%;
+    transform: scale(1.8);
+    z-index: 2;
+  }
+  100%   {
+    left: 30%;
+    transform: scale(2);
+    z-index: 2;
+  }
+}
+
+@keyframes to-back {
+  0%   {
+    left: 30%;
+    transform: scale(2);
+    z-index: 2;
+  }
+  30%   {
+    left: -65%;
+    transform: scale(1.8);
+    z-index: 2;
+  }
+  70%   {
+    left: -65%;
+    transform: scale(1.1);
+    z-index: 0;
+  }
+  100%   {
+    left: 30%;
+    transform: scale(1);
+    z-index: 0;
+  }
+}
+
+.about--sat-in {
+  animation: to-front;
+  animation-duration: 400ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+}
+
+.about--sat-out {
+  animation: to-back;
+  animation-duration: 400ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in;
+}
+
+.about__satellite-slide {
+  position: relative;
+  height: 100%;
+  width: 200%;
+  display: flex;
+  align-items: center;
+  transition: transform 400ms ease-out;
+  background-color: transparent;
+}
+
+.about__satellite-slide:hover {
+  transform: translateX(-50%);
+}
+
+.about__logo-container {
+  position: relative;
+  height: 100%;
+  width: 50%;
+  padding: 3%;
+  overflow: hidden;
+  display: flex;
   justify-content: center;
   align-items: center;
-  border: 4px solid pink;
 }
 
 .about__project-logo {
-  width: 100%;
   max-width:100%;
   max-height:100%;
-  padding: 10%;
-  z-index: 1;
   position: relative;
   object-fit: contain;
 }
 
-.about__project-description {
-  width: 100%;
-  height: 100%;
-  color: black;
-  text-align: center;
-  padding: 3rem;
-  background-color: var(--color-sky-05-white);
-  opacity: 0;
-  z-index: 2;
-  transition: opacity 700ms ease-out;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.about__project-description:hover {
-  opacity: 1;
-  border: 6px solid var(--color-sky-05);
-}
-
-.about__btn {
+.about__project-info {
   position: relative;
-  padding: 1rem 2rem;
-  border-radius: 2px;
-  font-size: 4rem;
-  margin: 3rem;
-  background: white;
+  height: 98%;
+  width: 49%;
+  margin: 1% 0.5% 1% 0.5%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3%;
+  border-radius: 50%;
+  background-color: var(--color-sat-shadow);
+}
+
+.about__project-text {
+  width: 80%;
+  padding-top: 1rem;
+  text-align: center;
+  margin: 0 auto;
+  color: black;
+  font-size: 1rem;
+}
+
+.about__project-link {
+  font-size: 1.25rem;
+  line-height: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  height: 3rem;
+  width: 3rem;
+  margin-top: 1rem;
+  position: relative;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
   color: black;
   transition: background 400ms ease-out;
 }
 
-.about__btn:hover {
+.about__project-link:hover {
+  font-size: bolder;
   color: white;
-  background: var(--color-sky-05-opacity);
-  border: 2px solid var(--color-sky-05);
-  font-weight: bold;
+  background: rgba(0, 0, 0, 0.7);
 }
+
 
 /* TRANSITION SECTION */
 
