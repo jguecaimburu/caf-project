@@ -227,14 +227,6 @@ const animationData = {
         transition: 'ease-out'
       }
     },
-    '.transition__first-quote-text': {
-      translateX: {
-        viewheightAnticipation: 15,
-        viewheightDuration: 30,
-        viewwidthDistance: -15,
-        transition: 'ease-out'
-      }
-    },
     '.transition__first-quote--begin': {
       opacity: {
         viewheightAnticipation: 20,
@@ -278,7 +270,7 @@ const animationData = {
       translateX: {
         viewheightAnticipation: 15,
         viewheightDuration: 35,
-        viewwidthDistance: 35,
+        viewwidthDistance: 29,
         transition: 'ease-out'
       }
     },

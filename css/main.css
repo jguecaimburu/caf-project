@@ -200,6 +200,12 @@ a {
   }
 }
 
+@media (max-height: 450px) {
+  .welcome__title {
+    margin-top: 40vh;
+  }
+}
+
 .welcome__title-parts {
   position: relative;
 }
@@ -254,6 +260,14 @@ a {
   .about__intro-text {
     width: 70%;
     left: 15%;
+  }
+}
+
+@media (max-width: 500px) {
+  .about__title,
+  .about__intro-text {
+    width: 90%;
+    left: 5%;
   }
 }
 
@@ -458,6 +472,22 @@ a {
   background: rgba(0, 0, 0, 0.7);
 }
 
+@media (max-height: 450px) {
+  .about__planet-group {
+      margin-top: 10vh;
+    }
+  .about__project-link {
+      margin-top: 0.5rem
+    }
+  .about__project-text {
+    width: 90%;
+    padding-top: 1.5rem;
+  }
+  .about--sat-4 .about__project-text,
+  .about--sat-2 .about__project-text {
+    font-size: 0.8rem;
+  }
+}
 
 /* TRANSITION SECTION */
 
@@ -589,42 +619,64 @@ a {
   margin-top: 1vh;
 }
 
+@media (max-width: 1050px) {
+  .transition__paragraph {
+    top: 5vh;
+  }
+  .transition__first-quote-container {
+    margin-left: 5%;
+  }
+  .transition__first-quote-text {
+    margin-left: -2%;
+    text-align: left;
+  }
+}
+
 @media (max-width: 600px) {
-  .transition__figure-sticky-container {
+  .transition__sticky-figure-container {
     height: 30vh;
   }
-
   .transition__figure {
-    font-size: 12vw;
-    width: 85%;
+    font-size: 15vw;
+    width: 90%;
   }
-
   .transition__figure-explanation {
     width: 85%;
     font-size: 2rem;
   }
-
   .transition__paragraph {
     width: 85%;
     margin-left: 7.5%
   }
-
   .transition__first-quote-container {
     width: 80vw;
     margin-left: 10%;
   }
-
   .transition__first-quote-author {
     padding-right: 5vw;
     width: 110%;
   }
-
   .transition__second-quote-container {
     width: 90vw;
     margin-left: 5%;
   }
-
 }
+
+@media (max-width: 450px) {
+  .transition__first-quote-container {
+    width: 90vw;
+    margin-left: 5%;
+  }
+
+  .transition__first-quote-author {
+    padding-right: 5vw;
+    margin-left: -3vw;
+  }
+  .transition__second-quote-container {
+    top: 105vh;
+  }
+}
+
 
 @media (min-width: 1200px) {
   .transition__paragraph {
@@ -635,7 +687,47 @@ a {
 @media (min-width: 1500px) {
   .transition__second-quote-container{
     margin-left: 49%;
-    width: 35%;
+    width: 45%;
+  }
+}
+
+@media (max-height: 450px) {
+  .transition__sticky-figure-container {
+    height: 50vh;
+  }
+  .transition__figure-explanation {
+    width: 85%;
+    font-size: 2rem;
+  }
+  .transition__paragraph {
+    width: 85%;
+    margin-left: 7.5%
+  }
+  .transition__first-quote-container {
+    width: 80vw;
+    margin-left: 10%;
+  }
+  .transition__first-quote-text {
+    width: 60vw;
+    margin-left: -10%;
+  }
+  .transition__first-quote-author {
+    padding-right: 5vw;
+    width: 110%;
+  }
+  .transition__second-quote-container {
+    width: 90vw;
+    margin-left: 5%;
+    top: 120vh;
+  }
+  .transition__sticky-text-container {
+    height: 140vh;
+  }
+  .transition__sticky-text-scrolling {
+    height: 270vh;
+  }
+  .transition {
+    height: 420vh;
   }
 }
 
