@@ -202,7 +202,7 @@ const animationData = {
         classOut: 'about--sat-out'
       }
     },
-    '.transition__figure-sticky-container': {
+    '.transition__sticky-figure-container': {
       opacity: {
         viewheightAnticipation: 20,
         viewheightDuration: 20,
@@ -224,6 +224,14 @@ const animationData = {
         viewheightAnticipation: 90,
         viewheightDuration: 50,
         scrollRate: -1.25,
+        transition: 'ease-out'
+      }
+    },
+    '.transition__first-quote-text': {
+      translateX: {
+        viewheightAnticipation: 15,
+        viewheightDuration: 30,
+        viewwidthDistance: -15,
         transition: 'ease-out'
       }
     },
@@ -255,18 +263,29 @@ const animationData = {
       }
     },
     '.transition__first-quote--relevant': {
-      fontSize: {
+      scaleX: {
         viewheightAnticipation: 15,
         viewheightDuration: 30,
-        initialRemFontSize: 3.5,
-        endRemFontSize: 12,
+        deltaScale: 1.9,
+        transition: 'ease-out'
+      },
+      scaleY: {
+        viewheightAnticipation: 15,
+        viewheightDuration: 30,
+        deltaScale: 1.9,
+        transition: 'ease-out'
+      },
+      translateX: {
+        viewheightAnticipation: 15,
+        viewheightDuration: 35,
+        viewwidthDistance: 35,
         transition: 'ease-out'
       }
     },
     '.transition__second-quote-container': {
       translateY: {
-        viewheightAnticipation: 10,
-        viewheightDuration: 38,
+        viewheightAnticipation: 20,
+        viewheightDuration: 42,
         scrollRate: -1.15,
         transition: 'ease-out'
       }

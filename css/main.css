@@ -257,7 +257,14 @@ a {
   }
 }
 
-.about__sticky-container {
+.about__sticky-planet-scrolling {
+  width: 100vw;
+  height: 200vh;
+  position: relative;
+  overflow: visible;
+}
+
+.about__sticky-planet-container {
   width: 100%;
   height: 100vh;
   position: sticky;
@@ -456,6 +463,7 @@ a {
 
 .transition {
   height: 380vh;
+  width: 100vw;
   background: linear-gradient(
     to bottom,
     var(--color-sky-03) 0%,
@@ -465,14 +473,16 @@ a {
   overflow: visible;
 }
 
-.transition__figure-scrolling {
+.transition__sticky-figure-scrolling {
   overflow: visible;
   position: relative;
   height: 150vh;
+  width: 100%;
 }
 
-.transition__figure-sticky-container {
+.transition__sticky-figure-container {
   height: 50vh;
+  width: 100%;
   position: sticky;
   top: 0;
   display: flex;
@@ -483,20 +493,26 @@ a {
 
 .transition__figure {
   font-size: 10vw;
-  max-width: 70%;
+  width: 70%;
   text-align: center;
   position: relative;
   margin-top: 20vh;
-  margin-bottom: 3vh;
 }
 
 .transition__figure-explanation {
-  max-width: 50%;
+  width: 50%;
   text-align: center;
   font-size: 3rem;
 }
 
-.transition__text-sticky-container {
+.transition__sticky-text-scrolling {
+  overflow: visible;
+  position: relative;
+  height: 230vh;
+  width: 100%;
+}
+
+.transition__sticky-text-container {
   height: 120vh;
   position: sticky;
   top: 0;
@@ -508,7 +524,7 @@ a {
   top: 15vh;
   left: 0;
   margin-left: 25%;
-  max-width: 50%;
+  width: 50%;
   height: auto;
   text-align: justify;
   padding: 3rem;
@@ -527,8 +543,12 @@ a {
 .transition__first-quote-text {
   position: relative;
   text-align: center;
-  width: 100%;
+  width: auto;
   font-size: 3.5rem;
+}
+
+.transition__first-quote--relevant {
+  display: inline-block;
 }
 
 .transition__first-quote-author,
@@ -536,24 +556,24 @@ a {
   position: relative;
   width: 100%;
   font-weight: bold;
-  margin-top: 3vh;
   text-align: right;
 }
 
 .transition__first-quote-author {
   padding-right: 15vw;
+  margin-top: 3vh;
 }
 
 .transition__second-quote-container{
   position: absolute;
   top: 100vh;
   left: 0;
-  margin-left: 25%;
-  width: 50vw;
+  margin-left: 40%;
+  width: 59%;
   height: auto;
   border-radius: 1rem;
   background-color: var(--color-sky-05-opacity);
-  padding: 1rem 4rem 1rem 4rem;
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
 }
 
 .transition__second-quote-text {
@@ -565,15 +585,23 @@ a {
   padding: 1rem;
 }
 
+.transition__second-quote-author {
+  margin-top: 1vh;
+}
+
 @media (max-width: 600px) {
+  .transition__figure-sticky-container {
+    height: 30vh;
+  }
+
   .transition__figure {
     font-size: 12vw;
-    max-width: 85%;
+    width: 85%;
   }
 
   .transition__figure-explanation {
     width: 85%;
-    margin-left: 7.5%;
+    font-size: 2rem;
   }
 
   .transition__paragraph {
@@ -581,17 +609,35 @@ a {
     margin-left: 7.5%
   }
 
-  .transition__second-quote-container,
   .transition__first-quote-container {
     width: 80vw;
+    margin-left: 10%;
   }
+
+  .transition__first-quote-author {
+    padding-right: 5vw;
+    width: 110%;
+  }
+
+  .transition__second-quote-container {
+    width: 90vw;
+    margin-left: 5%;
+  }
+
 }
 
 @media (min-width: 1200px) {
   .transition__paragraph {
     font-size: 3rem;
   }
+}
 
+@media (min-width: 1500px) {
+  .transition__second-quote-container{
+    margin-left: 49%;
+    width: 35%;
+  }
+}
 
 /* CAROUSEL SECTION */
 
