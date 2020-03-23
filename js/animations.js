@@ -23,6 +23,8 @@ const homeAnimations = (function () {
 
   function init () {
     setupParameters()
+    console.log(domElements)
+    console.log(percentAnimation)
     setupEventListeners()
     scrollTimer = setInterval(tryToAnimateElementsInLimits, SCROLL_INTERVAL_MS)
   }
@@ -42,6 +44,8 @@ const homeAnimations = (function () {
         updateParameters()
         updateWholePage()
         scrollToTopElement()
+        console.log(domElements)
+        console.log(percentAnimation)
       }
       lastScreenSize = getWindowSize()
     }, RESIZE_DEBOUNCE_MS))
@@ -94,45 +98,98 @@ const homeAnimations = (function () {
   }
 
   function getElementYPosition (element) {
-    const boundingRect = element.getBoundingClientRect()
-    const translatedY = getAxisTranslatedValue({
-      element: element,
-      axis: 'y'
-    })
-    return boundingRect.top + lastScroll - translatedY
+    const regularPosition = getRegularYPosition(element)
+    const stickyCorrection = getStickyCorrection(element)
+    console.log('element', element, 'reg', regularPosition, 'stickycorrect', stickyCorrection)
+    console.log('new', regularPosition - stickyCorrection)
+    return regularPosition - stickyCorrection
   }
 
-  function getAxisTranslatedValue ({ element, axis }) {
-    const translate3dString = getTranslate3dString(element)
-    const intRegex = /-*(\d+.)*\d+px/g
-    if (translate3dString) {
-      const translateValues =
-        translate3dString.match(intRegex).map((x) => parseFloat(x))
-      switch (axis) {
-        case 'x':
-          return translateValues[0]
-        case 'y':
-          return translateValues[1]
-      }
+  function getRegularYPosition (element) {
+    let total = 0
+    while (!isBodyOrHTML(element)) {
+      total += element.offsetTop
+      element = element.parentNode
+    }
+    return total
+  }
+
+  // function OLDgetRegularYPosition (element) {
+  //   const boundingRect = element.getBoundingClientRect()
+  //   const translatedY = getAxisTranslatedValue({
+  //     element: element,
+  //     axis: 'y'
+  //   })
+  //   return boundingRect.top + lastScroll - translatedY
+  // }
+  //
+  // function getAxisTranslatedValue ({ element, axis }) {
+  //   const translate3dString = getTranslate3dString(element)
+  //   const intRegex = /-*(\d+.)*\d+px/g
+  //   if (translate3dString) {
+  //     const translateValues =
+  //       translate3dString.match(intRegex).map((x) => parseFloat(x))
+  //     switch (axis) {
+  //       case 'x':
+  //         return translateValues[0]
+  //       case 'y':
+  //         return translateValues[1]
+  //     }
+  //   } else {
+  //     return 0
+  //   }
+  // }
+  //
+  // function getTranslate3dString (element) {
+  //   const translate3dRegex = /translate3d\(.*\)/
+  //   const currentTransform = element.style.transform
+  //   let matchArray
+  //   if (currentTransform) {
+  //     matchArray = currentTransform.match(translate3dRegex)
+  //   } else {
+  //     return ''
+  //   }
+  //   if (matchArray) {
+  //     return matchArray[0]
+  //   } else {
+  //     return ''
+  //   }
+  // }
+
+  function getStickyCorrection (element) {
+    if (lastScroll === 0) {
+      return 0
+    }
+    const stickyParent = getStickyParent(element)
+    if (stickyParent) {
+      const stickyPosition = getRegularYPosition(stickyParent)
+      const stickyTop = parseFloat(window.getComputedStyle(stickyParent).top)
+      const stickyContainerPosition = getRegularYPosition(
+        stickyParent.parentNode
+      )
+      return stickyPosition - stickyContainerPosition - stickyTop
     } else {
       return 0
     }
   }
 
-  function getTranslate3dString (element) {
-    const translate3dRegex = /translate3d\(.*\)/
-    const currentTransform = element.style.transform
-    let matchArray
-    if (currentTransform) {
-      matchArray = currentTransform.match(translate3dRegex)
-    } else {
-      return ''
+  function getStickyParent (element) {
+    if (window.getComputedStyle(element).position === 'sticky') {
+      return element
     }
-    if (matchArray) {
-      return matchArray[0]
-    } else {
-      return ''
+    let parent = element.parentNode
+    while (window.getComputedStyle(parent).position !== 'sticky') {
+      parent = parent.parentNode
+      if (isBodyOrHTML(parent)) {
+        return
+      }
     }
+    return parent
+  }
+
+  function isBodyOrHTML (element) {
+    return element.tagName === 'BODY' ||
+      element.tagName === 'HTML'
   }
 
   function getScrollRange ({ yPosition, animationData }) {
