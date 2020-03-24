@@ -23,8 +23,6 @@ const homeAnimations = (function () {
 
   function init () {
     setupParameters()
-    console.log(domElements)
-    console.log(percentAnimation)
     setupEventListeners()
     scrollTimer = setInterval(tryToAnimateElementsInLimits, SCROLL_INTERVAL_MS)
   }
@@ -44,8 +42,6 @@ const homeAnimations = (function () {
         updateParameters()
         updateWholePage()
         scrollToTopElement()
-        console.log(domElements)
-        console.log(percentAnimation)
       }
       lastScreenSize = getWindowSize()
     }, RESIZE_DEBOUNCE_MS))
@@ -100,8 +96,6 @@ const homeAnimations = (function () {
   function getElementYPosition (element) {
     const regularPosition = getRegularYPosition(element)
     const stickyCorrection = getStickyCorrection(element)
-    console.log('element', element, 'reg', regularPosition, 'stickycorrect', stickyCorrection)
-    console.log('new', regularPosition - stickyCorrection)
     return regularPosition - stickyCorrection
   }
 
