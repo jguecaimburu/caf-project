@@ -5,7 +5,8 @@ const homeAnimations = (function () {
 
   const DOM_ELEMENTS_DATA = animationData.generalValues
   const SCROLL_INTERVAL_MS = 10
-  const SCROLL_DEBOUNCE_MS = 100
+  const TOP_ELEMENT_DEBOUNCE_MS = 100
+  const UPDATE_ALL_DEBOUNCE_MS = 5000
   const RESIZE_DEBOUNCE_MS = 150
   const PARALLAX_RANGE_EXTRA_VH = 15
   const VALID_HEIGHT_RESIZE_PERCENT = 10
@@ -48,11 +49,11 @@ const homeAnimations = (function () {
 
     window.addEventListener('scroll', debounce(() => {
       getTopElementInViewport()
-    }, SCROLL_DEBOUNCE_MS))
+    }, TOP_ELEMENT_DEBOUNCE_MS))
 
-    // Marker to understand general layout. DELETE UNDER THIS LINE
-    window.addEventListener('scroll', function (e) { showOffsetMarker() })
-    // DELETE ABOVE THIS LINE
+    window.addEventListener('scroll', debounce(() => {
+      updateWholePage()
+    }, UPDATE_ALL_DEBOUNCE_MS))
   }
 
   /*  SETUP
@@ -589,15 +590,6 @@ const homeAnimations = (function () {
       return value
     }
   }
-
-  // Marker to understand general layout. DELETE UNDER THIS LINE
-
-  function showOffsetMarker () {
-    const scrolled = Math.floor(window.pageYOffset)
-    const marker = document.querySelector('.y-offset-marker')
-    marker.textContent = scrolled
-  }
-  // DELETE ABOVE THIS LINE
 
   init()
 }())
