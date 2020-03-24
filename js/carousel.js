@@ -1,3 +1,6 @@
+// EDIT
+
+
 const imageCarousel = (function () {
 
   /*  GLOBALS
@@ -6,10 +9,10 @@ const imageCarousel = (function () {
   const CAROUSEL_INTERVAL_MS = 5000
   const RESIZE_DEBOUNCE_MS = 150
   const carouselObject = {}
-  let carouselTimer
-  let timerIsOn
   let slideTransitionTime
   let slideWidth
+  let carouselTimer
+  let timerIsOn
 
   /*  CONSTRUCTION
   ----------------------------------------------- */
@@ -202,9 +205,12 @@ const imageCarousel = (function () {
   function playStopTimer () {
     if (timerIsOn) {
       clearInterval(carouselTimer)
+      carouselObject.buttons.play.textContent = 'Play'
       timerIsOn = false
     } else {
       carouselTimer = setInterval(moveOneSlideForward, CAROUSEL_INTERVAL_MS)
+      timerIsOn = true
+      carouselObject.buttons.play.textContent = 'Pause'
     }
   }
 
