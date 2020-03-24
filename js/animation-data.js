@@ -1,13 +1,5 @@
 const animationData = {
   generalValues: {
-    '.y-offset-marker': {
-      translateY: {
-        viewheightAnticipation: 0,
-        viewheightDuration: 999,
-        scrollRate: 1,
-        transition: 'linear'
-      }
-    },
     '.welcome--p-char-h': {
       translateX: {
         viewheightAnticipation: 40,
@@ -279,6 +271,14 @@ const animationData = {
         viewheightAnticipation: 20,
         viewheightDuration: 42,
         scrollRate: -1.15,
+        transition: 'ease-out'
+      }
+    },
+    '.carousel__sticky-slider': {
+      translateX: {
+        viewheightAnticipation: 40,
+        viewheightDuration: 225,
+        viewwidthDistance: -140,
         transition: 'ease-out'
       }
     }
