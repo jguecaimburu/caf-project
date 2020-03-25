@@ -303,7 +303,7 @@ button::-moz-focus-inner {
   top: 0;
   display: flex;
   justify-content: center;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .about__planet-group {
