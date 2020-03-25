@@ -165,33 +165,41 @@ const animationData = {
     '.about--sat-1': {
       classChange: {
         viewheightAnticipation: 25,
-        viewheightDuration: 25,
-        classIn: 'about--sat-in',
-        classOut: 'about--sat-out'
+        viewheightDuration: 35,
+        classIn: 'about--sat-1-in',
+        classOut: 'about--sat-1-out'
       }
     },
     '.about--sat-2': {
       classChange: {
-        viewheightAnticipation: -5,
-        viewheightDuration: 25,
-        classIn: 'about--sat-in',
-        classOut: 'about--sat-out'
+        viewheightAnticipation: -10,
+        viewheightDuration: 35,
+        classIn: 'about--sat-2-in',
+        classOut: 'about--sat-2-out'
       }
     },
     '.about--sat-3': {
       classChange: {
-        viewheightAnticipation: -35,
-        viewheightDuration: 25,
-        classIn: 'about--sat-in',
-        classOut: 'about--sat-out'
+        viewheightAnticipation: -45,
+        viewheightDuration: 35,
+        classIn: 'about--sat-3-in',
+        classOut: 'about--sat-3-out'
       }
     },
     '.about--sat-4': {
       classChange: {
-        viewheightAnticipation: -65,
-        viewheightDuration: 25,
-        classIn: 'about--sat-in',
-        classOut: 'about--sat-out'
+        viewheightAnticipation: -80,
+        viewheightDuration: 35,
+        classIn: 'about--sat-4-in',
+        classOut: 'about--sat-4-out'
+      }
+    },
+    '.about__main-planet': {
+      rotate: {
+        viewheightAnticipation: 0,
+        viewheightDuration: 150,
+        endRotation: 100,
+        transition: 'linear'
       }
     },
     '.transition__sticky-figure-container': {
@@ -213,7 +221,7 @@ const animationData = {
     },
     '.transition__first-quote-container': {
       translateY: {
-        viewheightAnticipation: 90,
+        viewheightAnticipation: 30,
         viewheightDuration: 50,
         scrollRate: -1.25,
         transition: 'ease-out'
@@ -221,7 +229,7 @@ const animationData = {
     },
     '.transition__first-quote--begin': {
       opacity: {
-        viewheightAnticipation: 20,
+        viewheightAnticipation: -40,
         viewheightDuration: 25,
         initialOpacity: 1,
         endOpacity: 0,
@@ -230,7 +238,7 @@ const animationData = {
     },
     '.transition__first-quote--end': {
       opacity: {
-        viewheightAnticipation: 20,
+        viewheightAnticipation: -40,
         viewheightDuration: 25,
         initialOpacity: 1,
         endOpacity: 0,
@@ -239,7 +247,7 @@ const animationData = {
     },
     '.transition__first-quote-author': {
       opacity: {
-        viewheightAnticipation: 25,
+        viewheightAnticipation: -40,
         viewheightDuration: 25,
         initialOpacity: 1,
         endOpacity: 0,
@@ -248,29 +256,23 @@ const animationData = {
     },
     '.transition__first-quote--relevant': {
       scaleX: {
-        viewheightAnticipation: 15,
+        viewheightAnticipation: -45,
         viewheightDuration: 30,
-        deltaScale: 1.9,
+        deltaScale: 1.8,
         transition: 'ease-out'
       },
       scaleY: {
-        viewheightAnticipation: 15,
+        viewheightAnticipation: -45,
         viewheightDuration: 30,
-        deltaScale: 1.9,
-        transition: 'ease-out'
-      },
-      translateX: {
-        viewheightAnticipation: 15,
-        viewheightDuration: 35,
-        viewwidthDistance: 29,
+        deltaScale: 1.8,
         transition: 'ease-out'
       }
     },
     '.transition__second-quote-container': {
       translateY: {
-        viewheightAnticipation: 20,
+        viewheightAnticipation: -40,
         viewheightDuration: 42,
-        scrollRate: -1.15,
+        scrollRate: -1.40,
         transition: 'ease-out'
       }
     },
