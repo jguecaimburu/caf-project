@@ -8,7 +8,7 @@ const homeAnimations = (function () {
   const TOP_ELEMENT_DEBOUNCE_MS = 100
   const UPDATE_ALL_DEBOUNCE_MS = 5000
   const RESIZE_DEBOUNCE_MS = 150
-  const PARALLAX_RANGE_EXTRA_VH = 15
+  const PARALLAX_RANGE_EXTRA_VH = 35
   const VALID_HEIGHT_RESIZE_PERCENT = 10
   let lastScroll = 0
   let topElement
@@ -226,6 +226,11 @@ const homeAnimations = (function () {
         valueRange.in = animationData.classIn
         valueRange.out = animationData.classOut
         break
+      case 'rotate':
+        valueRange.start = 0
+        valueRange.end = animationData.endRotation
+        valueRange.size = (valueRange.end - valueRange.start)
+        break
       case 'translateX':
         valueRange.start = 0
         valueRange.end = vwToPx(animationData.viewwidthDistance)
@@ -357,6 +362,7 @@ const homeAnimations = (function () {
           break
         case 'translateX':
         case 'translateY':
+        case 'rotate':
           animationValues[type] = Math.floor(
             getValueForAnimationType(animations[type])
           )
@@ -450,6 +456,7 @@ const homeAnimations = (function () {
 
   function applyStyleChanges ({ element, animationValues }) {
     const {
+      rotate = 0,
       translateX = 0,
       translateY = 0,
       opacity = 1,
@@ -457,10 +464,16 @@ const homeAnimations = (function () {
       scaleY = 1,
       fontSize = ''
     } = animationValues
+    const rotateString = `rotate(${rotate}deg)`
     const translateString = `translate3d(${translateX}px, ${translateY}px, 0px)`
     const scaleString = `scale3D(${scaleX}, ${scaleY}, 1)`
     element.style.opacity = opacity
-    element.style.transform = translateString + ' ' + scaleString
+    element.style.transform =
+      rotateString +
+      ' ' +
+      translateString +
+      ' ' +
+      scaleString
     if (fontSize) {
       element.style.fontSize = fontSize + 'rem'
     }
