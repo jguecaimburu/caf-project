@@ -316,7 +316,7 @@ const animationData = {
       translateY: {
         viewheightAnticipation: -900,
         viewheightDuration: 300,
-        scrollRate: 0.17,
+        scrollRate: 0.25,
         transition: 'ease-out'
       }
     },
@@ -351,7 +351,7 @@ const animationData = {
       opacity: {
         viewheightAnticipation: -900,
         viewheightDuration: 60,
-        initialOpacity: 0.5,
+        initialOpacity: 0.15,
         endOpacity: 1,
         transition: 'linear'
       }
@@ -360,7 +360,7 @@ const animationData = {
       opacity: {
         viewheightAnticipation: -900,
         viewheightDuration: 60,
-        initialOpacity: 0.5,
+        initialOpacity: 0.15,
         endOpacity: 1,
         transition: 'linear'
       }

@@ -1587,7 +1587,7 @@ button::-moz-focus-inner {
   left: 75%;
 }
 
-.footer__huan-container {
+/* .footer__huan-container {
   position: absolute;
   top: 27%;
   left: -7vh;
@@ -1595,7 +1595,7 @@ button::-moz-focus-inner {
   width: 6vh;
   width: auto;
   animation: swim-right 10s linear infinite;
-}
+} */
 
 .footer__jellyfish-container {
   position: absolute;
@@ -1607,7 +1607,7 @@ button::-moz-focus-inner {
   animation: swim-left 15s linear infinite;
 }
 
-.footer__huan,
+/* .footer__huan, */
 .footer__jellyfish {
   object-fit: contain;
   max-height: 100%;
@@ -1617,7 +1617,7 @@ button::-moz-focus-inner {
   animation: swim-jump 1s linear infinite;
 }
 
-.footer__huan {
+/* .footer__huan {
   animation: swim-down 5s linear infinite;
 }
 
@@ -1628,7 +1628,7 @@ button::-moz-focus-inner {
 	to {
 		transform: translate3d(120vw, 0px, 0px);
 	}
-}
+} */
 
 @keyframes swim-left {
   from {
@@ -1649,7 +1649,7 @@ button::-moz-focus-inner {
 	}
 }
 
-@keyframes swim-down {
+/* @keyframes swim-down {
   0% {
 		transform: translate3d(0px, 0px, 0px);
 	}
@@ -1659,7 +1659,7 @@ button::-moz-focus-inner {
   100% {
 		transform: translate3d(0px, 0vh, 0px);
 	}
-}
+} */
 
 
 @media (max-height: 450px) {
@@ -1685,7 +1685,7 @@ button::-moz-focus-inner {
 .unexpected__whale-container {
   position: fixed;
   top: 10vh;
-  left: 10vw;
+  left: 8vw;
   width: 4vw;
   height: 4vw;
   z-index: 1;
@@ -1707,7 +1707,7 @@ button::-moz-focus-inner {
   object-fit: contain;
   object-position: bottom;
   max-width: 100%;
-  opacity: 0.5;
+  opacity: 0.15;
 }
 
 @media (max-width: 450px) {
