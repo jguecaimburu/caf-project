@@ -75,6 +75,10 @@ section {
   overflow-x: hidden;
 }
 
+h1, h2, h3, p, a, li, div, button {
+  z-index: 2;
+}
+
 h2 {
   font-size: 5rem;
 }
@@ -910,8 +914,8 @@ button::-moz-focus-inner {
     top: 5vh;
   }
   .transition__first-quote-container {
-    left: 13%;
-    width: 70vw;
+    left: 7%;
+    width: 80vw;
   }
 }
 
@@ -1559,6 +1563,7 @@ button::-moz-focus-inner {
   background-repeat: repeat-x;
   background-position: center;
   overflow-x: hidden;
+  z-index: 0;
 }
 
 .footer__coral {
@@ -1666,5 +1671,46 @@ button::-moz-focus-inner {
 @media (max-width: 450px) {
   .footer {
     z-index: 0;
+  }
+}
+
+/* UNEXPECTED ELEMENTS */
+
+.unexpected__whale-container {
+  position: fixed;
+  top: 10vh;
+  left: 10vw;
+  width: 4vw;
+  height: 4vw;
+  z-index: 1;
+  opacity: 0;
+}
+
+.unexpected__flower-container {
+  position: fixed;
+  top: 3vh;
+  left: 4vw;
+  width: 1vw;
+  height: 1vw;
+  z-index: 1;
+  opacity: 0;
+}
+
+.unexpected__flower,
+.unexpected__whale {
+  object-fit: contain;
+  object-position: bottom;
+  max-width: 100%;
+  opacity: 0.5;
+}
+
+@media (max-width: 450px) {
+  .unexpected__flower {
+    width: 1.5vw;
+    height: 1.5vw;
+  }
+  .unexpected__whale {
+    width: 5vw;
+    height: 5vw;
   }
 }

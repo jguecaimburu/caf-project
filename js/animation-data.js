@@ -292,6 +292,78 @@ const animationData = {
         viewwidthDistance: -140,
         transition: 'ease-out'
       }
+    },
+    '.unexpected__whale-container': {
+      opacity: {
+        viewheightAnticipation: -675,
+        viewheightDuration: 10,
+        initialOpacity: 0,
+        endOpacity: 1,
+        transition: 'ease-out'
+      },
+      scaleX: {
+        viewheightAnticipation: -680,
+        viewheightDuration: 15,
+        deltaScale: 4,
+        transition: 'ease-out'
+      },
+      scaleY: {
+        viewheightAnticipation: -680,
+        viewheightDuration: 15,
+        deltaScale: 4,
+        transition: 'ease-out'
+      },
+      translateY: {
+        viewheightAnticipation: -900,
+        viewheightDuration: 300,
+        scrollRate: 0.17,
+        transition: 'ease-out'
+      }
+    },
+    '.unexpected__flower-container': {
+      opacity: {
+        viewheightAnticipation: -675,
+        viewheightDuration: 20,
+        initialOpacity: 0,
+        endOpacity: 1,
+        transition: 'ease-out'
+      },
+      scaleX: {
+        viewheightAnticipation: -685,
+        viewheightDuration: 30,
+        deltaScale: 2,
+        transition: 'ease-out'
+      },
+      scaleY: {
+        viewheightAnticipation: -685,
+        viewheightDuration: 30,
+        deltaScale: 2,
+        transition: 'ease-out'
+      },
+      translateY: {
+        viewheightAnticipation: -925,
+        viewheightDuration: 300,
+        scrollRate: 0.30,
+        transition: 'ease-out'
+      }
+    },
+    '.unexpected__whale': {
+      opacity: {
+        viewheightAnticipation: -900,
+        viewheightDuration: 60,
+        initialOpacity: 0.5,
+        endOpacity: 1,
+        transition: 'linear'
+      }
+    },
+    '.unexpected__flower': {
+      opacity: {
+        viewheightAnticipation: -900,
+        viewheightDuration: 60,
+        initialOpacity: 0.5,
+        endOpacity: 1,
+        transition: 'linear'
+      }
     }
   },
   percentAnimation: {
