@@ -229,7 +229,7 @@ button::-moz-focus-inner {
 
 .about {
   width: 100vw;
-  height: 340vh;
+  height: 400vh;
   position: relative;
   background: linear-gradient(
     to bottom,
@@ -291,7 +291,7 @@ button::-moz-focus-inner {
 
 .about__sticky-planet-scrolling {
   width: 100vw;
-  height: 240vh;
+  height: 300vh;
   position: relative;
   overflow: visible;
 }
@@ -410,14 +410,14 @@ button::-moz-focus-inner {
 
 .about--sat-1-in {
   animation: to-front-1;
-  animation-duration: 400ms;
+  animation-duration: 800ms;
   animation-fill-mode: forwards;
   animation-timing-function: ease-out;
 }
 
 .about--sat-1-out {
   animation: to-back-1;
-  animation-duration: 400ms;
+  animation-duration: 600ms;
   animation-fill-mode: forwards;
   animation-timing-function: ease-in;
 }
@@ -490,14 +490,14 @@ button::-moz-focus-inner {
 
 .about--sat-2-in {
   animation: to-front-2;
-  animation-duration: 400ms;
+  animation-duration: 800ms;
   animation-fill-mode: forwards;
   animation-timing-function: ease-out;
 }
 
 .about--sat-2-out {
   animation: to-back-2;
-  animation-duration: 400ms;
+  animation-duration: 600ms;
   animation-fill-mode: forwards;
   animation-timing-function: ease-in;
 }
@@ -570,14 +570,14 @@ button::-moz-focus-inner {
 
 .about--sat-3-in {
   animation: to-front-3;
-  animation-duration: 400ms;
+  animation-duration: 800ms;
   animation-fill-mode: forwards;
   animation-timing-function: ease-out;
 }
 
 .about--sat-3-out {
   animation: to-back-3;
-  animation-duration: 400ms;
+  animation-duration: 600ms;
   animation-fill-mode: forwards;
   animation-timing-function: ease-in;
 }
@@ -650,14 +650,14 @@ button::-moz-focus-inner {
 
 .about--sat-4-in {
   animation: to-front-4;
-  animation-duration: 400ms;
+  animation-duration: 800ms;
   animation-fill-mode: forwards;
   animation-timing-function: ease-out;
 }
 
 .about--sat-4-out {
   animation: to-back-4;
-  animation-duration: 400ms;
+  animation-duration: 600ms;
   animation-fill-mode: forwards;
   animation-timing-function: ease-in;
 }
@@ -955,11 +955,15 @@ button::-moz-focus-inner {
     left: 7.5%
   }
   .transition__first-quote-container {
-    left: 2%;
-    width: 90vw;
+    left: 6%;
+    width: 85%;
   }
   .transition__first-quote-text {
-    font-size: 2.5rem;
+    font-size: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   .transition__first-quote-author {
     padding-right: 5vw;
@@ -972,21 +976,21 @@ button::-moz-focus-inner {
 }
 
 @media (max-width: 450px) {
-  .transition__first-quote-container {
-    left: 18%;
-    width: 70vw;
-  }
   .transition__first-quote-text {
     font-size: 3.25rem;
   }
+  .transition__quote-middle {
+    position: relative;
+    left: -5%;
+  }
   .transition__first-quote-author {
     width: 70%;
-    margin-left: 12vw;
+    margin-left: 15vw;
     text-align: center;
   }
   .transition__second-quote-container {
     top: 112vh;
-    left: 2%;
+    left: 5%;
   }
 }
 
@@ -1545,32 +1549,122 @@ button::-moz-focus-inner {
   bottom: 0;
   width: 100vw;
   height: 40vh;
-  background-color: var(--color-footer);
+  background-color: transparent;
   color: white;
   text-align: right;
   padding-right: 4rem;
   padding-top: 2rem;
+  background-image: url('/img/background/footer.png');
+  background-size: auto 40vh;
+  background-repeat: repeat-x;
+  background-position: center;
+  overflow-x: hidden;
 }
+
+.footer__coral {
+  position: absolute;
+  bottom: 12%;
+  height: 30%;
+  width: auto;
+}
+
+.footer--coral-1 {
+  left: 40%;
+}
+
+.footer--coral-2 {
+  left: 75%;
+}
+
+.footer__huan-container {
+  position: absolute;
+  top: 27%;
+  left: -7vh;
+  height: 6vh;
+  width: 6vh;
+  width: auto;
+  animation: swim-right 10s linear infinite;
+}
+
+.footer__jellyfish-container {
+  position: absolute;
+  top: 30%;
+  left: 105%;
+  height: 8vh;
+  width: 8vh;
+  width: auto;
+  animation: swim-left 15s linear infinite;
+}
+
+.footer__huan,
+.footer__jellyfish {
+  object-fit: contain;
+  max-height: 100%;
+}
+
+.footer__jellyfish {
+  animation: swim-jump 1s linear infinite;
+}
+
+.footer__huan {
+  animation: swim-down 5s linear infinite;
+}
+
+@keyframes swim-right {
+  from {
+		transform: translate3d(0px, 0px, 0px);
+	}
+	to {
+		transform: translate3d(120vw, 0px, 0px);
+	}
+}
+
+@keyframes swim-left {
+  from {
+		transform: translate3d(0px, 0px, 0px);
+	}
+	to {
+		transform: translate3d(-120vw, 0px, 0px);
+	}
+}
+
+
+@keyframes swim-jump {
+  from {
+		transform: translate3d(0px, 0px, 0px);
+	}
+	to {
+		transform: translate3d(0px, 2vh, 0px);
+	}
+}
+
+@keyframes swim-down {
+  0% {
+		transform: translate3d(0px, 0px, 0px);
+	}
+	50% {
+		transform: translate3d(0px, 20vh, 0px);
+	}
+  100% {
+		transform: translate3d(0px, 0vh, 0px);
+	}
+}
+
 
 @media (max-height: 450px) {
   .footer {
     z-index: 0;
   }
-  .footer__text {
-    position: absolute;
-    bottom: 1rem;
-    right: 2rem;
-  }
 }
 
+@media (max-width: 800px) {
+  .footer--coral-2 {
+    opacity: 0;
+  }
+}
 
 @media (max-width: 450px) {
   .footer {
     z-index: 0;
-  }
-  .footer__text {
-    position: absolute;
-    bottom: 1rem;
-    right: 2rem;
   }
 }

@@ -165,31 +165,31 @@ const animationData = {
     '.about--sat-1': {
       classChange: {
         viewheightAnticipation: 25,
-        viewheightDuration: 35,
+        viewheightDuration: 50,
         classIn: 'about--sat-1-in',
         classOut: 'about--sat-1-out'
       }
     },
     '.about--sat-2': {
       classChange: {
-        viewheightAnticipation: -10,
-        viewheightDuration: 35,
+        viewheightAnticipation: -25,
+        viewheightDuration: 50,
         classIn: 'about--sat-2-in',
         classOut: 'about--sat-2-out'
       }
     },
     '.about--sat-3': {
       classChange: {
-        viewheightAnticipation: -45,
-        viewheightDuration: 35,
+        viewheightAnticipation: -75,
+        viewheightDuration: 50,
         classIn: 'about--sat-3-in',
         classOut: 'about--sat-3-out'
       }
     },
     '.about--sat-4': {
       classChange: {
-        viewheightAnticipation: -80,
-        viewheightDuration: 35,
+        viewheightAnticipation: -125,
+        viewheightDuration: 50,
         classIn: 'about--sat-4-in',
         classOut: 'about--sat-4-out'
       }
@@ -228,6 +228,15 @@ const animationData = {
       }
     },
     '.transition__first-quote--begin': {
+      opacity: {
+        viewheightAnticipation: -40,
+        viewheightDuration: 25,
+        initialOpacity: 1,
+        endOpacity: 0,
+        transition: 'ease-out'
+      }
+    },
+    '.transition__first-quote--pre-relavant': {
       opacity: {
         viewheightAnticipation: -40,
         viewheightDuration: 25,
