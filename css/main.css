@@ -1522,6 +1522,12 @@ button::-moz-focus-inner {
     z-index: 5;
     visibility: visible;
   }
+  .contact__text {
+    max-width: 80%;
+  }
+  .contact__title {
+    font-size: 4rem;
+  }
 }
 
 @media (max-height: 450px) {
