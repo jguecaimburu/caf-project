@@ -101,12 +101,16 @@ const homeAnimations = (function () {
   }
 
   function getRegularYPosition (element) {
-    let total = 0
-    while (!isBodyOrHTML(element)) {
-      total += element.offsetTop
-      element = element.parentNode
+    if (window.getComputedStyle(element).position === 'fixed') {
+      return element.getBoundingClientRect().top
+    } else {
+      let total = 0
+      while (!isBodyOrHTML(element)) {
+        total += element.offsetTop
+        element = element.parentNode
+      }
+      return total
     }
-    return total
   }
 
   // function OLDgetRegularYPosition (element) {
