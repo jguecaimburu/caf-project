@@ -1711,11 +1711,11 @@ button::-moz-focus-inner {
 }
 
 @media (max-width: 450px) {
-  .unexpected__flower {
+  .unexpected__flower-container {
     width: 1.5vw;
     height: 1.5vw;
   }
-  .unexpected__whale {
+  .unexpected__whale-container {
     width: 5vw;
     height: 5vw;
   }
