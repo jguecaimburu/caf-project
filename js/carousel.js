@@ -1,6 +1,3 @@
-// EDIT
-
-
 const imageCarousel = (function () {
 
   /*  GLOBALS
@@ -70,7 +67,11 @@ const imageCarousel = (function () {
   function getElementTransitionDuration (element) {
     const elementStyle = getComputedStyle(element)
     const transDurationStr = elementStyle.transitionDuration
-    return Math.floor(parseFloat(transDurationStr) * 1000)
+    if (transDurationStr) {
+      return Math.floor(parseFloat(transDurationStr) * 1000)
+    } else {
+      return 0
+    }
   }
 
   /*  EVENT LISTENERS
