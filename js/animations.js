@@ -11,6 +11,9 @@ const homeAnimations = (function () {
   const PARALLAX_RANGE_EXTRA_VH = 35
   const VALID_HEIGHT_RESIZE_PERCENT = 10
 
+  const IS_PERCENT_ON = true
+  const PERCENT_DOM_DATA = animationData.percentAnimation
+
   /*  GLOBALS
   ----------------------------------------------- */
 
@@ -20,8 +23,9 @@ const homeAnimations = (function () {
   let maxScroll
   let scrollTimer
   const domElements = {}
-  const percentAnimation = {}
   let scheduledAnimationFrame = false
+
+  const percentAnimation = {}
 
   /*  CONSTRUCTION
   ----------------------------------------------- */
@@ -257,20 +261,23 @@ const homeAnimations = (function () {
   }
 
   function buildPercentAnimationObject () {
-    const data = animationData.percentAnimation
-    percentAnimation.element = document.querySelector(data.selector)
-    percentAnimation.animations = { percent: {} }
-    percentAnimation.animations.percent.scrollRange = getScrollRange({
-      yPosition: getElementYPosition(percentAnimation.element),
-      animationData: data
-    })
-    percentAnimation.animations.percent.valueRange = {
-      start: 0,
-      end: data.endValue,
-      size: data.endValue,
-      transition: 'linear'
+    if (IS_PERCENT_ON) {
+      const data = PERCENT_DOM_DATA
+      percentAnimation.element = document.querySelector(data.selector)
+      percentAnimation.animations = { percent: {} }
+      percentAnimation.animations.percent.scrollRange = getScrollRange({
+        yPosition: getElementYPosition(percentAnimation.element),
+        animationData: data
+      })
+      percentAnimation.animations.percent.valueRange = {
+        start: 0,
+        end: data.endValue,
+        size: data.endValue,
+        transition: 'linear'
+      }
+      percentAnimation.limits =
+        getAnimationScrollLimits(percentAnimation.animations)
     }
-    percentAnimation.limits = getAnimationScrollLimits(percentAnimation.animations)
   }
 
   /*  UPDATE CONTENT ON SCROLL
@@ -292,7 +299,9 @@ const homeAnimations = (function () {
     for (const selector in domElements) {
       animateIfInLimits(domElements[selector])
     }
-    animateIfInLimits(percentAnimation)
+    if (IS_PERCENT_ON) {
+      animateIfInLimits(percentAnimation)
+    }
     scheduledAnimationFrame = false
   }
 
