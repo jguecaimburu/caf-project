@@ -1,6 +1,6 @@
 const homeAnimations = (function () {
 
-  /*  GLOBALS
+  /*  CONFIGURATION VALUES
   ----------------------------------------------- */
 
   const DOM_ELEMENTS_DATA = animationData.generalValues
@@ -10,6 +10,10 @@ const homeAnimations = (function () {
   const RESIZE_DEBOUNCE_MS = 150
   const PARALLAX_RANGE_EXTRA_VH = 35
   const VALID_HEIGHT_RESIZE_PERCENT = 10
+
+  /*  GLOBALS
+  ----------------------------------------------- */
+
   let lastScroll = 0
   let topElement
   let lastScreenSize
@@ -112,48 +116,6 @@ const homeAnimations = (function () {
       return total
     }
   }
-
-  // function OLDgetRegularYPosition (element) {
-  //   const boundingRect = element.getBoundingClientRect()
-  //   const translatedY = getAxisTranslatedValue({
-  //     element: element,
-  //     axis: 'y'
-  //   })
-  //   return boundingRect.top + lastScroll - translatedY
-  // }
-  //
-  // function getAxisTranslatedValue ({ element, axis }) {
-  //   const translate3dString = getTranslate3dString(element)
-  //   const intRegex = /-*(\d+.)*\d+px/g
-  //   if (translate3dString) {
-  //     const translateValues =
-  //       translate3dString.match(intRegex).map((x) => parseFloat(x))
-  //     switch (axis) {
-  //       case 'x':
-  //         return translateValues[0]
-  //       case 'y':
-  //         return translateValues[1]
-  //     }
-  //   } else {
-  //     return 0
-  //   }
-  // }
-  //
-  // function getTranslate3dString (element) {
-  //   const translate3dRegex = /translate3d\(.*\)/
-  //   const currentTransform = element.style.transform
-  //   let matchArray
-  //   if (currentTransform) {
-  //     matchArray = currentTransform.match(translate3dRegex)
-  //   } else {
-  //     return ''
-  //   }
-  //   if (matchArray) {
-  //     return matchArray[0]
-  //   } else {
-  //     return ''
-  //   }
-  // }
 
   function getStickyCorrection (element) {
     if (lastScroll === 0) {

@@ -1,9 +1,10 @@
 const imageCarousel = (function () {
 
-  /*  GLOBALS
+  /*  CONFIGURATION VALUES
   ----------------------------------------------- */
+
   const CAROUSEL_SELECTORS = {
-    carousel: '.carousel',
+    container: '.carousel',
     btnForward: '.carousel__btn--forward',
     btnBackward: '.carousel__btn--backward',
     btnPlay: '.carousel__btn--play',
@@ -12,6 +13,10 @@ const imageCarousel = (function () {
   }
   const CAROUSEL_INTERVAL_MS = 5000
   const RESIZE_DEBOUNCE_MS = 150
+
+  /*  GLOBALS
+  ----------------------------------------------- */
+
   const carouselObject = {}
   let slideTransitionTime
   let slideWidth
@@ -45,7 +50,7 @@ const imageCarousel = (function () {
   ----------------------------------------------- */
 
   function buildCarouselObject () {
-    const carousel = document.querySelector(CAROUSEL_SELECTORS.carousel)
+    const carousel = document.querySelector(CAROUSEL_SELECTORS.container)
     carouselObject.container = carousel
     carouselObject.buttons = {}
     carouselObject.buttons.forward = carousel
