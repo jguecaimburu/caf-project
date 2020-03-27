@@ -2,7 +2,14 @@ const imageCarousel = (function () {
 
   /*  GLOBALS
   ----------------------------------------------- */
-
+  const CAROUSEL_SELECTORS = {
+    carousel: '.carousel',
+    btnForward: '.carousel__btn--forward',
+    btnBackward: '.carousel__btn--backward',
+    btnPlay: '.carousel__btn--play',
+    slides: '.carousel__slide',
+    currentSlide: '.carousel__slide--current'
+  }
   const CAROUSEL_INTERVAL_MS = 5000
   const RESIZE_DEBOUNCE_MS = 150
   const carouselObject = {}
@@ -38,17 +45,17 @@ const imageCarousel = (function () {
   ----------------------------------------------- */
 
   function buildCarouselObject () {
-    const carousel = document.querySelector('.carousel')
+    const carousel = document.querySelector(CAROUSEL_SELECTORS.carousel)
     carouselObject.container = carousel
     carouselObject.buttons = {}
     carouselObject.buttons.forward = carousel
-      .querySelector('.carousel__btn--forward')
+      .querySelector(CAROUSEL_SELECTORS.btnForward)
     carouselObject.buttons.backward = carousel
-      .querySelector('.carousel__btn--backward')
+      .querySelector(CAROUSEL_SELECTORS.btnBackward)
     carouselObject.buttons.play = carousel
-      .querySelector('.carousel__btn--play')
+      .querySelector(CAROUSEL_SELECTORS.btnPlay)
     carouselObject.slides = Array.from(carousel
-      .querySelectorAll('.carousel__slide')
+      .querySelectorAll(CAROUSEL_SELECTORS.slides)
     )
   }
 
@@ -144,7 +151,7 @@ const imageCarousel = (function () {
 
   function identifySlidesToPosition (indexChange) {
     const currentSlide = carouselObject.container
-      .querySelector('.carousel__slide--current')
+      .querySelector(CAROUSEL_SELECTORS.currentSlide)
     const indexes = {}
     indexes.current = carouselObject
       .slides.findIndex(slide => slide === currentSlide)
@@ -182,8 +189,12 @@ const imageCarousel = (function () {
     coverCurrentSlide.then(function () {
       moveOnBack(carouselObject.slides[newForward], slideWidth)
       moveOnBack(carouselObject.slides[newBackward], -slideWidth)
-      carouselObject.slides[current].classList.remove('carousel__slide--current')
-      carouselObject.slides[target].classList.add('carousel__slide--current')
+      carouselObject.slides[current].classList.remove(
+        CAROUSEL_SELECTORS.currentSlide.slice(1)
+      )
+      carouselObject.slides[target].classList.add(
+        CAROUSEL_SELECTORS.currentSlide.slice(1)
+      )
     })
   }
 
