@@ -365,9 +365,9 @@ const animationData = {
         transition: 'ease-out'
       },
       translateY: {
-        viewheightAnticipation: -975,
-        viewheightDuration: 300,
-        scrollRate: 0.30,
+        viewheightAnticipation: -1075,
+        viewheightDuration: 200,
+        scrollRate: 0.31,
         transition: 'ease-out'
       }
     },
@@ -387,6 +387,12 @@ const animationData = {
         initialOpacity: 0.15,
         endOpacity: 1,
         transition: 'linear'
+      },
+      translateY: {
+        viewheightAnticipation: -975,
+        viewheightDuration: 100,
+        scrollRate: 0.05,
+        transition: 'ease-out'
       }
     }
   },

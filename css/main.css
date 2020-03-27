@@ -1607,6 +1607,7 @@ button::-moz-focus-inner {
 @media (max-height: 450px) {
   .contact__flex-container {
     margin-top: 0;
+    width: 100%;
   }
   .contact-sticky-content-container {
     z-index: 5;
@@ -1617,6 +1618,9 @@ button::-moz-focus-inner {
   }
   .contact__title {
     font-size: 4rem;
+  }
+  .contact__link {
+    margin: 0 1rem 1rem 1rem;
   }
   .contact__link--wa-desktop {
     z-index: 0;
@@ -1775,7 +1779,7 @@ button::-moz-focus-inner {
 .unexpected__flower-container {
   position: fixed;
   top: 3vh;
-  left: 4vw;
+  left: 7.5vw;
   width: 1vw;
   height: 1vw;
   z-index: 1;
@@ -1790,15 +1794,43 @@ button::-moz-focus-inner {
   opacity: 0.15;
 }
 
+@media (max-width: 1000px) {
+  .unexpected__flower-container {
+    top: 10vh;
+  }
+  .unexpected__whale-container {
+    top: 15vh;
+  }
+}
+
+@media (max-width: 600px) {
+  .unexpected__flower-container {
+    width: 2vw;
+    height: 2vw;
+    top: 10vh;
+  }
+  .unexpected__whale-container {
+    width: 6vw;
+    height: 6vw;
+    top: 15vh;
+  }
+}
+
 @media (max-width: 450px) {
   .unexpected__flower-container {
     width: 2vw;
     height: 2vw;
-    top: 8vh;
+    top: 10.5vh;
   }
   .unexpected__whale-container {
     width: 7vw;
     height: 7vw;
     top: 15vh;
+  }
+}
+
+@media (max-height: 450px) {
+  .unexpected__flower-container {
+    top: 2vh;
   }
 }
