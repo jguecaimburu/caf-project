@@ -141,7 +141,7 @@ const animationData = {
         transition: 'ease-out'
       },
       translateY: {
-        viewheightAnticipation: 35,
+        viewheightAnticipation: 25,
         viewheightDuration: 30,
         scrollRate: -1,
         transition: 'ease-out'
@@ -149,7 +149,7 @@ const animationData = {
     },
     '.about__intro-text': {
       opacity: {
-        viewheightAnticipation: 60,
+        viewheightAnticipation: 85,
         viewheightDuration: 25,
         initialOpacity: 0,
         endOpacity: 1,
@@ -217,6 +217,30 @@ const animationData = {
         viewheightDuration: 50,
         scrollRate: -1.5,
         transition: 'linear'
+      }
+    },
+    '.transition__cloud-1': {
+      translateX: {
+        viewheightAnticipation: 70,
+        viewheightDuration: 100,
+        viewwidthDistance: -70,
+        transition: 'ease-out'
+      }
+    },
+    '.transition__cloud-2': {
+      translateX: {
+        viewheightAnticipation: 75,
+        viewheightDuration: 100,
+        viewwidthDistance: 50,
+        transition: 'ease-out'
+      }
+    },
+    '.transition__cloud-3': {
+      translateX: {
+        viewheightAnticipation: 90,
+        viewheightDuration: 200,
+        viewwidthDistance: -100,
+        transition: 'ease-out'
       }
     },
     '.transition__first-quote-container': {
@@ -295,26 +319,26 @@ const animationData = {
     },
     '.unexpected__whale-container': {
       opacity: {
-        viewheightAnticipation: -675,
+        viewheightAnticipation: -725,
         viewheightDuration: 10,
         initialOpacity: 0,
         endOpacity: 1,
         transition: 'ease-out'
       },
       scaleX: {
-        viewheightAnticipation: -680,
+        viewheightAnticipation: -730,
         viewheightDuration: 15,
         deltaScale: 4,
         transition: 'ease-out'
       },
       scaleY: {
-        viewheightAnticipation: -680,
+        viewheightAnticipation: -730,
         viewheightDuration: 15,
         deltaScale: 4,
         transition: 'ease-out'
       },
       translateY: {
-        viewheightAnticipation: -900,
+        viewheightAnticipation: -950,
         viewheightDuration: 300,
         scrollRate: 0.25,
         transition: 'ease-out'
@@ -322,26 +346,26 @@ const animationData = {
     },
     '.unexpected__flower-container': {
       opacity: {
-        viewheightAnticipation: -675,
+        viewheightAnticipation: -725,
         viewheightDuration: 20,
         initialOpacity: 0,
         endOpacity: 1,
         transition: 'ease-out'
       },
       scaleX: {
-        viewheightAnticipation: -685,
+        viewheightAnticipation: -730,
         viewheightDuration: 30,
         deltaScale: 2,
         transition: 'ease-out'
       },
       scaleY: {
-        viewheightAnticipation: -685,
+        viewheightAnticipation: -730,
         viewheightDuration: 30,
         deltaScale: 2,
         transition: 'ease-out'
       },
       translateY: {
-        viewheightAnticipation: -925,
+        viewheightAnticipation: -975,
         viewheightDuration: 300,
         scrollRate: 0.30,
         transition: 'ease-out'
@@ -349,7 +373,7 @@ const animationData = {
     },
     '.unexpected__whale': {
       opacity: {
-        viewheightAnticipation: -900,
+        viewheightAnticipation: -950,
         viewheightDuration: 60,
         initialOpacity: 0.15,
         endOpacity: 1,
@@ -358,7 +382,7 @@ const animationData = {
     },
     '.unexpected__flower': {
       opacity: {
-        viewheightAnticipation: -900,
+        viewheightAnticipation: -950,
         viewheightDuration: 60,
         initialOpacity: 0.15,
         endOpacity: 1,

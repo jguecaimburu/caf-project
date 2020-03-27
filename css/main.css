@@ -233,7 +233,7 @@ button::-moz-focus-inner {
 
 .about {
   width: 100vw;
-  height: 400vh;
+  height: 450vh;
   position: relative;
   background: linear-gradient(
     to bottom,
@@ -245,7 +245,7 @@ button::-moz-focus-inner {
 
 .about__intro-container {
   width: 100%;
-  height: 100vh;
+  height: 150vh;
   position: relative;
 }
 
@@ -267,7 +267,7 @@ button::-moz-focus-inner {
   width: 50%;
   left: 25%;
   text-align: center;
-  top: 50vh;
+  top: 100vh;
   opacity: 0;
 }
 
@@ -330,6 +330,7 @@ button::-moz-focus-inner {
       var(--color-main-planet) 50%
       );
   box-shadow: 0 0 3rem var(--color-main-shine);
+  border: 6px solid var(--color-main-shine);
   z-index: 1;
 }
 
@@ -342,6 +343,7 @@ button::-moz-focus-inner {
   top: 30%;
   left: 30%;
   overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.02);
 }
 
 /* ORBITS */
@@ -841,6 +843,30 @@ button::-moz-focus-inner {
   padding: 3rem;
 }
 
+.transition__cloud-1,
+.transition__cloud-2,
+.transition__cloud-3 {
+  position: absolute;
+}
+
+.transition__cloud-1 {
+  width: 35vw;
+  top: 13vh;
+  left: 20vw;
+}
+
+.transition__cloud-2 {
+  width: 35vw;
+  top: 20vh;
+  left: 50vw;
+}
+
+.transition__cloud-3 {
+  width: 20vw;
+  top: 35vh;
+  left: 40vw;
+}
+
 .transition__first-quote-container {
   position: absolute;
   top: 100vh;
@@ -911,7 +937,7 @@ button::-moz-focus-inner {
 
 @media (max-width: 1050px) {
   .transition__paragraph {
-    top: 5vh;
+    top: 15vh;
   }
   .transition__first-quote-container {
     left: 7%;
@@ -925,6 +951,18 @@ button::-moz-focus-inner {
   }
   .transition__paragraph {
     font-size: 2rem;
+  }
+  .transition__cloud-1 {
+    top: 5vh;
+    left: 15vw;
+  }
+  .transition__cloud-2 {
+    top: 15vh;
+    left: 55vw;
+  }
+  .transition__cloud-3 {
+    top: 20vh;
+    left: 30vw;
   }
   .transition__first-quote-container {
     left: 6%;
@@ -956,7 +994,20 @@ button::-moz-focus-inner {
   }
   .transition__paragraph {
     width: 85%;
-    left: 7.5%
+    left: 7.5%;
+    top: 20vh;
+  }
+  .transition__cloud-1 {
+    top: 15vh;
+    left: 15vw;
+  }
+  .transition__cloud-2 {
+    top: 20vh;
+    left: 60vw;
+  }
+  .transition__cloud-3 {
+    top: 32vh;
+    left: 30vw;
   }
   .transition__first-quote-container {
     left: 6%;
@@ -980,6 +1031,19 @@ button::-moz-focus-inner {
 }
 
 @media (max-width: 450px) {
+  .transition__paragraph {
+    top: 20vh;
+  }
+  .transition__cloud-1 {
+    top: 30vh;
+  }
+  .transition__cloud-2 {
+    top: 35vh;
+  }
+  .transition__cloud-3 {
+    top: 45vh;
+    left: 30vw;
+  }
   .transition__first-quote-text {
     font-size: 3.25rem;
   }
@@ -1010,6 +1074,16 @@ button::-moz-focus-inner {
   .transition__paragraph {
     width: 85%;
     left: 7.5%
+  }
+  .transition__cloud-1 {
+    top: 10vh;
+    left: 15vw;
+  }
+  .transition__cloud-2 {
+    left: 60vw;
+  }
+  .transition__cloud-3 {
+    left: 20vw;
   }
   .transition__first-quote-container {
     width: 90vw;
@@ -1458,7 +1532,7 @@ button::-moz-focus-inner {
   position: relative;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -1472,7 +1546,7 @@ button::-moz-focus-inner {
   padding: 1rem 2rem;
   border-radius: 5px;
   font-size: 2rem;
-  margin: 1rem;
+  margin: 1rem 2.5rem 1rem 2.5rem;
   background: white;
   color: black;
   transition: background 400ms ease-out;
@@ -1531,6 +1605,9 @@ button::-moz-focus-inner {
 }
 
 @media (max-height: 450px) {
+  .contact__flex-container {
+    margin-top: 0;
+  }
   .contact-sticky-content-container {
     z-index: 5;
   }
@@ -1665,6 +1742,7 @@ button::-moz-focus-inner {
 @media (max-height: 450px) {
   .footer {
     z-index: 0;
+    padding-right: 1rem;
   }
 }
 
@@ -1676,9 +1754,11 @@ button::-moz-focus-inner {
 
 @media (max-width: 450px) {
   .footer {
+    padding-right: 1rem;
     z-index: 0;
   }
 }
+
 
 /* UNEXPECTED ELEMENTS */
 
@@ -1712,11 +1792,13 @@ button::-moz-focus-inner {
 
 @media (max-width: 450px) {
   .unexpected__flower-container {
-    width: 1.5vw;
-    height: 1.5vw;
+    width: 2vw;
+    height: 2vw;
+    top: 8vh;
   }
   .unexpected__whale-container {
-    width: 5vw;
-    height: 5vw;
+    width: 7vw;
+    height: 7vw;
+    top: 15vh;
   }
 }
