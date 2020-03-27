@@ -1,6 +1,5 @@
-/* EDITING */
-
 /* Font import */
+
 @import url('https://fonts.googleapis.com/css?family=Montserrat:100,400,700|Press+Start+2P&display=swap');
 
 /* Root variables */
@@ -53,6 +52,12 @@ html::-webkit-scrollbar {
 }
 
 @media (max-width: 600px) {
+  html {
+    font-size: 8px;
+  }
+}
+
+@media (max-height: 600px) {
   html {
     font-size: 8px;
   }
@@ -755,7 +760,7 @@ button::-moz-focus-inner {
   background: rgba(0, 0, 0, 0.7);
 }
 
-@media (max-height: 450px) {
+@media (max-height: 600px) {
   .about__planet-group {
       margin-top: 10vh;
     }
@@ -1340,6 +1345,26 @@ button::-moz-focus-inner {
   }
 }
 
+@media (max-height: 600px) {
+  .carousel__slides-container {
+    width: 50%;
+    height: 60%;
+    left: 25%;
+    top: 12%;
+  }
+  .carousel__btn--backward {
+    left: 26%;
+  }
+  .carousel__btn--forward {
+    left: 70%;
+  }
+  .carousel__btn--play {
+    left: 49%;
+    top: 60%;
+  }
+}
+}
+
 @media (max-height: 450px) {
   .carousel__sticky-slider {
     height: 100%;
@@ -1668,15 +1693,6 @@ button::-moz-focus-inner {
   left: 75%;
 }
 
-/* .footer__huan-container {
-  position: absolute;
-  top: 27%;
-  left: -7vh;
-  height: 6vh;
-  width: 6vh;
-  width: auto;
-  animation: swim-right 10s linear infinite;
-} */
 
 .footer__jellyfish-container {
   position: absolute;
@@ -1698,18 +1714,6 @@ button::-moz-focus-inner {
   animation: swim-jump 1s linear infinite;
 }
 
-/* .footer__huan {
-  animation: swim-down 5s linear infinite;
-}
-
-@keyframes swim-right {
-  from {
-		transform: translate3d(0px, 0px, 0px);
-	}
-	to {
-		transform: translate3d(120vw, 0px, 0px);
-	}
-} */
 
 @keyframes swim-left {
   from {
@@ -1729,19 +1733,6 @@ button::-moz-focus-inner {
 		transform: translate3d(0px, 2vh, 0px);
 	}
 }
-
-/* @keyframes swim-down {
-  0% {
-		transform: translate3d(0px, 0px, 0px);
-	}
-	50% {
-		transform: translate3d(0px, 20vh, 0px);
-	}
-  100% {
-		transform: translate3d(0px, 0vh, 0px);
-	}
-} */
-
 
 @media (max-height: 450px) {
   .footer {
