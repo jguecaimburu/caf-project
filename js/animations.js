@@ -585,3 +585,21 @@ const homeAnimations = (function () {
 }())
 
 console.log('Animations main script loaded correctly.')
+
+console.log(
+  `%c
+  Hi there!
+  If you're reading this that means:
+  a. You're checking my repo, or
+  b. You're checking my console
+  Anyway, glad you're here, hopefully from home.
+  I've been teaching myself to code for the last 6 months, almost full-time
+  for the last  3.  My goal is to start working and learning from pros this
+  2020.
+  If you're from Founders and Coders, I believe you can help me achieve this
+  goal.
+  Please feel free to contact me at any time at guecaimburu.j@gmail.com.
+  Thank you and take care this months! ${String.fromCodePoint(0x1F637)}
+  `,
+  'color: #020111; font-size: 1.25rem; font-weight: bold; font-family: sans-serif'
+)
