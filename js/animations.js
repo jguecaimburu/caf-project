@@ -1,3 +1,5 @@
+'use strict';
+
 const homeAnimations = (function () {
 
   /*  CONFIGURATION VALUES
@@ -582,4 +584,4 @@ const homeAnimations = (function () {
   init()
 }())
 
-console.log('Animations file loaded correctly')
+console.log('Animations main script loaded correctly.')

@@ -1,3 +1,5 @@
+'use strict';
+
 const imageCarousel = (function () {
 
   /*  CONFIGURATION VALUES
@@ -264,4 +266,4 @@ const imageCarousel = (function () {
   init()
 }())
 
-console.log('Carousel file loaded correctly')
+console.log('Carousel script loaded correctly.')

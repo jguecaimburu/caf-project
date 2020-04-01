@@ -1,3 +1,5 @@
+'use strict';
+
 const animationData = {
   generalValues: {
     '.welcome--p-char-h': {
@@ -403,3 +405,5 @@ const animationData = {
     endValue: 100 * 15 / 17
   }
 }
+
+console.log('Animations data loaded correctly.')
