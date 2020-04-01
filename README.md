@@ -1,7 +1,7 @@
 # Huancito's Personal Website
 
 
-This project was built as a part of the [Founders and Coders](https://www.foundersandcoders.com) application process. Everything was built to work on this particular website but the carousel and parallax scripts can be reused.
+This project was built as a part of the [Founders and Coders](https://www.foundersandcoders.com) application process. Everything was built to work on this particular website but the carousel and parallax scripts can be reused. I encourage you to read this README file before attempting to apply any code to your website.
 
 
 ## Image carousel
@@ -20,9 +20,9 @@ This project was built as a part of the [Founders and Coders](https://www.founde
 All the carousel elements should be placed inside a **container** element.
 It should contain one of each of these elements:
 - Slide Container: Element that contains all the slides. One slide should be the **currentSlide**, which is the slide visible in the front of the carousel. The slides will be ordered in a list as presented in the HTML. The current slide sets the index to start with when the page is loaded.
-- **btnForward**: Move to the next slide, the one located on the right of the current slide.
-- **btnBackward**: Move to the previous slide, the one located on the left of the current slide.
-- **btnPlay**: Turn on / off the carousel timer.
+- **btnForward**: Element that will hold a click event to call the function that moves to the next slide, the one located on the right of the current slide.
+- **btnBackward**: Element that will hold a click event to call the function that moves to the previous slide, the one located on the left of the current slide.
+- **btnPlay**: Element that will hold a click event to call the function that turns on / off the carousel timer.
 
 The slide container can hold any number of **slides**. Each of them must have the same class selector but other classes can be added to each one. Only one of them should have the currentSlide selector.
 
@@ -153,7 +153,7 @@ Inside generalValues, the next level is composed by properties to be modified. K
 
 classChange applies a class when a given scrolling point of the website is reached. The others apply proportional changes to the properties, given a scrolling value.
 
-Inside each of this key there's another object that holds data for that given animation. Where to start, where to finish and how to apply the changes. Each data type has a key and a values. The object for each of the properties is different but they all share the way to define the starting and ending points.
+Inside each of these keys there's another object that holds data for that given animation. Where to start, where to finish and how to apply the changes. Each data type has a key and a values. The object for each of the properties is different but they all share the way to define the starting and ending points.
 
 ##### Animation scroll range
 
@@ -189,7 +189,7 @@ As mentioned before, each property object has different data types. However, all
 - rotate
   - **endRotation**: Total rotation applied to the object after the scrolling range, measured in deg.
 - classChange
-  - **classIn**: Inside the range, the object gets added this class. The class hold the styles and animations in the CSS file.
+  - **classIn**: Inside the range, the object gets added this class. The class holds the styles and animations in the CSS file.
   - **classOut**: Outside the range, the classIn is removed and this is added. It is recommended to add this class to the object in the HTML if the object is outside of the range at the initial load of the page and need to have this style.
 
 
@@ -258,9 +258,9 @@ As this animation is too focused on this project, there's a flag in the main JS 
 
 At the start of the javascript file, the following values can be set:
 
-- **DOM_ELEMENTS_DATA**: The data js file is loaded on the HTML it must be called here to get the data. `animationData.generalValues` is the default in this example, being `animationData` the name of the whole data object and `generalValues` the key for the general animation data explained before.
+- **DOM_ELEMENTS_DATA**: The data js file is loaded on the HTML so it must be called here to get the data. `animationData.generalValues` is the default in this example, being `animationData` the name of the whole data object and `generalValues` the key for the general animation data explained before.
 - **SCROLL_INTERVAL_MS**: As adding a scroll listener was not performant, the scrolled value is measured at fixed intervals set by this variable. Time (integer) for the interval in miliseconds.
-- **TOP_ELEMENT_DEBOUNCE_MS**: Resizing can push the content in the user view up or down. The script takes you back to the element present at the top of the view before the resize. Time (integer) that should be waited in miliseconds before updating the top element on a scroll event. This keeps the scrolling event from launching this function all the time.
+- **TOP_ELEMENT_DEBOUNCE_MS**: Resizing can push the content in the user view up or down. The script takes the user back to the element present at the top of the view before the resize. Time (integer) that should be waited in miliseconds before updating the top element on a scroll event. This keeps the scrolling event from launching this function all the time.
 - **PARALLAX_RANGE_EXTRA_VH**: To improve performance, objects get ignored outside of their limits. As the user can scroll fast through the page, some animations can be left unfinished. To prevent this, the scrolling range gets extended by this value, set in positive vh units. A value of 0 keeps the limits to the scrolling range. A bigger limit prevents unfinished animations but reduce performance. If the scrolling value is inside of the limits of an object but outside it's scrolling range, the object will not be ignored but initial / ending values will be set.
 - **UPDATE_ALL_DEBOUNCE_MS**: As a low extra value does not prevent all unfinished animations, every element position gets updated outside of their limits some time after the scroll. Time (integer) that should be waited in miliseconds before updating all element positions. This variable should have a value much bigger than all other variables in miliseconds.
 - **RESIZE_DEBOUNCE_MS**: Time (integer) that should be waited in miliseconds before updating values on a resize event.
