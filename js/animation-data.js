@@ -134,6 +134,15 @@ const animationData = {
         transition: 'ease-out'
       }
     },
+    '.welcome__indicator': {
+      opacity: {
+        viewheightAnticipation: 80,
+        viewheightDuration: 15,
+        initialOpacity: 0.8,
+        endOpacity: 0,
+        transition: 'ease-out'
+      }
+    },
     '.about__title': {
       opacity: {
         viewheightAnticipation: 75,
