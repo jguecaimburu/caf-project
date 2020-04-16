@@ -1,8 +1,9 @@
-/* Font import */
+/* FONT IMPORT */
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat:100,400,700|Press+Start+2P&display=swap');
 
-/* Root variables */
+/* ROOT VARIABLES */
+
 :root {
   --color-sky-01: #020111;
   --color-sky-02: #20202c;
@@ -23,7 +24,8 @@
   --color-arcade-hover: #fff0c0;
 }
 
-/* Set general document properties */
+/* GENERAL DOCUMENT PROPERTIES */
+
 *,
 *::after,
 *::before {
@@ -72,15 +74,18 @@ body {
   color: white;
 }
 
+main {
+  position: relative;
+}
 
-section {
+header, article {
   width: 100vw;
   margin-bottom: -1px;
   position: relative;
   overflow-x: hidden;
 }
 
-h1, h2, h3, p, a, li, div, button {
+blockquote, cite, h1, h2, h3, p, a, li, div, button {
   z-index: 2;
 }
 
@@ -92,8 +97,13 @@ h3 {
   font-size: 3rem;
 }
 
-p {
+cite, p {
   font-size: 2rem;
+}
+
+cite {
+  font-style: normal;
+  display: block;
 }
 
 li {
@@ -121,18 +131,27 @@ button::-moz-focus-inner {
   border: 0;
 }
 
+.hidden {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 /* WELCOME SECTION */
 
 /* BACKGROUND ANIMATION */
 
 .welcome {
   height: 100vh;
+  overflow-y: hidden;
   background: linear-gradient(
     to bottom,
     var(--color-sky-01) 50%,
     var(--color-sky-02) 100%
     );
-  overflow-y: hidden;
 }
 
 @keyframes move-background {
@@ -145,35 +164,39 @@ button::-moz-focus-inner {
 }
 
 .welcome__stars {
-  background-image: url(/img/background/stars.png);
-  background-color: transparent;
-  background-position: 0 0;
-  width:10000px;
-	height: 100%;
   position: absolute;
   right: 0;
   top: 0;
   z-index: 0;
+  width:10000px;
+	height: 100%;
+  background-image: url(/img/background/stars.png);
+  background-color: transparent;
+  background-position: 0 0;
   animation: move-background 120s linear infinite;
 }
 
 .welcome__twinkling{
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  width:10000px;
+	height: 50%;
   background-image:
     radial-gradient(var(--color-sky-01) 5%, transparent 30%),
     radial-gradient(var(--color-sky-01) 5%, transparent 20%);
   background-color: transparent;
   background-position: 0 0, 50px 50px;
   background-size: 100px 100px;
-	width:10000px;
-	height: 50%;
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 1;
   animation: move-background 30s linear infinite;
 }
 
 .welcome__fade-stars {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
   width: 100%;
   height: 100%;
   background: linear-gradient(
@@ -181,10 +204,6 @@ button::-moz-focus-inner {
     transparent 50%,
     var(--color-sky-02) 100%
     );
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 2;
 }
 
 @keyframes text-start {
@@ -200,18 +219,18 @@ button::-moz-focus-inner {
 
 .welcome__title {
   position: relative;
-  margin: 0 auto;
-  margin-top: 35vh;
   z-index: 3;
   width: 50%;
   height: 8%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 35vh;
   font-size: 10vw;
   font-weight: 100;
   animation: text-start 500ms ease-out;
   animation-fill-mode: forwards;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 @media (max-width: 800px) {
@@ -237,30 +256,30 @@ button::-moz-focus-inner {
 /* INTRO */
 
 .about {
+  position: relative;
   width: 100vw;
   height: 450vh;
-  position: relative;
+  overflow: visible;
   background: linear-gradient(
     to bottom,
     var(--color-sky-02) 0%,
     var(--color-sky-03) 100%
     );
-  overflow: visible;
 }
 
 .about__intro-container {
+  position: relative;
   width: 100%;
   height: 150vh;
-  position: relative;
 }
 
 .about__title {
   position: absolute;
   top: 18vh;
+  left: 25%;
+  width: 50%;
   font-size: 7rem;
   font-weight: 400;
-  width: 50%;
-  left: 25%;
   text-align: center;
   opacity: 0;
 }
@@ -268,11 +287,11 @@ button::-moz-focus-inner {
 
 .about__intro-text {
   position: absolute;
-  font-size: 3rem;
-  width: 50%;
   left: 25%;
-  text-align: center;
   top: 100vh;
+  width: 50%;
+  font-size: 3rem;
+  text-align: center;
   opacity: 0;
 }
 
@@ -299,56 +318,56 @@ button::-moz-focus-inner {
 /* PLANET STRUCTURE */
 
 .about__sticky-planet-scrolling {
+  position: relative;
   width: 100vw;
   height: 300vh;
-  position: relative;
   overflow: visible;
 }
 
 .about__sticky-planet-container {
-  width: 100%;
-  height: 100vh;
   position: sticky;
   top: 0;
+  width: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   overflow: hidden;
 }
 
 .about__planet-group {
-  margin-top: 20vh;
+  position: relative;
   width: 50vh;
   height: 50vh;
   min-width: 300px;
   min-height: 300px;
-  position: relative;
+  margin-top: 20vh;
 }
 
 .about__main-planet {
   position: absolute;
+  z-index: 1;
   width: 100%;
   height: 100%;
   border-radius: 50%;
+  border: 6px solid var(--color-main-shine);
   background: radial-gradient(
       circle at 35% 35%,
       var(--color-main-shine),
       var(--color-main-planet) 50%
       );
   box-shadow: 0 0 3rem var(--color-main-shine);
-  border: 6px solid var(--color-main-shine);
-  z-index: 1;
 }
 
 .about__satellite {
   position: absolute;
-  width: 40%;
-  height: 40%;
-  border-radius: 50%;
   z-index: 0;
   top: 30%;
   left: 30%;
-  overflow: hidden;
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
   border: 1px solid rgba(0, 0, 0, 0.02);
+  overflow: hidden;
 }
 
 /* ORBITS */
@@ -701,17 +720,17 @@ button::-moz-focus-inner {
   position: relative;
   height: 100%;
   width: 50%;
-  padding: 3%;
-  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 3%;
+  overflow: hidden;
 }
 
 .about__project-logo {
+  position: relative;
   max-width:100%;
   max-height:100%;
-  position: relative;
   object-fit: contain;
 }
 
@@ -719,35 +738,35 @@ button::-moz-focus-inner {
   position: relative;
   height: 100%;
   width: 50%;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 3%;
   border-radius: 50%;
+  overflow: hidden;
 }
 
 .about__project-text {
   width: 80%;
+  margin: 0 auto;
   padding-top: 1rem;
   text-align: center;
-  margin: 0 auto;
   color: black;
   font-size: 1rem;
 }
 
 .about__project-link {
+  position: relative;
+  height: 3rem;
+  width: 3rem;
+  margin-top: 1rem;
+  padding: 0.5rem;
   font-size: 1.25rem;
   line-height: 2rem;
   font-weight: 700;
   text-transform: uppercase;
   text-align: center;
-  height: 3rem;
-  width: 3rem;
-  margin-top: 1rem;
-  position: relative;
-  padding: 0.5rem;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.4);
   color: black;
@@ -780,6 +799,7 @@ button::-moz-focus-inner {
 /* TRANSITION SECTION */
 
 .transition {
+  position: relative;
   height: 440vh;
   width: 100vw;
   background: linear-gradient(
@@ -787,22 +807,21 @@ button::-moz-focus-inner {
     var(--color-sky-03) 0%,
     var(--color-sky-04) 100%
     );
-  position: relative;
   overflow: visible;
 }
 
 .transition__sticky-figure-scrolling {
-  overflow: visible;
   position: relative;
   height: 150vh;
   width: 100%;
+  overflow: visible;
 }
 
 .transition__sticky-figure-container {
-  height: 50vh;
-  width: 100%;
   position: sticky;
   top: 0;
+  height: 50vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -810,11 +829,11 @@ button::-moz-focus-inner {
 }
 
 .transition__figure {
-  font-size: 10vw;
-  width: 70%;
-  text-align: center;
   position: relative;
+  width: 70%;
   margin-top: 20vh;
+  text-align: center;
+  font-size: 10vw;
 }
 
 .transition__figure-explanation {
@@ -824,28 +843,28 @@ button::-moz-focus-inner {
 }
 
 .transition__sticky-text-scrolling {
-  overflow: visible;
   position: relative;
   height: 290vh;
   width: 100%;
+  overflow: visible;
 }
 
 .transition__sticky-text-container {
-  height: 120vh;
   position: sticky;
   top: 0;
+  height: 120vh;
   overflow: hidden;
 }
 
 .transition__paragraph {
   position: absolute;
-  font-size: 3rem;
   top: 15vh;
   left: 25%;
   width: 50%;
   height: auto;
-  text-align: center;
   padding: 3rem;
+  text-align: center;
+  font-size: 3rem;
 }
 
 .transition__cloud-1,
@@ -855,21 +874,21 @@ button::-moz-focus-inner {
 }
 
 .transition__cloud-1 {
-  width: 35vw;
   top: 13vh;
   left: 20vw;
+  width: 35vw;
 }
 
 .transition__cloud-2 {
-  width: 35vw;
   top: 20vh;
   left: 50vw;
+  width: 35vw;
 }
 
 .transition__cloud-3 {
-  width: 20vw;
   top: 35vh;
   left: 40vw;
+  width: 20vw;
 }
 
 .transition__first-quote-container {
@@ -881,8 +900,8 @@ button::-moz-focus-inner {
 
 .transition__first-quote-text {
   position: relative;
-  text-align: center;
   width: auto;
+  text-align: center;
   font-size: 3.5rem;
 }
 
@@ -1121,39 +1140,39 @@ button::-moz-focus-inner {
 /* CONTAINER */
 
 .carousel-container {
+  position: relative;
   width: 100%;
   height: auto;
+  overflow: visible;
   background: linear-gradient(
     to bottom,
     var(--color-sky-04) 0%,
     var(--color-sky-05) 100%
     );
-  position: relative;
-  overflow: visible;
 }
 
 .carousel__sticky-content-scrolling {
+  position: relative;
   width: 100%;
   height: 200vh;
-  position: relative;
   overflow: visible;
 }
 
 .carousel__sticky-content-container {
-  width: 100%;
-  height: 100vh;
   position: sticky;
   left: 0;
   top: 0;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
 }
 
 .carousel__sticky-slider {
-  width: 200%;
-  height: 90%;
   position: absolute;
   top: 5%;
   left: 0;
+  width: 200%;
+  height: 90%;
   display: flex;
 }
 
@@ -1161,31 +1180,31 @@ button::-moz-focus-inner {
   position: absolute;
   top: 0;
   left: 50%;
+  z-index: 0;
   max-height: 100%;
   width: auto;
-  z-index: 0;
 }
 
 /* CAROUSEL */
 
 .carousel {
-  height: 100%;
-  width: 50%;
   position: absolute;
   left: 45%;
   top: 0;
   z-index: 3;
+  height: 100%;
+  width: 50%;
 }
 
 .carousel__slides-container {
-  width: 50%;
-  height: 50%;
   position: relative;
   left: 25%;
   top: 15%;
+  width: 50%;
+  height: 50%;
+  overflow: hidden;
   border-radius: 20px;
   border: 8px solid #FE90B4;
-  overflow: hidden;
   background: repeating-linear-gradient(
     to bottom,
     var(--color-sky-01),
@@ -1197,12 +1216,12 @@ button::-moz-focus-inner {
 
 .carousel__btn {
   position: absolute;
-  cursor: pointer;
   z-index: 10;
   font-family: 'Press Start 2P', cursive;
   color: var(--color-arcade-text);
   text-shadow: 0 0 3px var(--color-arcade-text);
   background: transparent;
+  cursor: pointer;
 }
 
 .carousel__btn:hover {
@@ -1212,14 +1231,14 @@ button::-moz-focus-inner {
 
 .carousel__btn--backward,
 .carousel__btn--forward {
+  width: 5vw;
+  height: 5vw;
+  padding-bottom: 0.5vw;
+  border: none;
   font-size: 5vw;
   text-align: center;
   line-height: 2vw;
-  padding-bottom: 0.5vw;
-  width: 5vw;
-  height: 5vw;
   transform: translateY(-50%);
-  border: none;
 }
 
 
@@ -1234,11 +1253,11 @@ button::-moz-focus-inner {
 }
 
 .carousel__btn--play {
-  font-size: 3rem;
-  padding: 0.5rem;
-  border: 1px solid var(--color-arcade-text);
   left: 50%;
   top: 55%;
+  padding: 0.5rem;
+  border: 1px solid var(--color-arcade-text);
+  font-size: 3rem;
   transform: translateX(-50%);
 }
 
@@ -1248,9 +1267,9 @@ button::-moz-focus-inner {
 
 @media (max-width: 1200px) {
   .carousel__slides-container {
+    left: 30%;
     width: 70%;
     height: 50%;
-    left: 30%;
   }
   .carousel__btn--backward {
     left: 32%;
@@ -1265,8 +1284,8 @@ button::-moz-focus-inner {
 
 @media (max-width: 800px) {
   .carousel__slides-container {
-    width: 80%;
     left: 35%;
+    width: 80%;
   }
   .carousel__btn--backward {
     left: 37%;
@@ -1284,8 +1303,8 @@ button::-moz-focus-inner {
 
 @media (max-width: 600px) {
   .carousel__slides-container {
-    width: 95%;
     left: 25%;
+    width: 95%;
   }
   .carousel__btn--backward {
     left: 26%;
@@ -1314,19 +1333,19 @@ button::-moz-focus-inner {
     left: -5%;
   }
   .carousel__slides-container {
-    width: 97%;
-    height: 75%;
     left: 5%;
     top: 5%;
+    width: 97%;
+    height: 75%;
     border: 4px solid #FE90B4;
   }
   .carousel__btn--backward,
   .carousel__btn--forward {
-    font-size: 10vw;
-    line-height: 4vw;
-    padding-bottom: 1vw;
     width: 10vw;
     height: 10vw;
+    padding-bottom: 1vw;
+    font-size: 10vw;
+    line-height: 4vw;
   }
   .carousel__btn--backward {
     left: 7%;
@@ -1337,20 +1356,20 @@ button::-moz-focus-inner {
     top: 40%;
   }
   .carousel__btn--play {
-    font-size: 2.5rem;
-    padding: 0.5rem;
     left: 53%;
     top: 70%;
+    padding: 0.5rem;
+    font-size: 2.5rem;
     transform: translateX(-50%);
   }
 }
 
 @media (max-height: 600px) {
   .carousel__slides-container {
-    width: 50%;
-    height: 60%;
     left: 25%;
     top: 12%;
+    width: 50%;
+    height: 60%;
   }
   .carousel__btn--backward {
     left: 26%;
@@ -1367,26 +1386,26 @@ button::-moz-focus-inner {
 
 @media (max-height: 450px) {
   .carousel__sticky-slider {
-    height: 100%;
     top: 0;
+    height: 100%;
   }
   .carousel__background {
     left: 45%;
   }
   .carousel__slides-container {
-    width: 90%;
-    height: 80%;
     left: 10%;
     top: 0;
+    width: 90%;
+    height: 80%;
     border: 4px solid #FE90B4;
   }
   .carousel__btn--backward,
   .carousel__btn--forward {
-    font-size: 7vw;
-    line-height: 3vw;
-    padding-bottom: 1vw;
     width: 7vw;
     height: 7vw;
+    padding-bottom: 1vw;
+    font-size: 7vw;
+    line-height: 3vw;
   }
 
   .carousel__btn--backward {
@@ -1400,10 +1419,10 @@ button::-moz-focus-inner {
   }
 
   .carousel__btn--play {
-    font-size: 2.5rem;
-    padding: 0.5rem;
     left: 53%;
     top: 65%;
+    padding: 0.5rem;
+    font-size: 2.5rem;
     transform: translateX(-50%);
   }
 }
@@ -1412,33 +1431,33 @@ button::-moz-focus-inner {
 
 .carousel__slide {
   position: absolute;
+  z-index: 0;
   width: 100%;
   height: calc(100% + 1.5px);
   padding-bottom: 7%;
-  transition-property: left;
-  transition-duration: 300ms;
-  transition-timing-function: ease-in-out;
-  z-index: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  font-family: 'Press Start 2P', cursive;
   background: repeating-linear-gradient(
     to bottom,
     var(--color-sky-01),
     var(--color-sky-01) 1px,
     var(--color-sky-02) 1px,
     var(--color-sky-02) 2px
-  )
+  );
+  transition-property: left;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+  font-family: 'Press Start 2P', cursive;
 }
 
 .carousel__slide-title {
   position: relative;
   max-width: 70%;
+  border-bottom: 1px solid var(--color-arcade-text);
   color: var(--color-arcade-text);
   text-shadow: 0 0 3px var(--color-arcade-text);
-  border-bottom: 1px solid var(--color-arcade-text);
   text-align: center;
   opacity: 1;
   text-transform: uppercase;
@@ -1465,9 +1484,9 @@ button::-moz-focus-inner {
 }
 
 .carousel__codewars-grid {
-  display: grid;
   width: 65%;
   margin-left: 10%;
+  display: grid;
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 5px;
   grid-row-gap: 10px;
@@ -1482,13 +1501,13 @@ button::-moz-focus-inner {
 
 @media (max-width: 450px) {
   .carousel__slide {
-    justify-content: space-evenly;
     margin-bottom: 10%;
     margin-top: -10%;
+    justify-content: space-evenly;
   }
   .carousel__slide-title {
-    font-size: 2.5rem;
     max-width: 85%;
+    font-size: 2.5rem;
   }
   .carousel__codewars-grid {
     height: 40%;
@@ -1509,52 +1528,52 @@ button::-moz-focus-inner {
 /* CONTACT SECTION */
 
 .contact {
+  position: relative;
   width: 100%;
   height: auto;
   padding-top: 15vh;
-  background-color: var(--color-sky-05);
-  position: relative;
   overflow: visible;
+  background-color: var(--color-sky-05);
 }
 
 .contact__sticky-content-scrolling {
+  position: relative;
   width: 100%;
   height: 160vh;
-  position: relative;
   overflow: visible;
 }
 
 .contact-sticky-content-container {
-  width: 100%;
-  height: auto;
-  padding-top: 10vh;
   position: sticky;
   left: 0;
   top: 0;
-  overflow: hidden;
+  width: 100%;
+  height: auto;
+  padding-top: 10vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  overflow: hidden;
 }
 
 .contact__text {
-  color: var(--color-sky-03);
   max-width: 50%;
   height: auto;
   padding: 3rem;
   text-align: center;
+  color: var(--color-sky-03);
 }
 
 .contact__flex-container {
-  margin-top: 5vh;
-  width: 100%;
   position: relative;
+  width: 100%;
+  margin-top: 5vh;
 }
 
 .contact__flex {
-  min-width: 70%;
   position: relative;
+  min-width: 70%;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -1563,15 +1582,15 @@ button::-moz-focus-inner {
 }
 
 .contact__link {
+  position: relative;
   min-width: 20rem;
   height: 5rem;
+  padding: 1rem 2rem;
+  margin: 1rem 2.5rem 1rem 2.5rem;
+  border-radius: 5px;
   text-transform: uppercase;
   text-align: center;
-  position: relative;
-  padding: 1rem 2rem;
-  border-radius: 5px;
   font-size: 2rem;
-  margin: 1rem 2.5rem 1rem 2.5rem;
   background: white;
   color: black;
   transition: background 400ms ease-out;
@@ -1631,8 +1650,8 @@ button::-moz-focus-inner {
 
 @media (max-height: 450px) {
   .contact__flex-container {
-    margin-top: 0;
     width: 100%;
+    margin-top: 0;
   }
   .contact-sticky-content-container {
     z-index: 5;
@@ -1662,20 +1681,20 @@ button::-moz-focus-inner {
 
 .footer {
   position: absolute;
+  z-index: 0;
   bottom: 0;
   width: 100vw;
   height: 40vh;
-  background-color: transparent;
-  color: white;
-  text-align: right;
   padding-right: 4rem;
   padding-top: 2rem;
+  overflow-x: hidden;
+  text-align: right;
+  color: white;
+  background-color: transparent;
   background-image: url('/img/background/footer.png');
   background-size: auto 40vh;
   background-repeat: repeat-x;
   background-position: center;
-  overflow-x: hidden;
-  z-index: 0;
 }
 
 .footer__coral {
@@ -1699,15 +1718,13 @@ button::-moz-focus-inner {
   top: 30%;
   left: 105%;
   height: 8vh;
-  width: 8vh;
   width: auto;
   animation: swim-left 15s linear infinite;
 }
 
-/* .footer__huan, */
 .footer__jellyfish {
-  object-fit: contain;
   max-height: 100%;
+  object-fit: contain;
 }
 
 .footer__jellyfish {
