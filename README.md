@@ -167,8 +167,9 @@ To set the scrolling range in which an object properties are changed, the follow
 - `viewheightDuration`: The `viewheightDuration` is the size of the scrolling range from the starting point mentioned before. It is also measured in vh.
 
 So:
-Starting Scroll = Y Position - Anticipation (limited to > 0)
-Ending Scroll = Starting Scroll + Duration  (limited to the scrolling size of the page)
+Starting Scroll (limited to > 0) = Y Position - Anticipation.
+
+Ending Scroll (limited to the scrolling size of the page) = Starting Scroll + Duration.
 
 Where to start and finish an animation is defined relative to the element style position and the viewport size.
 
