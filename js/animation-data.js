@@ -320,11 +320,32 @@ const animationData = {
         transition: 'ease-out'
       }
     },
+    '.carousel__intro': {
+      opacity: {
+        viewheightAnticipation: 50,
+        viewheightDuration: 20,
+        initialOpacity: 0,
+        endOpacity: 1,
+        transition: 'ease-out'
+      },
+      scaleX: {
+        viewheightAnticipation: -50,
+        viewheightDuration: 25,
+        deltaScale: -0.5,
+        transition: 'ease-out'
+      },
+      scaleY: {
+        viewheightAnticipation: -50,
+        viewheightDuration: 25,
+        deltaScale: -0.5,
+        transition: 'ease-out'
+      }
+    },
     '.carousel__sticky-slider': {
       translateX: {
         viewheightAnticipation: 40,
-        viewheightDuration: 225,
-        viewwidthDistance: -140,
+        viewheightDuration: 375,
+        viewwidthDistance: -290,
         transition: 'ease-out'
       }
     },

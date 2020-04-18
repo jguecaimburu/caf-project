@@ -1171,7 +1171,7 @@ button::-moz-focus-inner {
 .carousel__sticky-content-scrolling {
   position: relative;
   width: 100%;
-  height: 200vh;
+  height: 350vh;
   overflow: visible;
 }
 
@@ -1184,10 +1184,20 @@ button::-moz-focus-inner {
   overflow: hidden;
 }
 
+.carousel__intro {
+  position: absolute;
+  left: 25%;
+  top: 40vh;
+  width: 50%;
+  font-size: 3rem;
+  text-align: center;
+  opacity: 0;
+}
+
 .carousel__sticky-slider {
   position: absolute;
   top: 5%;
-  left: 0;
+  left: 150vw;
   width: 200%;
   height: 90%;
   display: flex;
@@ -1300,6 +1310,10 @@ button::-moz-focus-inner {
 }
 
 @media (max-width: 800px) {
+  .carousel__intro {
+    width: 70%;
+    left: 15%;
+  }
   .carousel__slides-container {
     left: 35%;
     width: 80%;
@@ -1339,9 +1353,14 @@ button::-moz-focus-inner {
 }
 
 @media (max-width: 450px) {
+  .carousel__intro {
+    top: 15vh;
+    left: 5%;
+    width: 90%;
+  }
   .carousel__sticky-slider {
-    height: 100%;
     top: 0;
+    height: 100%;
   }
   .carousel {
     left: 50%;
@@ -1398,7 +1417,6 @@ button::-moz-focus-inner {
     left: 49%;
     top: 60%;
   }
-}
 }
 
 @media (max-height: 450px) {
@@ -1509,12 +1527,12 @@ button::-moz-focus-inner {
   grid-row-gap: 10px;
 }
 
+
 @media (max-width: 600px) {
   .carousel__codewars-grid {
     margin-left: 0%;
   }
 }
-
 
 @media (max-width: 450px) {
   .carousel__slide {
@@ -1557,7 +1575,7 @@ button::-moz-focus-inner {
   position: relative;
   z-index: 0;
   width: 100%;
-  height: 160vh;
+  height: 155vh;
   overflow: visible;
 }
 
@@ -1648,6 +1666,10 @@ button::-moz-focus-inner {
 @media (max-width: 450px) {
   .contact-sticky-content-container {
     z-index: 5;
+    padding-top: 3vh;
+  }
+  .contact__flex-container {
+    margin-top: 0;
   }
   .contact__link--wa-desktop {
     z-index: 0;
@@ -1673,6 +1695,7 @@ button::-moz-focus-inner {
   }
   .contact-sticky-content-container {
     z-index: 5;
+    padding-top: 3vh;
   }
   .contact__text {
     max-width: 80%;
