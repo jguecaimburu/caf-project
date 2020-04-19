@@ -176,31 +176,31 @@ const animationData = {
     '.about--sat-1': {
       classChange: {
         viewheightAnticipation: 25,
-        viewheightDuration: 50,
+        viewheightDuration: 75,
         classIn: 'about--sat-1-in',
         classOut: 'about--sat-1-out'
       }
     },
     '.about--sat-2': {
       classChange: {
-        viewheightAnticipation: -25,
-        viewheightDuration: 50,
+        viewheightAnticipation: -50,
+        viewheightDuration: 75,
         classIn: 'about--sat-2-in',
         classOut: 'about--sat-2-out'
       }
     },
     '.about--sat-3': {
       classChange: {
-        viewheightAnticipation: -75,
-        viewheightDuration: 50,
+        viewheightAnticipation: -125,
+        viewheightDuration: 75,
         classIn: 'about--sat-3-in',
         classOut: 'about--sat-3-out'
       }
     },
     '.about--sat-4': {
       classChange: {
-        viewheightAnticipation: -125,
-        viewheightDuration: 50,
+        viewheightAnticipation: -200,
+        viewheightDuration: 75,
         classIn: 'about--sat-4-in',
         classOut: 'about--sat-4-out'
       }
@@ -351,26 +351,26 @@ const animationData = {
     },
     '.unexpected__whale-container': {
       opacity: {
-        viewheightAnticipation: -725,
+        viewheightAnticipation: -825,
         viewheightDuration: 10,
         initialOpacity: 0,
         endOpacity: 1,
         transition: 'ease-out'
       },
       scaleX: {
-        viewheightAnticipation: -730,
+        viewheightAnticipation: -830,
         viewheightDuration: 15,
         deltaScale: 4,
         transition: 'ease-out'
       },
       scaleY: {
-        viewheightAnticipation: -730,
+        viewheightAnticipation: -830,
         viewheightDuration: 15,
         deltaScale: 4,
         transition: 'ease-out'
       },
       translateY: {
-        viewheightAnticipation: -950,
+        viewheightAnticipation: -1050,
         viewheightDuration: 300,
         scrollRate: 0.25,
         transition: 'ease-out'
@@ -378,26 +378,26 @@ const animationData = {
     },
     '.unexpected__flower-container': {
       opacity: {
-        viewheightAnticipation: -725,
+        viewheightAnticipation: -825,
         viewheightDuration: 20,
         initialOpacity: 0,
         endOpacity: 1,
         transition: 'ease-out'
       },
       scaleX: {
-        viewheightAnticipation: -730,
+        viewheightAnticipation: -830,
         viewheightDuration: 30,
         deltaScale: 2,
         transition: 'ease-out'
       },
       scaleY: {
-        viewheightAnticipation: -730,
+        viewheightAnticipation: -830,
         viewheightDuration: 30,
         deltaScale: 2,
         transition: 'ease-out'
       },
       translateY: {
-        viewheightAnticipation: -1075,
+        viewheightAnticipation: -1175,
         viewheightDuration: 200,
         scrollRate: 0.31,
         transition: 'ease-out'
@@ -405,7 +405,7 @@ const animationData = {
     },
     '.unexpected__whale': {
       opacity: {
-        viewheightAnticipation: -950,
+        viewheightAnticipation: -1050,
         viewheightDuration: 60,
         initialOpacity: 0.15,
         endOpacity: 1,
@@ -414,14 +414,14 @@ const animationData = {
     },
     '.unexpected__flower': {
       opacity: {
-        viewheightAnticipation: -950,
+        viewheightAnticipation: -1050,
         viewheightDuration: 60,
         initialOpacity: 0.15,
         endOpacity: 1,
         transition: 'linear'
       },
       translateY: {
-        viewheightAnticipation: -975,
+        viewheightAnticipation: -1075,
         viewheightDuration: 100,
         scrollRate: 0.05,
         transition: 'ease-out'
