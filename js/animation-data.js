@@ -56,7 +56,7 @@ const animationData = {
     '.unexpected__flower-container': {
       opacity: {
         viewheightAnticipation: -230,
-        viewheightDuration: 20,
+        viewheightDuration: 40,
         initialOpacity: 0,
         endOpacity: 1,
         transition: 'ease-out'
@@ -75,8 +75,8 @@ const animationData = {
       },
       translateY: {
         viewheightAnticipation: -260,
-        viewheightDuration: 210,
-        scrollRate: 0.05,
+        viewheightDuration: 335,
+        scrollRate: 0.16,
         transition: 'ease-out'
       }
     },
@@ -91,16 +91,16 @@ const animationData = {
     },
     '.unexpected__flower': {
       opacity: {
-        viewheightAnticipation: -260,
-        viewheightDuration: 60,
+        viewheightAnticipation: -350,
+        viewheightDuration: 100,
         initialOpacity: 0.15,
         endOpacity: 1,
         transition: 'linear'
       },
       translateY: {
-        viewheightAnticipation: -550,
-        viewheightDuration: 120,
-        scrollRate: 0.17,
+        viewheightAnticipation: -535,
+        viewheightDuration: 115,
+        scrollRate: 0.10,
         transition: 'ease-out'
       }
     }
