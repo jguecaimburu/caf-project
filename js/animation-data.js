@@ -2,7 +2,7 @@
 
 const animationData = {
   generalValues: {
-    '.transition__cloud-1': {
+    '.third-stage__cloud-1': {
       translateX: {
         viewheightAnticipation: 70,
         viewheightDuration: 150,
@@ -10,7 +10,7 @@ const animationData = {
         transition: 'ease-out'
       }
     },
-    '.transition__cloud-2': {
+    '.third-stage__cloud-2': {
       translateX: {
         viewheightAnticipation: 75,
         viewheightDuration: 150,
@@ -18,7 +18,7 @@ const animationData = {
         transition: 'ease-out'
       }
     },
-    '.transition__cloud-3': {
+    '.third-stage__cloud-3': {
       translateX: {
         viewheightAnticipation: 90,
         viewheightDuration: 250,
