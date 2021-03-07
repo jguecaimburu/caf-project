@@ -7,7 +7,6 @@ const homeAnimations = (function () {
 
   const DOM_ELEMENTS_DATA = animationData.generalValues
   const SCROLL_INTERVAL_MS = 10
-  const TOP_ELEMENT_DEBOUNCE_MS = 100
   const UPDATE_ALL_DEBOUNCE_MS = 5000
   const RESIZE_DEBOUNCE_MS = 150
   const PARALLAX_RANGE_EXTRA_VH = 35
@@ -20,7 +19,6 @@ const homeAnimations = (function () {
   ----------------------------------------------- */
 
   let lastScroll = 0
-  let topElement
   let lastScreenSize
   let maxScroll
   let scrollTimer
@@ -48,18 +46,21 @@ const homeAnimations = (function () {
   }
 
   function setupEventListeners () {
+    if (history.scrollRestoration) {
+      history.scrollRestoration = 'manual';
+    } else {
+      window.onbeforeunload = function () {
+          window.scrollTo(0, 0);
+      }
+    }
+
     window.addEventListener('resize', debounce(() => {
       if (isValidResize()) {
         updateParameters()
         updateWholePage()
-        scrollToTopElement()
       }
       lastScreenSize = getWindowSize()
     }, RESIZE_DEBOUNCE_MS))
-
-    window.addEventListener('scroll', debounce(() => {
-      getTopElementInViewport()
-    }, TOP_ELEMENT_DEBOUNCE_MS))
 
     window.addEventListener('scroll', debounce(() => {
       updateWholePage()
@@ -507,26 +508,6 @@ const homeAnimations = (function () {
     }
   }
 
-  /*  VIEW KEEPER ON RESIZE
-  ----------------------------------------------- */
-
-  function getTopElementInViewport () {
-    let tempElement
-    topElement = null
-    for (let x = 0; x < document.body.offsetWidth; x++) {
-      tempElement = document.elementFromPoint(x, 2)
-      if (!topElement || tempElement.offsetTop > topElement.offsetTop) {
-        topElement = tempElement
-      }
-    }
-  }
-
-  function scrollToTopElement () {
-    if (topElement) {
-      topElement.scrollIntoView(true)
-    }
-  }
-
   /*  HELPERS
   ----------------------------------------------- */
 
@@ -586,13 +567,7 @@ const homeAnimations = (function () {
 
 console.log(
   `%c
-  Hi there!
-  If you're reading this that means:
-  a. You're checking my repo, or
-  b. You're checking my console
-  Anyway, glad you're here.
-  Please feel free to contact me at any time at guecaimburu.j@gmail.com.
-  Keep taking care! ${String.fromCodePoint(0x1F637)}
+    Hi there, you can contact me at guecaimburu.j@gmail.com.
   `,
   'color: #020111; font-size: 12px; font-family: sans-serif'
 )

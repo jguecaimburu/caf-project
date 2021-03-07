@@ -138,6 +138,7 @@ header {
 .header__link {
   font-size: 3rem;
   color: var(--color-text);
+  text-decoration: underline;
 }
 
 .about,
@@ -442,12 +443,14 @@ header {
   .unexpected__flower-container {
     width: 3vw;
     height: 3vw;
-    top: 6vh;
+    top: 9vh;
+    left: 32vw;
   }
   .unexpected__whale-container {
     width: 9vw;
     height: 9vw;
-    top: 15vh;
+    top: 12vh;
+    left: 67vw;
   }
 }
 
