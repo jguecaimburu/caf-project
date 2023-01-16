@@ -2,10 +2,13 @@
 
 My name is Juan Gueçaimburu.
 
-Born and raised in Mercedes, Argentina.
+Born in Mercedes, Argentina :argentina:. Lived a decade in Buenos Aires :soccer:. Now based in Europe :eu:.
 
-I'm a software builder with a generalist background.
-
-I find joy in trying to write simple code, whatever the language.
+I'm a software builder with a [generalist background](resume.md).
 
 Some of my code can be read [here](https://www.github.com/jguecaimburu).
+
+:wave::envelope:
+```bash
+echo email@address | sed -e 's/email/guecaimburu.j/' -e 's/address/gmail/' -e 's/$/.com/'
+```
