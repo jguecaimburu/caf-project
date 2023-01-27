@@ -7,7 +7,7 @@ Check some of my code [here](https://www.github.com/jguecaimburu). Longer versio
 
 I'm a sofware builder with a generalist background, forged as a professional during an almost constant economic crisis.
 
-I adapt fast to new contexts. I can shape and deliver projects with specific budgets and deadlines, working alonside domain experts to understand tradeoffs. I find joy in coding, mentoring and, more recently, in playing the piano :musical_keyboard:.
+I adapt fast to new contexts. I can shape and deliver projects with specific budgets and deadlines, working alonside domain experts to understand tradeoffs. I find joy in writing simple code, mentoring and, more recently, in playing the piano :musical_keyboard:.
 
 ### Some things I've done
 
