@@ -1,5 +1,5 @@
 # Juan Gueçaimburu
-Remote, based in Barcelona :spain:. Contact me at [guecaimburu.j@gmail.com](mailto:guecaimburu.j@gmail.com)
+Remote, based in Barcelona :es:. Contact me at [guecaimburu.j@gmail.com](mailto:guecaimburu.j@gmail.com)
 
 Check some of my code [here](https://www.github.com/jguecaimburu). Longer version of this resume at [LinkedIn](https://www.linkedin.com/in/guecaimburuj/).
 

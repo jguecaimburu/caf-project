@@ -2,7 +2,7 @@
 
 My name is Juan Gueçaimburu.
 
-Born in Mercedes, Argentina :argentina:. Lived a decade in Buenos Aires :soccer:. Now based in Barcelona :spain:.
+Born in Mercedes, Argentina :argentina:. Lived a decade in Buenos Aires :soccer:. Now based in Barcelona :es:.
 
 I'm a software builder with a [generalist background](resume.md).
 
