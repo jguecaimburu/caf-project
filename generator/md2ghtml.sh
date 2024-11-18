@@ -2,10 +2,11 @@
 
 # This script converts a markdown file to an HTML file using the GitHub API.
 # Github CLI should be installed and user auth completed before running this script
-# Usage: From the folder where the script and template are located, run:
-#     ./generator/md2ghml.sh path/to/markdown.md path/to/output.html
-# Eg: ./generator/md2ghtml.sh ./resume.md ./docs/resume.html
+# Usage: From the folder where the script and template are located (cd ./generator), run:
+#     ./md2ghml.sh path/to/markdown.md path/to/output.html
+# Eg: ./md2ghtml.sh ../resume.md ../docs/resume.html
 # If no output file is given, it defaults to the md filename
+# FIXME: The html title is not set, for now it needs to be replaced manually. Same thing for links (e.g. from index to resume)
 
 if ! command -v gh > /dev/null 2>&1; then
   echo 'Error: gh is not installed.' >&2
